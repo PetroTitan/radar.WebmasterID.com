@@ -18,4 +18,5 @@ export const SECONDARY_NAV: ReadonlyArray<NavLink> = [
   { label: "Methodology", href: "/methodology" },
   { label: "Sources", href: "/sources" },
   { label: "About", href: "/about" },
+  { label: "Privacy", href: "/privacy" },
 ];

@@ -24,6 +24,27 @@ export function organizationJsonLd() {
 }
 
 /**
+ * Build a `schema.org` WebSite node. Lives in the root layout so
+ * search engines treat the entire surface as one publication.
+ */
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.name,
+    alternateName: "Radar",
+    url: SITE.url,
+    description: SITE.description,
+    publisher: {
+      "@type": "Organization",
+      name: SITE.organization.name,
+      url: SITE.organization.url,
+    },
+    inLanguage: SITE.locale,
+  } as const;
+}
+
+/**
  * Build a `schema.org` Dataset node for an entity index page.
  * Used on /countries, /cities, /ixps, /cloud, /rankings.
  */

@@ -3,8 +3,11 @@ import { Inter, Inter_Tight } from "next/font/google";
 import Script from "next/script";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ConsentProvider } from "@/components/consent/ConsentProvider";
+import { CookieBanner } from "@/components/consent/CookieBanner";
+import { WebmasterIDTracker } from "@/components/analytics/WebmasterIDTracker";
 import { SITE } from "@/config/site";
-import { organizationJsonLd } from "@/lib/seo";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -67,16 +70,27 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main" className="pb-24 pt-10 md:pt-16">
-          {children}
-        </main>
-        <SiteFooter />
+        <ConsentProvider>
+          <SiteHeader />
+          <main id="main" className="pb-24 pt-10 md:pt-16">
+            {children}
+          </main>
+          <SiteFooter />
+          <CookieBanner />
+          <WebmasterIDTracker />
+        </ConsentProvider>
         <Script
           id="ld-org"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationJsonLd()),
+          }}
+        />
+        <Script
+          id="ld-website"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd()),
           }}
         />
       </body>

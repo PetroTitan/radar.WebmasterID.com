@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
+import { CookiePreferencesLink } from "@/components/consent/CookiePreferencesLink";
 import { PRIMARY_NAV, SECONDARY_NAV } from "@/content/navigation";
 import { SITE } from "@/config/site";
 
@@ -60,7 +61,11 @@ export function SiteFooter() {
           <p>
             © {year} {SITE.organization.name}. All rights reserved.
           </p>
-          <p>Source-governed digital infrastructure intelligence.</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <CookiePreferencesLink />
+            <span aria-hidden="true" className="text-ink-300">·</span>
+            <p>Source-governed digital infrastructure intelligence.</p>
+          </div>
         </Container>
       </div>
     </footer>

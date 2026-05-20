@@ -20,6 +20,7 @@ const STATIC_PATHS: ReadonlyArray<{
   { path: "/methodology", changeFrequency: "monthly", priority: 0.7 },
   { path: "/sources", changeFrequency: "monthly", priority: 0.7 },
   { path: "/about", changeFrequency: "yearly", priority: 0.4 },
+  { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
