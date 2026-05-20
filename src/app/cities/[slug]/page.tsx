@@ -4,6 +4,10 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { EntityHeader } from "@/components/ui/EntityHeader";
 import { EntitySection } from "@/components/ui/EntitySection";
+import {
+  EditorialBlocks,
+  hasEditorialContent,
+} from "@/components/ui/EditorialBlocks";
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
@@ -44,6 +48,9 @@ export default async function CityPage({ params }: RouteParams) {
     .map((s) => getIxp(s))
     .filter((i): i is NonNullable<typeof i> => Boolean(i));
   const country = getCountry(city.countrySlug);
+  const peerMetros = (city.peerMetroSlugs ?? [])
+    .map((s) => getCity(s))
+    .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
   const breadcrumb = breadcrumbJsonLd([
     { name: "Cities", path: "/cities" },
@@ -98,14 +105,33 @@ export default async function CityPage({ params }: RouteParams) {
               },
             ]}
           />
+          {peerMetros.length > 0 ? (
+            <RelatedEntities
+              title="Peer hub metros"
+              items={peerMetros.map((m) => ({
+                href: `/cities/${m.slug}`,
+                label: m.name,
+                note: m.countryCode,
+              }))}
+            />
+          ) : null}
         </div>
       </EntitySection>
 
-      <EntitySection title="Infrastructure role">
-        <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
-          {city.summary}
-        </p>
-      </EntitySection>
+      {city.editorial && hasEditorialContent(city.editorial) ? (
+        <EntitySection
+          title="Infrastructure intelligence"
+          description="Source-cited editorial briefing on this metro's role in the global infrastructure graph."
+        >
+          <EditorialBlocks editorial={city.editorial} />
+        </EntitySection>
+      ) : (
+        <EntitySection title="Infrastructure role">
+          <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+            {city.summary}
+          </p>
+        </EntitySection>
+      )}
 
       <EntitySection title="Sources">
         <SourceFootnote citations={city.provenance.sources} />

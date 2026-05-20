@@ -143,6 +143,58 @@ export const SOURCE_REGISTRY: ReadonlyArray<SourceRecord> = [
       "Telecommunications market research firm. Maintains the canonical public maps of submarine cables, internet backbones and colocation markets.",
     coverage: ["Submarine cables", "Internet backbones", "Colocation"],
   },
+  {
+    id: "aws-regions",
+    name: "AWS Global Infrastructure",
+    category: "vendor",
+    url: "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/",
+    trustTier: "tier-3",
+    licenseNote: "Vendor primary doc, freely citable with attribution.",
+    lastChecked: "2026-05-20",
+    updateFrequency: "irregular",
+    description:
+      "Amazon Web Services' published directory of regions, availability zones, and local zones. Authoritative for AWS-attested geographic facts.",
+    coverage: ["AWS regions", "AWS availability zones", "AWS local zones"],
+  },
+  {
+    id: "gcp-regions",
+    name: "Google Cloud regions",
+    category: "vendor",
+    url: "https://cloud.google.com/about/locations",
+    trustTier: "tier-3",
+    licenseNote: "Vendor primary doc, freely citable with attribution.",
+    lastChecked: "2026-05-20",
+    updateFrequency: "irregular",
+    description:
+      "Google Cloud's published directory of regions and zones. Authoritative for GCP-attested geographic facts.",
+    coverage: ["GCP regions", "GCP zones", "GCP edge locations"],
+  },
+  {
+    id: "azure-regions",
+    name: "Microsoft Azure geographies",
+    category: "vendor",
+    url: "https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/",
+    trustTier: "tier-3",
+    licenseNote: "Vendor primary doc, freely citable with attribution.",
+    lastChecked: "2026-05-20",
+    updateFrequency: "irregular",
+    description:
+      "Microsoft Azure's published directory of geographies and regions. Authoritative for Azure-attested geographic facts.",
+    coverage: ["Azure regions", "Azure geographies", "Azure availability zones"],
+  },
+  {
+    id: "de-cix",
+    name: "DE-CIX",
+    category: "vendor",
+    url: "https://www.de-cix.net/",
+    trustTier: "tier-3",
+    licenseNote: "Operator primary doc, freely citable with attribution.",
+    lastChecked: "2026-05-20",
+    updateFrequency: "monthly",
+    description:
+      "DE-CIX Management GmbH's corporate site. Authoritative operator primary doc for DE-CIX Frankfurt, Hamburg, Munich, Düsseldorf and DE-CIX's international IXP locations.",
+    coverage: ["DE-CIX IXP locations", "Operator policy", "Member services"],
+  },
 ];
 
 export function getSourceRecord(id: string): SourceRecord | undefined {

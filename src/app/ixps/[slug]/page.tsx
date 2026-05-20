@@ -4,6 +4,10 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { EntityHeader } from "@/components/ui/EntityHeader";
 import { EntitySection } from "@/components/ui/EntitySection";
+import {
+  EditorialBlocks,
+  hasEditorialContent,
+} from "@/components/ui/EditorialBlocks";
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
@@ -109,11 +113,20 @@ export default async function IxpPage({ params }: RouteParams) {
         </div>
       </EntitySection>
 
-      <EntitySection title="Infrastructure role">
-        <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
-          {ixp.summary}
-        </p>
-      </EntitySection>
+      {ixp.editorial && hasEditorialContent(ixp.editorial) ? (
+        <EntitySection
+          title="Infrastructure intelligence"
+          description="Source-cited editorial briefing on this Internet Exchange Point's role in the global infrastructure graph."
+        >
+          <EditorialBlocks editorial={ixp.editorial} />
+        </EntitySection>
+      ) : (
+        <EntitySection title="Infrastructure role">
+          <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+            {ixp.summary}
+          </p>
+        </EntitySection>
+      )}
 
       <EntitySection title="Sources">
         <SourceFootnote citations={ixp.provenance.sources} />

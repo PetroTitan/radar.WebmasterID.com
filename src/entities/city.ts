@@ -1,4 +1,4 @@
-import type { CountryCode, Provenance } from "./shared";
+import type { CountryCode, EditorialBlock, Provenance } from "./shared";
 
 /**
  * An infrastructure hub city.
@@ -27,5 +27,10 @@ export interface City {
   readonly cloudRegionRefs?: ReadonlyArray<string>;
   /** Slugs of subsea cables landing in or routed via this metro. */
   readonly cableSlugs?: ReadonlyArray<string>;
+  /** Slugs of peer metros for editorial cross-linking — comparable
+   *  hubs that an operator might evaluate against. */
+  readonly peerMetroSlugs?: ReadonlyArray<string>;
+  /** Editorial intelligence sections. */
+  readonly editorial?: EditorialBlock;
   readonly provenance: Provenance;
 }

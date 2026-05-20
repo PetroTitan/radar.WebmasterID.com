@@ -4,6 +4,10 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { EntityHeader } from "@/components/ui/EntityHeader";
 import { EntitySection } from "@/components/ui/EntitySection";
+import {
+  EditorialBlocks,
+  hasEditorialContent,
+} from "@/components/ui/EditorialBlocks";
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
@@ -99,11 +103,20 @@ export default async function CountryPage({ params }: RouteParams) {
         </div>
       </EntitySection>
 
-      <EntitySection title="Infrastructure role">
-        <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
-          {country.summary}
-        </p>
-      </EntitySection>
+      {country.editorial && hasEditorialContent(country.editorial) ? (
+        <EntitySection
+          title="Infrastructure intelligence"
+          description="Source-cited editorial briefing on this country's role in the global infrastructure graph."
+        >
+          <EditorialBlocks editorial={country.editorial} />
+        </EntitySection>
+      ) : (
+        <EntitySection title="Infrastructure role">
+          <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+            {country.summary}
+          </p>
+        </EntitySection>
+      )}
 
       <EntitySection
         title="Sources"

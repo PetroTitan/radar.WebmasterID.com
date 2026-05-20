@@ -31,7 +31,7 @@ import {
 } from "../data";
 import { getSourceRecord } from "../source-registry";
 import { isValidIsoDate } from "../lib/dates";
-import type { Provenance } from "../entities";
+import type { EditorialBlock, Provenance } from "../entities";
 
 const UNVERIFIED_PLACEHOLDER = "Data not yet verified.";
 
@@ -76,6 +76,46 @@ function assertNonEmptyString(scope: string, id: string, field: string, value: s
   }
 }
 
+const EDITORIAL_SECTIONS: ReadonlyArray<keyof EditorialBlock> = [
+  "significance",
+  "connectivityRole",
+  "cloudRelevance",
+  "interconnectionContext",
+  "strategicImportance",
+];
+
+function validateEditorial(
+  scope: string,
+  id: string,
+  editorial: EditorialBlock | undefined,
+) {
+  if (!editorial) return;
+  for (const section of EDITORIAL_SECTIONS) {
+    const paragraphs = editorial[section];
+    if (!paragraphs) continue;
+    if (!Array.isArray(paragraphs) || paragraphs.length === 0) {
+      fail(
+        scope,
+        id,
+        `editorial.${section} is present but empty — omit the key entirely instead`,
+      );
+      continue;
+    }
+    paragraphs.forEach((p, i) => {
+      if (typeof p !== "string" || !p.trim()) {
+        fail(scope, id, `editorial.${section}[${i}] is empty or non-string`);
+      }
+      if (p === UNVERIFIED_PLACEHOLDER) {
+        fail(
+          scope,
+          id,
+          `editorial.${section}[${i}] literally equals the EmptyMetric placeholder string`,
+        );
+      }
+    });
+  }
+}
+
 for (const country of COUNTRIES) {
   const id = country.slug;
   assertNonEmptyString("country", id, "slug", country.slug);
@@ -97,6 +137,7 @@ for (const country of COUNTRIES) {
     if (!getIxp(slug)) fail("country", id, `ixpSlugs references unknown IXP "${slug}"`);
   }
   validateProvenance("country", id, country.provenance);
+  validateEditorial("country", id, country.editorial);
 }
 
 for (const city of CITIES) {
@@ -122,7 +163,17 @@ for (const city of CITIES) {
   for (const slug of city.ixpSlugs ?? []) {
     if (!getIxp(slug)) fail("city", id, `ixpSlugs references unknown IXP "${slug}"`);
   }
+  for (const slug of city.peerMetroSlugs ?? []) {
+    if (slug === city.slug) {
+      fail("city", id, `peerMetroSlugs references self ("${slug}")`);
+      continue;
+    }
+    if (!getCity(slug)) {
+      fail("city", id, `peerMetroSlugs references unknown city "${slug}"`);
+    }
+  }
   validateProvenance("city", id, city.provenance);
+  validateEditorial("city", id, city.editorial);
 }
 
 for (const ixp of IXPS) {
@@ -140,6 +191,7 @@ for (const ixp of IXPS) {
     fail("ixp", id, `countryCode "${ixp.countryCode}" not in countries registry`);
   }
   validateProvenance("ixp", id, ixp.provenance);
+  validateEditorial("ixp", id, ixp.editorial);
 }
 
 for (const provider of CLOUD_PROVIDERS) {

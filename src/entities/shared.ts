@@ -70,3 +70,36 @@ export interface Provenance {
 
 /** ISO 3166-1 alpha-2 country code, e.g. "DE", "SG", "US". */
 export type CountryCode = string;
+
+/**
+ * Editorial intelligence for an entity.
+ *
+ * Five named sections, each an optional array of plain-prose
+ * paragraphs. The provenance.sources array on the parent entity
+ * must back every published claim — inline citations are
+ * paraphrased in the prose ("per PeeringDB", "per TeleGeography")
+ * and the SourceFootnote at the bottom of the page lists the
+ * supporting records.
+ *
+ * The five sections correspond to the questions a serious reader
+ * asks about an infrastructure entity:
+ *
+ *   significance         — why this entity exists on the platform
+ *   connectivityRole     — how it sits in the global routing graph
+ *   cloudRelevance       — what hyperscaler / specialist capacity
+ *                          it carries
+ *   interconnectionContext — local peering and colocation context
+ *   strategicImportance  — what operators and policy-makers should
+ *                          take away
+ *
+ * Pages render present sections in the order above. Omit fields
+ * for which no editorial review has been completed; never publish
+ * a placeholder paragraph.
+ */
+export interface EditorialBlock {
+  readonly significance?: ReadonlyArray<string>;
+  readonly connectivityRole?: ReadonlyArray<string>;
+  readonly cloudRelevance?: ReadonlyArray<string>;
+  readonly interconnectionContext?: ReadonlyArray<string>;
+  readonly strategicImportance?: ReadonlyArray<string>;
+}

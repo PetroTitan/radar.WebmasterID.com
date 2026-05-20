@@ -1,4 +1,4 @@
-import type { CountryCode, Provenance } from "./shared";
+import type { CountryCode, EditorialBlock, Provenance } from "./shared";
 
 /**
  * A sovereign country observed as an infrastructure jurisdiction.
@@ -29,5 +29,8 @@ export interface Country {
   /** Optional shortlist of cloud regions hosted in-country.
    *  Format: "<provider-slug>:<region-slug>". */
   readonly cloudRegionRefs?: ReadonlyArray<string>;
+  /** Editorial intelligence sections. Author-curated, source-cited
+   *  prose. Pages render present sections in document order. */
+  readonly editorial?: EditorialBlock;
   readonly provenance: Provenance;
 }

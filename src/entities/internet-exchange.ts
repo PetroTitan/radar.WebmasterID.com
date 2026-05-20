@@ -1,4 +1,4 @@
-import type { CountryCode, Provenance } from "./shared";
+import type { CountryCode, EditorialBlock, Provenance } from "./shared";
 
 /**
  * An Internet Exchange Point (IXP).
@@ -26,5 +26,7 @@ export interface InternetExchange {
   readonly summary: string;
   /** IXP's official website. */
   readonly websiteUrl?: string;
+  /** Editorial intelligence sections. */
+  readonly editorial?: EditorialBlock;
   readonly provenance: Provenance;
 }
