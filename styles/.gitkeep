@@ -1,0 +1,3 @@
+Reserved for non-Tailwind stylesheet partials (e.g. typography
+overrides imported by `src/app/globals.css`). The folder is empty
+until a non-utility stylesheet ships.

@@ -1,0 +1,19 @@
+export interface NavLink {
+  readonly label: string;
+  readonly href: string;
+  readonly description?: string;
+}
+
+export const PRIMARY_NAV: ReadonlyArray<NavLink> = [
+  { label: "Countries", href: "/countries", description: "Sovereign infrastructure jurisdictions." },
+  { label: "Cities", href: "/cities", description: "Infrastructure hub metros." },
+  { label: "Cloud", href: "/cloud", description: "Provider region directories." },
+  { label: "IXPs", href: "/ixps", description: "Internet Exchange Points." },
+  { label: "Rankings", href: "/rankings", description: "Source-cited comparative rankings." },
+];
+
+export const SECONDARY_NAV: ReadonlyArray<NavLink> = [
+  { label: "Methodology", href: "/methodology" },
+  { label: "Sources", href: "/sources" },
+  { label: "About", href: "/about" },
+];
