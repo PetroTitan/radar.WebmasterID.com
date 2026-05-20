@@ -13,11 +13,11 @@ export function TrustTierBadge({ tier }: { readonly tier: TrustTier }) {
   const def = getTrustTierDefinition(tier);
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium ${TIER_STYLE[tier]}`}
+      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[0.7rem] font-medium ${TIER_STYLE[tier]}`}
       title={def.description}
     >
       <span className="font-mono uppercase tracking-wide">{tier}</span>
-      <span aria-hidden="true" className="text-ink-300">·</span>
+      <span aria-hidden="true" className="opacity-50">·</span>
       <span>{def.label}</span>
     </span>
   );

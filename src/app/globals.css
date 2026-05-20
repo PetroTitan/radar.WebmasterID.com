@@ -16,6 +16,13 @@
   body {
     @apply bg-surface-base text-ink-700 font-sans;
     text-rendering: optimizeLegibility;
+    /* Inter contextual alternates and stylistic set 1: cleaner
+       digits, calmer letterforms. Negligible cost; meaningful
+       editorial polish. */
+    font-feature-settings:
+      "cv11" on,
+      "ss01" on,
+      "ss03" on;
   }
 
   h1,
@@ -23,11 +30,26 @@
   h3,
   h4 {
     @apply font-display text-ink-900;
+    font-feature-settings: "ss01" on, "ss03" on;
+  }
+
+  /* Tabular figures everywhere stats appear — keeps columns of
+     numbers visually aligned even at small sizes. */
+  .num,
+  th,
+  .font-mono {
+    font-variant-numeric: tabular-nums;
   }
 
   ::selection {
-    background-color: rgba(59, 130, 246, 0.2);
+    background-color: rgba(59, 130, 246, 0.18);
     color: #0f172a;
+  }
+
+  *:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.22);
+    border-radius: 6px;
   }
 
   a {
@@ -42,5 +64,24 @@
   }
   details > summary::-webkit-details-marker {
     display: none;
+  }
+}
+
+@layer components {
+  /* Editorial intro paragraph following a page H1. */
+  .lead {
+    @apply text-lead text-ink-500;
+    max-width: 40rem;
+  }
+
+  /* Caption used above headings and on small inline labels. */
+  .eyebrow {
+    @apply text-eyebrow font-semibold uppercase text-ink-500;
+  }
+
+  /* Subtle hairline used to separate full-width sections without
+     adding visual weight. Sits inside Container blocks. */
+  .rule {
+    @apply border-t border-line;
   }
 }

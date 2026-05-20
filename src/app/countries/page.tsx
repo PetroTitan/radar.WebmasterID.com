@@ -33,32 +33,33 @@ export default function CountriesIndex() {
 
   return (
     <Container as="article">
-      <header className="border-b border-line pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
-          Index · Countries
-        </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
+      <header className="border-b border-line pb-12 md:pb-16">
+        <p className="eyebrow text-accent-600">Index · Countries</p>
+        <h1 className="mt-6 text-balance font-display text-hero font-semibold text-ink-900">
           Countries as infrastructure jurisdictions.
         </h1>
-        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
+        <p className="mt-7 max-w-prose text-lead text-ink-500">
           The country is the legal and policy unit of internet infrastructure.
           Every IXP, cloud region, cable landing, and datacenter facility in the
           Radar graph resolves back to a country record.
         </p>
-        <p className="mt-4 max-w-prose text-sm text-ink-9000">
+        <p className="mt-6 max-w-prose text-sm text-ink-500">
           Index updated {LAST_UPDATED}. See{" "}
-          <Link href="/methodology" className="text-accent-600 hover:text-accent-700">
+          <Link
+            href="/methodology"
+            className="text-accent-600 hover:text-accent-700"
+          >
             methodology
           </Link>{" "}
           for verification criteria.
         </p>
       </header>
 
-      <section className="mt-10">
+      <section className="mt-12 md:mt-16">
         {COUNTRIES.length === 0 ? (
           <EmptyIndexState entity="country records" />
         ) : (
-          <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {COUNTRIES.map((country) => (
               <li key={country.slug}>
                 <Card

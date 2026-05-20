@@ -33,32 +33,35 @@ export default function CloudIndex() {
 
   return (
     <Container as="article">
-      <header className="border-b border-line pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
-          Index · Cloud providers
-        </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
+      <header className="border-b border-line pb-12 md:pb-16">
+        <p className="eyebrow text-accent-600">Index · Cloud providers</p>
+        <h1 className="mt-6 text-balance font-display text-hero font-semibold text-ink-900">
           Cloud regions, normalised.
         </h1>
-        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
+        <p className="mt-7 max-w-prose text-lead text-ink-500">
           Provider region directories are the only authoritative public record
-          of where the major clouds operate. Radar normalises them onto a single
-          schema and resolves each region to a verified country and metro.
+          of where the major clouds operate. Radar normalises them onto a
+          single schema and resolves each region to a verified country and
+          metro.
         </p>
-        <p className="mt-4 max-w-prose text-sm text-ink-9000">
+        <p className="mt-6 max-w-prose text-sm text-ink-500">
           Index updated {LAST_UPDATED}. Provider records are tier-3 (vendor
           primary docs); see{" "}
-          <Link href="/methodology" className="text-accent-600 hover:text-accent-700">
+          <Link
+            href="/methodology"
+            className="text-accent-600 hover:text-accent-700"
+          >
             methodology
-          </Link>.
+          </Link>
+          .
         </p>
       </header>
 
-      <section className="mt-10">
+      <section className="mt-12 md:mt-16">
         {CLOUD_PROVIDERS.length === 0 ? (
           <EmptyIndexState entity="cloud provider records" />
         ) : (
-          <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {CLOUD_PROVIDERS.map((provider) => (
               <li key={provider.slug}>
                 <Card

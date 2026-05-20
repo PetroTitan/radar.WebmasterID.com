@@ -32,39 +32,40 @@ export default function CitiesIndex() {
 
   return (
     <Container as="article">
-      <header className="border-b border-line pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
-          Index · Cities
-        </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
+      <header className="border-b border-line pb-12 md:pb-16">
+        <p className="eyebrow text-accent-600">Index · Cities</p>
+        <h1 className="mt-6 text-balance font-display text-hero font-semibold text-ink-900">
           Where the internet physically converges.
         </h1>
-        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
+        <p className="mt-7 max-w-prose text-lead text-ink-500">
           The metro is the operational unit of internet infrastructure. Routing,
           peering, and cable landings cluster at the city level — and so does
           the Radar graph.
         </p>
-        <p className="mt-4 max-w-prose text-sm text-ink-9000">
+        <p className="mt-6 max-w-prose text-sm text-ink-500">
           Index updated {LAST_UPDATED}. See{" "}
-          <Link href="/methodology" className="text-accent-600 hover:text-accent-700">
+          <Link
+            href="/methodology"
+            className="text-accent-600 hover:text-accent-700"
+          >
             methodology
           </Link>{" "}
           for verification criteria.
         </p>
       </header>
 
-      <section className="mt-10">
+      <section className="mt-12 md:mt-16">
         {CITIES.length === 0 ? (
           <EmptyIndexState entity="metro records" />
         ) : (
-          <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {CITIES.map((city) => (
               <li key={city.slug}>
                 <Card
                   title={city.name}
                   description={city.summary}
                   href={`/cities/${city.slug}`}
-                  eyebrow={`${city.countryCode}`}
+                  eyebrow={city.countryCode}
                 />
               </li>
             ))}

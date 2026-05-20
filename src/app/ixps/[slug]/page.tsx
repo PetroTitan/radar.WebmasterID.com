@@ -3,6 +3,7 @@ import Script from "next/script";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { EntityHeader } from "@/components/ui/EntityHeader";
+import { EntitySection } from "@/components/ui/EntitySection";
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
@@ -66,66 +67,62 @@ export default async function IxpPage({ params }: RouteParams) {
         lastUpdated={ixp.provenance.lastUpdated}
       />
 
-      <section className="mt-12">
-        <h2 className="text-xl font-semibold text-ink-900">Key metrics</h2>
-        <p className="mt-2 max-w-prose text-sm text-ink-500">
-          Identity facts plus the most recent observed traffic and membership
-          values. Observation dates are recorded with each value.
-        </p>
-        <div className="mt-6">
-          <MetricTable
-            rows={[
-              { label: "Operator", value: ixp.operator },
-              {
-                label: "Location",
-                value: city ? city.name : null,
-              },
-              { label: "Connected networks", value: null },
-              { label: "Peak traffic", value: null, unit: "Tbps" },
-              {
-                label: "PeeringDB ID",
-                value: ixp.peeringDbId ?? null,
-                sourceLabel: "PeeringDB",
-              },
-            ]}
+      <EntitySection
+        title="Key metrics"
+        description="Identity facts plus the most recent observed traffic and membership values. Observation dates are recorded with each value."
+      >
+        <MetricTable
+          rows={[
+            { label: "Operator", value: ixp.operator },
+            { label: "Location", value: city ? city.name : null },
+            { label: "Connected networks", value: null },
+            { label: "Peak traffic", value: null, unit: "Tbps" },
+            {
+              label: "PeeringDB ID",
+              value: ixp.peeringDbId ?? null,
+              sourceLabel: "PeeringDB",
+            },
+          ]}
+        />
+      </EntitySection>
+
+      <EntitySection title="Related entities">
+        <div className="grid gap-6 md:grid-cols-2">
+          <RelatedEntities
+            title="Hub city"
+            items={city ? [{ href: `/cities/${city.slug}`, label: city.name }] : []}
+          />
+          <RelatedEntities
+            title="Country"
+            items={
+              country
+                ? [
+                    {
+                      href: `/countries/${country.slug}`,
+                      label: country.name,
+                      note: country.code,
+                    },
+                  ]
+                : []
+            }
           />
         </div>
-      </section>
+      </EntitySection>
 
-      <section className="mt-12 grid gap-6 md:grid-cols-2">
-        <RelatedEntities
-          title="Hub city"
-          items={city ? [{ href: `/cities/${city.slug}`, label: city.name }] : []}
-        />
-        <RelatedEntities
-          title="Country"
-          items={
-            country
-              ? [
-                  {
-                    href: `/countries/${country.slug}`,
-                    label: country.name,
-                    note: country.code,
-                  },
-                ]
-              : []
-          }
-        />
-      </section>
+      <EntitySection title="Infrastructure role">
+        <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+          {ixp.summary}
+        </p>
+      </EntitySection>
 
-      <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-ink-900">
-          Infrastructure role
-        </h2>
-        <p className="mt-3 text-ink-700">{ixp.summary}</p>
-      </section>
-
-      <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-ink-900">Sources</h2>
-        <div className="mt-4">
-          <SourceFootnote citations={ixp.provenance.sources} />
-        </div>
-      </section>
+      <EntitySection title="Sources">
+        <SourceFootnote citations={ixp.provenance.sources} />
+        {ixp.provenance.note ? (
+          <p className="mt-6 max-w-prose text-sm italic text-ink-500">
+            {ixp.provenance.note}
+          </p>
+        ) : null}
+      </EntitySection>
 
       {ldNodes.map((node, i) => (
         <Script

@@ -63,29 +63,30 @@ export default function RankingsPage() {
 
   return (
     <Container as="article">
-      <header className="border-b border-line pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
-          Rankings
-        </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
+      <header className="border-b border-line pb-12 md:pb-16">
+        <p className="eyebrow text-accent-600">Rankings</p>
+        <h1 className="mt-6 text-balance font-display text-hero font-semibold text-ink-900">
           Comparative views, source-cited.
         </h1>
-        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
-          Radar does not publish a single overall &ldquo;infrastructure score&rdquo;. Operators
-          care about different dimensions; we rank each dimension separately and
-          document the inputs.
+        <p className="mt-7 max-w-prose text-lead text-ink-500">
+          Radar does not publish a single overall &ldquo;infrastructure
+          score&rdquo;. Operators care about different dimensions; we rank
+          each dimension separately and document the inputs.
         </p>
-        <p className="mt-4 max-w-prose text-sm text-ink-9000">
+        <p className="mt-6 max-w-prose text-sm text-ink-500">
           Updated {LAST_UPDATED}. See{" "}
-          <Link href="/methodology#scoring" className="text-accent-600 hover:text-accent-700">
+          <Link
+            href="/methodology#scoring"
+            className="text-accent-600 hover:text-accent-700"
+          >
             scoring methodology
           </Link>{" "}
           for the editorial position.
         </p>
       </header>
 
-      <section className="mt-10">
-        <ul className="grid gap-4 md:grid-cols-2">
+      <section className="mt-12 md:mt-16">
+        <ul className="grid gap-5 md:grid-cols-2">
           {RANKINGS.map((ranking) => (
             <li key={ranking.title}>
               <Card

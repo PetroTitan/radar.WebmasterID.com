@@ -14,22 +14,22 @@ interface RelatedEntitiesProps {
 export function RelatedEntities({ title, items }: RelatedEntitiesProps) {
   if (items.length === 0) return null;
   return (
-    <section className="rounded-card border border-line bg-surface-base p-7">
-      <h2 className="text-xs font-semibold uppercase tracking-eyebrow text-ink-500">
-        {title}
-      </h2>
-      <ul className="mt-5 grid gap-2 sm:grid-cols-2">
+    <section className="rounded-card border border-line bg-surface-base p-7 sm:p-8">
+      <h2 className="eyebrow text-ink-500">{title}</h2>
+      <ul className="mt-6 divide-y divide-line/60">
         {items.map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}
-              className="group flex items-baseline justify-between gap-3 rounded-md px-3 py-2.5 transition hover:bg-surface-subtle"
+              className="group flex items-baseline justify-between gap-3 py-3 transition first:pt-0 last:pb-0 hover:text-accent-700"
             >
-              <span className="font-medium text-ink-900">
+              <span className="text-[0.95rem] font-medium text-ink-900 group-hover:text-accent-700">
                 {item.label}
               </span>
               {item.note ? (
-                <span className="font-mono text-xs uppercase text-ink-500">{item.note}</span>
+                <span className="font-mono text-[0.7rem] uppercase tracking-wider text-ink-500">
+                  {item.note}
+                </span>
               ) : null}
             </Link>
           </li>

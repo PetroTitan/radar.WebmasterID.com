@@ -33,7 +33,7 @@ const INTELLIGENCE_OVERVIEW = [
   {
     title: "Cloud regions",
     description:
-      "Provider-published region directories, normalised to a single schema and pinned to a country/metro.",
+      "Provider-published region directories, normalised to a single schema and pinned to a country / metro.",
     href: "/cloud",
   },
   {
@@ -124,16 +124,14 @@ export default function HomePage() {
 
 function Hero() {
   return (
-    <Container as="section" className="pt-2 pb-section">
-      <div className="grid items-start gap-16 lg:grid-cols-12">
+    <Container as="section" className="pt-4 pb-section-y md:pt-8">
+      <div className="grid items-start gap-12 md:gap-16 lg:grid-cols-12">
         <div className="lg:col-span-7">
-          <p className="text-xs font-semibold uppercase tracking-eyebrow text-accent-600">
-            Infrastructure Intelligence
-          </p>
-          <h1 className="mt-5 text-balance font-display text-hero font-semibold text-ink-900">
+          <p className="eyebrow text-accent-600">Infrastructure intelligence</p>
+          <h1 className="mt-6 text-balance font-display text-hero font-semibold text-ink-900">
             Understand the infrastructure that connects the world.
           </h1>
-          <p className="mt-7 max-w-prose text-lg leading-relaxed text-ink-500 md:text-xl">
+          <p className="mt-7 max-w-prose text-lead text-ink-500">
             Verified, source-governed data on cloud regions, Internet Exchanges,
             datacenters, subsea cables, and the institutions that operate them.
             Every fact is cited. Where data is absent, we say so.
@@ -141,24 +139,28 @@ function Hero() {
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
               href="/countries"
-              className="inline-flex items-center rounded-md bg-accent-600 px-4 py-2.5 text-sm font-medium text-white shadow-card transition hover:bg-accent-700"
+              className="inline-flex items-center rounded-md bg-accent-600 px-5 py-2.5 text-sm font-medium text-white shadow-card transition hover:bg-accent-700"
             >
               Explore the graph
             </Link>
             <Link
               href="/methodology"
-              className="inline-flex items-center rounded-md border border-line px-4 py-2.5 text-sm font-medium text-ink-700 transition hover:border-line-strong hover:text-ink-900"
+              className="inline-flex items-center rounded-md border border-line px-5 py-2.5 text-sm font-medium text-ink-700 transition hover:border-line-strong hover:text-ink-900"
             >
               Read the methodology
             </Link>
           </div>
         </div>
         <aside className="lg:col-span-5">
-          <div className="rounded-card border border-line bg-surface-subtle p-8">
-            <p className="text-xs font-semibold uppercase tracking-eyebrow text-ink-500">
-              Knowledge graph · live
+          <div className="rounded-card border border-line bg-surface-subtle p-8 md:p-10">
+            <p className="inline-flex items-center gap-2 eyebrow text-ink-500">
+              <span
+                aria-hidden="true"
+                className="size-1.5 rounded-full bg-accent-500"
+              />
+              Knowledge graph
             </p>
-            <dl className="mt-6 grid grid-cols-3 gap-x-6 gap-y-6">
+            <dl className="num mt-7 grid grid-cols-3 gap-x-6 gap-y-8">
               <Stat label="Countries" value={COUNTRIES.length} />
               <Stat label="Metros" value={CITIES.length} />
               <Stat label="IXPs" value={IXPS.length} />
@@ -166,7 +168,7 @@ function Hero() {
               <Stat label="Cloud regions" value="—" hint="pending" />
               <Stat label="Cables" value="—" hint="pending" />
             </dl>
-            <p className="mt-7 text-xs leading-relaxed text-ink-500">
+            <p className="mt-8 max-w-[26rem] text-[0.8125rem] leading-relaxed text-ink-500">
               Counts reflect verified records currently in the knowledge graph.
               Pending fields await editorial review against registered sources.
             </p>
@@ -188,14 +190,14 @@ function Stat({
 }) {
   return (
     <div>
-      <dt className="text-xs font-medium uppercase tracking-eyebrow text-ink-500">
+      <dt className="text-[0.7rem] font-medium uppercase tracking-eyebrow text-ink-500">
         {label}
       </dt>
-      <dd className="mt-1.5 font-display text-2xl font-semibold text-ink-900">
+      <dd className="mt-2 font-display text-[1.75rem] font-semibold leading-none text-ink-900">
         {value}
       </dd>
       {hint ? (
-        <p className="mt-0.5 text-xs italic text-ink-300">{hint}</p>
+        <p className="mt-1 text-[0.7rem] italic text-ink-300">{hint}</p>
       ) : null}
     </div>
   );
@@ -205,11 +207,19 @@ function FeaturedHubs() {
   const featured = CITIES;
   if (featured.length === 0) return null;
   return (
-    <Container as="section" className="py-section">
+    <Container as="section" className="py-section-y">
       <SectionHeading
         eyebrow="Featured infrastructure hubs"
         title="The metros that move the internet."
         description="Most global traffic concentrates in fewer than thirty cities. These are the anchors of the graph."
+        trailing={
+          <Link
+            href="/cities"
+            className="text-sm font-medium text-accent-600 hover:text-accent-700"
+          >
+            View all metros →
+          </Link>
+        }
       />
       <div className="mt-12 grid gap-5 md:grid-cols-3">
         {featured.map((city) => (
@@ -228,7 +238,7 @@ function FeaturedHubs() {
 
 function IntelligenceOverview() {
   return (
-    <Container as="section" className="py-section">
+    <Container as="section" className="py-section-y">
       <SectionHeading
         eyebrow="Infrastructure intelligence"
         title="Four axes, one graph."
@@ -245,20 +255,18 @@ function IntelligenceOverview() {
 
 function FeaturedRankings() {
   return (
-    <Container as="section" className="py-section">
+    <Container as="section" className="py-section-y">
       <SectionHeading
         eyebrow="Featured rankings"
         title="Source-cited comparative views."
-        description={
-          <>
-            Each ranking publishes its inputs, weights, and last-recomputed date.{" "}
-            <Link
-              href="/rankings"
-              className="text-accent-600 hover:text-accent-700"
-            >
-              See all rankings →
-            </Link>
-          </>
+        description="Each ranking publishes its inputs, weights, and last-recomputed date."
+        trailing={
+          <Link
+            href="/rankings"
+            className="text-sm font-medium text-accent-600 hover:text-accent-700"
+          >
+            See all rankings →
+          </Link>
         }
       />
       <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -277,7 +285,7 @@ function FeaturedRankings() {
 
 function FeaturedReports() {
   return (
-    <Container as="section" className="py-section">
+    <Container as="section" className="py-section-y">
       <SectionHeading
         eyebrow="Featured reports"
         title="Editorial work, ingest-ready."
@@ -298,16 +306,14 @@ function FeaturedReports() {
 
 function FeaturedMaps() {
   return (
-    <Container as="section" className="py-section">
+    <Container as="section" className="py-section-y">
       <SectionHeading
         eyebrow="Maps"
         title="A map layer is on the way."
         description="The graph is built map-ready: cities carry coordinates, cables carry landings, regions carry country anchors. Cartography ships once the underlying data passes verification."
       />
-      <div className="mt-12 rounded-card border border-dashed border-line-strong bg-surface-subtle p-14 text-center">
-        <p className="text-xs font-semibold uppercase tracking-eyebrow text-ink-500">
-          Map module
-        </p>
+      <div className="mt-12 rounded-card border border-dashed border-line-strong bg-surface-subtle px-8 py-16 text-center md:py-20">
+        <p className="eyebrow text-ink-500">Map module</p>
         <p className="mt-3 text-ink-700">Data not yet verified.</p>
       </div>
     </Container>
@@ -317,19 +323,18 @@ function FeaturedMaps() {
 function SourceTransparency() {
   const topSources = SOURCE_REGISTRY.slice(0, 6);
   return (
-    <Container as="section" className="py-section">
+    <Container as="section" className="py-section-y">
       <SectionHeading
         eyebrow="Source transparency"
         title="Every value traces back to a registered source."
-        description={
-          <>
-            Sources are tier-assigned, license-noted, and dated. The full
-            registry lives on{" "}
-            <Link href="/sources" className="text-accent-600 hover:text-accent-700">
-              /sources
-            </Link>
-            .
-          </>
+        description="Sources are tier-assigned, license-noted, and dated."
+        trailing={
+          <Link
+            href="/sources"
+            className="text-sm font-medium text-accent-600 hover:text-accent-700"
+          >
+            View the full registry →
+          </Link>
         }
       />
       <ul className="mt-12 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -337,17 +342,17 @@ function SourceTransparency() {
           <li key={source.id}>
             <Link
               href={`/sources#${source.id}`}
-              className="group flex items-center justify-between gap-3 rounded-card border border-line bg-surface-base px-5 py-4 transition hover:border-accent-200"
+              className="group flex items-center justify-between gap-3 rounded-card border border-line bg-surface-base px-5 py-4 transition hover:border-line-strong hover:shadow-card-hover"
             >
               <span>
-                <span className="block font-medium text-ink-900 group-hover:text-accent-700">
+                <span className="block text-[0.95rem] font-medium text-ink-900 group-hover:text-accent-700">
                   {source.name}
                 </span>
-                <span className="mt-0.5 block text-xs uppercase tracking-eyebrow text-ink-500">
+                <span className="mt-0.5 block eyebrow text-ink-500">
                   {source.category}
                 </span>
               </span>
-              <span className="font-mono text-xs uppercase text-amber-600">
+              <span className="font-mono text-[0.7rem] uppercase tracking-wider text-amber-600">
                 {source.trustTier}
               </span>
             </Link>
@@ -361,11 +366,19 @@ function SourceTransparency() {
 function MethodologyPreview() {
   const preview = METHODOLOGY_SECTIONS.slice(0, 2);
   return (
-    <Container as="section" className="py-section">
+    <Container as="section" className="py-section-y">
       <SectionHeading
         eyebrow="Methodology"
         title="What we publish, and what we refuse to publish."
-        description={`Last reviewed ${METHODOLOGY_LAST_UPDATED}. The full document is on /methodology.`}
+        description={`Last reviewed ${METHODOLOGY_LAST_UPDATED}.`}
+        trailing={
+          <Link
+            href="/methodology"
+            className="text-sm font-medium text-accent-600 hover:text-accent-700"
+          >
+            Read the full methodology →
+          </Link>
+        }
       />
       <div className="mt-12 grid gap-6 md:grid-cols-2">
         {preview.map((section) => (
@@ -373,13 +386,13 @@ function MethodologyPreview() {
             key={section.id}
             className="rounded-card border border-line bg-surface-base p-8"
           >
-            <h3 className="font-display text-lg font-semibold text-ink-900">
+            <h3 className="font-display text-h3 font-semibold text-ink-900">
               {section.title}
             </h3>
             {section.paragraphs.map((paragraph) => (
               <p
                 key={paragraph}
-                className="mt-3 text-sm leading-relaxed text-ink-500"
+                className="mt-4 text-[0.9375rem] leading-relaxed text-ink-500"
               >
                 {paragraph}
               </p>
@@ -387,19 +400,13 @@ function MethodologyPreview() {
           </article>
         ))}
       </div>
-      <Link
-        href="/methodology"
-        className="mt-10 inline-flex items-center text-sm font-medium text-accent-600 hover:text-accent-700"
-      >
-        Read the full methodology →
-      </Link>
     </Container>
   );
 }
 
 function InternalLinking() {
   return (
-    <Container as="section" className="py-section">
+    <Container as="section" className="py-section-y">
       <SectionHeading eyebrow="Explore" title="Where to go next." />
       <div className="mt-10 grid gap-3 md:grid-cols-3">
         <InternalLink href="/countries" label="All countries" />
@@ -423,9 +430,15 @@ function InternalLink({
   return (
     <Link
       href={href}
-      className="rounded-card border border-line bg-surface-base px-5 py-4 text-sm font-medium text-ink-700 transition hover:border-accent-200 hover:text-accent-700"
+      className="group flex items-center justify-between rounded-card border border-line bg-surface-base px-5 py-4 text-sm font-medium text-ink-700 transition hover:border-line-strong hover:text-accent-700"
     >
       {label}
+      <span
+        aria-hidden="true"
+        className="text-ink-300 transition group-hover:text-accent-600"
+      >
+        →
+      </span>
     </Link>
   );
 }

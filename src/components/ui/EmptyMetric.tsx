@@ -8,14 +8,14 @@
 export function EmptyMetric() {
   return (
     <span
-      className="inline-flex items-center gap-1.5 text-ink-300"
+      className="inline-flex items-center gap-2 text-[0.875rem] italic text-ink-300"
       aria-label="Data not yet verified."
     >
       <span
         aria-hidden="true"
-        className="inline-block size-1.5 rounded-full bg-ink-300"
+        className="inline-block size-1 rounded-full bg-ink-300"
       />
-      <span className="italic">Data not yet verified.</span>
+      Data not yet verified.
     </span>
   );
 }

@@ -91,28 +91,38 @@ const config: Config = {
         ],
       },
       fontSize: {
-        hero: ["clamp(2.5rem, 5vw, 4rem)", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
-        display: ["clamp(2rem, 3.5vw, 2.75rem)", { lineHeight: "1.1", letterSpacing: "-0.015em" }],
-        h1: ["clamp(1.875rem, 2.75vw, 2.25rem)", { lineHeight: "1.15", letterSpacing: "-0.01em" }],
-        h2: ["1.5rem", { lineHeight: "1.25", letterSpacing: "-0.005em" }],
+        // Editorial scale. Hero / display / h1 / h2 are clamped so
+        // they scale calmly between phone and desktop. `lead` is the
+        // intro-paragraph utility used after every page H1.
+        hero: ["clamp(2.25rem, 4.6vw, 3.75rem)", { lineHeight: "1.06", letterSpacing: "-0.022em" }],
+        display: ["clamp(1.875rem, 3.4vw, 2.625rem)", { lineHeight: "1.1", letterSpacing: "-0.018em" }],
+        h1: ["clamp(1.625rem, 2.6vw, 2.125rem)", { lineHeight: "1.15", letterSpacing: "-0.012em" }],
+        h2: ["1.375rem", { lineHeight: "1.3", letterSpacing: "-0.008em" }],
+        h3: ["1.0625rem", { lineHeight: "1.4", letterSpacing: "-0.004em" }],
+        lead: ["clamp(1.0625rem, 1.4vw, 1.1875rem)", { lineHeight: "1.65" }],
+        eyebrow: ["0.6875rem", { lineHeight: "1", letterSpacing: "0.16em" }],
       },
       letterSpacing: {
-        eyebrow: "0.14em",
+        eyebrow: "0.16em",
       },
       maxWidth: {
         content: "80rem",
-        prose: "44rem",
+        prose: "42rem",
         editorial: "56rem",
       },
       spacing: {
-        section: "5rem",
+        // Section rhythm: ~4rem on phones, ~7rem on desktop. Used
+        // as `py-section-y` on every major homepage / route block
+        // so the page breathes consistently.
+        "section-y": "clamp(3.5rem, 8vw, 7rem)",
       },
       boxShadow: {
-        card: "0 1px 2px rgba(15, 23, 42, 0.04)",
-        "card-hover": "0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04)",
+        card: "0 1px 2px rgba(15, 23, 42, 0.03)",
+        "card-hover": "0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 20px -8px rgba(15, 23, 42, 0.08)",
+        focus: "0 0 0 3px rgba(59, 130, 246, 0.22)",
       },
       borderRadius: {
-        card: "0.75rem",
+        card: "0.875rem",
       },
     },
   },

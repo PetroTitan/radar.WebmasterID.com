@@ -32,19 +32,19 @@ export default function IxpsIndex() {
 
   return (
     <Container as="article">
-      <header className="border-b border-line pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
+      <header className="border-b border-line pb-12 md:pb-16">
+        <p className="eyebrow text-accent-600">
           Index · Internet Exchange Points
         </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
+        <h1 className="mt-6 text-balance font-display text-hero font-semibold text-ink-900">
           The peering fabrics that move regional traffic.
         </h1>
-        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
+        <p className="mt-7 max-w-prose text-lead text-ink-500">
           IXPs are the physical interconnect points where networks exchange
           traffic directly. The largest IXPs carry traffic on the same order of
           magnitude as the largest national backbones.
         </p>
-        <p className="mt-4 max-w-prose text-sm text-ink-9000">
+        <p className="mt-6 max-w-prose text-sm text-ink-500">
           Index updated {LAST_UPDATED}. IXP identity records reference{" "}
           <Link
             href="/sources#peeringdb"
@@ -56,11 +56,11 @@ export default function IxpsIndex() {
         </p>
       </header>
 
-      <section className="mt-10">
+      <section className="mt-12 md:mt-16">
         {IXPS.length === 0 ? (
           <EmptyIndexState entity="IXP records" />
         ) : (
-          <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {IXPS.map((ixp) => (
               <li key={ixp.slug}>
                 <Card

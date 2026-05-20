@@ -3,6 +3,7 @@ import Script from "next/script";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { EntityHeader } from "@/components/ui/EntityHeader";
+import { EntitySection } from "@/components/ui/EntitySection";
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
@@ -27,7 +28,7 @@ export async function generateMetadata({
   const city = getCity(slug);
   if (!city) return {};
   return buildPageMetadata({
-    title: `${city.name}`,
+    title: city.name,
     description: `${city.name} — infrastructure profile: IXPs, cloud regions, cable landings. Every figure source-cited.`,
     path: `/cities/${city.slug}`,
     lastUpdated: city.provenance.lastUpdated,
@@ -67,59 +68,53 @@ export default async function CityPage({ params }: RouteParams) {
         lastUpdated={city.provenance.lastUpdated}
       />
 
-      <section className="mt-12">
-        <h2 className="text-xl font-semibold text-ink-900">Key metrics</h2>
-        <p className="mt-2 max-w-prose text-sm text-ink-500">
-          Metro-level structural metrics. Volatile observations (peering peaks,
-          latency samples) carry their own observation date and confidence.
-        </p>
-        <div className="mt-6">
-          <MetricTable
-            rows={[
-              { label: "Internet Exchange Points", value: null },
-              { label: "Announced cloud regions", value: null },
-              { label: "Submarine cable landings", value: null },
-              { label: "Peak peering traffic", value: null, unit: "Tbps" },
+      <EntitySection
+        title="Key metrics"
+        description="Metro-level structural metrics. Volatile observations (peering peaks, latency samples) carry their own observation date and confidence."
+      >
+        <MetricTable
+          rows={[
+            { label: "Internet Exchange Points", value: null },
+            { label: "Announced cloud regions", value: null },
+            { label: "Submarine cable landings", value: null },
+            { label: "Peak peering traffic", value: null, unit: "Tbps" },
+          ]}
+        />
+      </EntitySection>
+
+      <EntitySection title="Related entities">
+        <div className="grid gap-6 md:grid-cols-2">
+          <RelatedEntities
+            title="Internet Exchanges in this metro"
+            items={ixps.map((i) => ({ href: `/ixps/${i.slug}`, label: i.name }))}
+          />
+          <RelatedEntities
+            title="Country"
+            items={[
+              {
+                href: `/countries/${city.countrySlug}`,
+                label: country?.name ?? city.countryCode,
+                note: city.countryCode,
+              },
             ]}
           />
         </div>
-      </section>
+      </EntitySection>
 
-      <section className="mt-12 grid gap-6 md:grid-cols-2">
-        <RelatedEntities
-          title="Internet Exchanges in this metro"
-          items={ixps.map((i) => ({ href: `/ixps/${i.slug}`, label: i.name }))}
-        />
-        <RelatedEntities
-          title="Country"
-          items={[
-            {
-              href: `/countries/${city.countrySlug}`,
-              label: country?.name ?? city.countryCode,
-              note: city.countryCode,
-            },
-          ]}
-        />
-      </section>
+      <EntitySection title="Infrastructure role">
+        <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+          {city.summary}
+        </p>
+      </EntitySection>
 
-      <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-ink-900">
-          Infrastructure role
-        </h2>
-        <p className="mt-3 text-ink-700">{city.summary}</p>
-      </section>
-
-      <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-ink-900">Sources</h2>
-        <div className="mt-4">
-          <SourceFootnote citations={city.provenance.sources} />
-        </div>
+      <EntitySection title="Sources">
+        <SourceFootnote citations={city.provenance.sources} />
         {city.provenance.note ? (
-          <p className="mt-4 text-sm italic text-ink-500">
+          <p className="mt-6 max-w-prose text-sm italic text-ink-500">
             {city.provenance.note}
           </p>
         ) : null}
-      </section>
+      </EntitySection>
 
       {ldNodes.map((node, i) => (
         <Script

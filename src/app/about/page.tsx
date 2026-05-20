@@ -17,102 +17,139 @@ export const metadata: Metadata = buildPageMetadata({
   lastUpdated: LAST_UPDATED,
 });
 
+const SECTIONS = [
+  {
+    id: "mission",
+    title: "Mission",
+    body: (
+      <>
+        Internet infrastructure is opaque by design. Operators publish what
+        commerce requires and little more, while the bulk of the system —
+        cables, exchanges, regional points of presence — operates outside
+        ordinary public visibility. Radar&apos;s mission is to build a
+        verified, citable record of that system, so operators, researchers,
+        and policymakers can reason about it on shared ground.
+      </>
+    ),
+  },
+  {
+    id: "position",
+    title: "Editorial position",
+    body: (
+      <>
+        Radar refuses to publish fabricated or unverified figures. Where data
+        is unknown or contested, the platform displays{" "}
+        <span className="rounded bg-surface-subtle px-1.5 py-0.5 font-mono text-[0.85em] text-ink-700">
+          &ldquo;Data not yet verified.&rdquo;
+        </span>{" "}
+        The absence of a number is itself a published signal.
+      </>
+    ),
+  },
+  {
+    id: "scope",
+    title: "Scope",
+    body: (
+      <>
+        The knowledge graph covers internet infrastructure, cloud regions,
+        Internet Exchange Points, datacenters, submarine cables, internet
+        resilience, and AI infrastructure readiness. New entity types are
+        added only after a methodology entry has been written.
+      </>
+    ),
+  },
+] as const;
+
 export default function AboutPage() {
   const ld = breadcrumbJsonLd([{ name: "About", path: PAGE_PATH }]);
 
   return (
     <Container as="article">
-      <header className="border-b border-line pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
-          About
-        </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
+      <header className="border-b border-line pb-12 md:pb-16">
+        <p className="eyebrow text-accent-600">About</p>
+        <h1 className="mt-6 text-balance font-display text-hero font-semibold text-ink-900">
           A platform for verifiable infrastructure facts.
         </h1>
-        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
+        <p className="mt-7 max-w-prose text-lead text-ink-500">
           {SITE.description}
         </p>
-        <p className="mt-4 text-sm text-ink-9000">
+        <p className="mt-6 text-sm text-ink-500">
           Last reviewed {LAST_UPDATED}.
         </p>
       </header>
 
-      <div className="mt-12 grid gap-12 md:grid-cols-3">
-        <section className="md:col-span-2 max-w-prose">
-          <h2 className="text-xl font-semibold text-ink-900">Mission</h2>
-          <p className="mt-3 text-ink-700">
-            Internet infrastructure is opaque by design. Operators publish what
-            commerce requires and little more, while the bulk of the system —
-            cables, exchanges, regional points of presence — operates outside
-            ordinary public visibility. Radar&apos;s mission is to build a verified,
-            citable record of that system, so operators, researchers, and
-            policymakers can reason about it on shared ground.
-          </p>
+      <div className="mt-14 grid gap-12 md:mt-20 md:grid-cols-12 md:gap-16">
+        <section className="md:col-span-8">
+          <div className="space-y-14">
+            {SECTIONS.map((section) => (
+              <section
+                key={section.id}
+                id={section.id}
+                className="scroll-mt-28 max-w-prose"
+              >
+                <h2 className="font-display text-h1 font-semibold text-ink-900">
+                  {section.title}
+                </h2>
+                <p className="mt-5 text-[0.9375rem] leading-relaxed text-ink-700">
+                  {section.body}
+                </p>
+              </section>
+            ))}
 
-          <h2 className="mt-10 text-xl font-semibold text-ink-900">
-            Editorial position
-          </h2>
-          <p className="mt-3 text-ink-700">
-            Radar refuses to publish fabricated or unverified figures. Where
-            data is unknown or contested, the platform displays{" "}
-            <span className="font-mono text-ink-700">
-              &ldquo;Data not yet verified.&rdquo;
-            </span>{" "}
-            The absence of a number is itself a published signal.
-          </p>
-
-          <h2 className="mt-10 text-xl font-semibold text-ink-900">Scope</h2>
-          <p className="mt-3 text-ink-700">
-            The knowledge graph covers internet infrastructure, cloud regions,
-            Internet Exchange Points, datacenters, submarine cables, internet
-            resilience, and AI infrastructure readiness. New entity types are
-            added only after a methodology entry has been written.
-          </p>
-
-          <h2 className="mt-10 text-xl font-semibold text-ink-900">
-            Independence
-          </h2>
-          <p className="mt-3 text-ink-700">
-            Radar is operated by {SITE.organization.name}. Sources are reviewed
-            on editorial criteria; vendor pages enter the registry as tier-3
-            (self-attested) and never as tier-1.
-          </p>
+            <section id="independence" className="scroll-mt-28 max-w-prose">
+              <h2 className="font-display text-h1 font-semibold text-ink-900">
+                Independence
+              </h2>
+              <p className="mt-5 text-[0.9375rem] leading-relaxed text-ink-700">
+                Radar is operated by {SITE.organization.name}. Sources are
+                reviewed on editorial criteria; vendor pages enter the
+                registry as tier-3 (self-attested) and never as tier-1.
+              </p>
+            </section>
+          </div>
         </section>
 
-        <aside className="space-y-6 text-sm">
-          <section className="rounded-lg border border-line bg-surface-base p-5">
-            <p className="text-xs font-semibold uppercase tracking-eyebrow text-ink-9000">
-              Explore the platform
-            </p>
-            <ul className="mt-4 space-y-2">
+        <aside className="md:col-span-4 lg:col-span-3 lg:col-start-10 space-y-6">
+          <section className="rounded-card border border-line bg-surface-base p-6">
+            <p className="eyebrow text-ink-500">Explore the platform</p>
+            <ul className="mt-5 space-y-3 text-sm">
               <li>
-                <Link href="/methodology" className="text-accent-600 hover:text-accent-700">
+                <Link
+                  href="/methodology"
+                  className="text-ink-900 underline decoration-line-strong underline-offset-4 hover:decoration-accent-400 hover:text-accent-700"
+                >
                   Methodology
                 </Link>
               </li>
               <li>
-                <Link href="/sources" className="text-accent-600 hover:text-accent-700">
+                <Link
+                  href="/sources"
+                  className="text-ink-900 underline decoration-line-strong underline-offset-4 hover:decoration-accent-400 hover:text-accent-700"
+                >
                   Source registry
                 </Link>
               </li>
               <li>
-                <Link href="/rankings" className="text-accent-600 hover:text-accent-700">
+                <Link
+                  href="/rankings"
+                  className="text-ink-900 underline decoration-line-strong underline-offset-4 hover:decoration-accent-400 hover:text-accent-700"
+                >
                   Rankings
                 </Link>
               </li>
             </ul>
           </section>
 
-          <section className="rounded-lg border border-line bg-surface-base p-5">
-            <p className="text-xs font-semibold uppercase tracking-eyebrow text-ink-9000">
-              Operator
+          <section className="rounded-card border border-line bg-surface-base p-6">
+            <p className="eyebrow text-ink-500">Operator</p>
+            <p className="mt-3 text-[0.95rem] font-medium text-ink-900">
+              {SITE.organization.name}
             </p>
-            <p className="mt-3 text-ink-700">{SITE.organization.name}</p>
             <a
               href={SITE.organization.url}
-              className="mt-1 inline-block text-ink-500 underline decoration-line-strong hover:text-ink-700"
+              className="mt-1 inline-block text-sm text-ink-500 hover:text-ink-900"
             >
-              {SITE.organization.url}
+              {SITE.organization.url} ↗
             </a>
           </section>
         </aside>

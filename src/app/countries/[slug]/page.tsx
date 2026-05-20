@@ -3,6 +3,7 @@ import Script from "next/script";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { EntityHeader } from "@/components/ui/EntityHeader";
+import { EntitySection } from "@/components/ui/EntitySection";
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
@@ -27,7 +28,7 @@ export async function generateMetadata({
   const country = getCountry(slug);
   if (!country) return {};
   return buildPageMetadata({
-    title: `${country.name}`,
+    title: country.name,
     description: `${country.name} — internet infrastructure profile: hub cities, IXPs, announced cloud regions and cable landings. Source-cited.`,
     path: `/countries/${country.slug}`,
     lastUpdated: country.provenance.lastUpdated,
@@ -68,59 +69,53 @@ export default async function CountryPage({ params }: RouteParams) {
         lastUpdated={country.provenance.lastUpdated}
       />
 
-      <section className="mt-12">
-        <h2 className="text-xl font-semibold text-ink-900">Key metrics</h2>
-        <p className="mt-2 max-w-prose text-sm text-ink-500">
-          Country-level structural metrics. Values appear here only after
-          editorial review against the cited sources.
-        </p>
-        <div className="mt-6">
-          <MetricTable
-            rows={[
-              { label: "Announced cloud regions", value: null },
-              { label: "Internet Exchange Points", value: null },
-              { label: "Submarine cable landings", value: null },
-              { label: "IPv6 adoption", value: null, unit: "%" },
-            ]}
+      <EntitySection
+        title="Key metrics"
+        description="Country-level structural metrics. Values appear here only after editorial review against the cited sources."
+      >
+        <MetricTable
+          rows={[
+            { label: "Announced cloud regions", value: null },
+            { label: "Internet Exchange Points", value: null },
+            { label: "Submarine cable landings", value: null },
+            { label: "IPv6 adoption", value: null, unit: "%" },
+          ]}
+        />
+      </EntitySection>
+
+      <EntitySection title="Related entities">
+        <div className="grid gap-6 md:grid-cols-2">
+          <RelatedEntities
+            title="Hub cities"
+            items={hubCities.map((c) => ({
+              href: `/cities/${c.slug}`,
+              label: c.name,
+            }))}
+          />
+          <RelatedEntities
+            title="Internet Exchanges"
+            items={ixps.map((i) => ({ href: `/ixps/${i.slug}`, label: i.name }))}
           />
         </div>
-      </section>
+      </EntitySection>
 
-      <section className="mt-12 grid gap-6 md:grid-cols-2">
-        <RelatedEntities
-          title="Hub cities"
-          items={hubCities.map((c) => ({
-            href: `/cities/${c.slug}`,
-            label: c.name,
-          }))}
-        />
-        <RelatedEntities
-          title="Internet Exchanges"
-          items={ixps.map((i) => ({ href: `/ixps/${i.slug}`, label: i.name }))}
-        />
-      </section>
-
-      <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-ink-900">
-          Infrastructure role
-        </h2>
-        <p className="mt-3 text-ink-700">{country.summary}</p>
-      </section>
-
-      <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-ink-900">Sources</h2>
-        <p className="mt-2 text-sm text-ink-500">
-          Records and direct citations supporting this page.
+      <EntitySection title="Infrastructure role">
+        <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+          {country.summary}
         </p>
-        <div className="mt-4">
-          <SourceFootnote citations={country.provenance.sources} />
-        </div>
+      </EntitySection>
+
+      <EntitySection
+        title="Sources"
+        description="Records and direct citations supporting this page."
+      >
+        <SourceFootnote citations={country.provenance.sources} />
         {country.provenance.note ? (
-          <p className="mt-4 text-sm italic text-ink-500">
+          <p className="mt-6 max-w-prose text-sm italic text-ink-500">
             {country.provenance.note}
           </p>
         ) : null}
-      </section>
+      </EntitySection>
 
       {ldNodes.map((node, i) => (
         <Script
