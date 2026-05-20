@@ -12,8 +12,11 @@ import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { COUNTRIES, getCountry, getCity, getIxp } from "@/data";
+import { listInsightsByEntityRef } from "@/content/insights";
+import { listGuidesByEntityRef } from "@/content/guides";
 import { buildPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd, countryJsonLd } from "@/lib/seo";
+import Link from "next/link";
 
 interface RouteParams {
   readonly params: Promise<{ readonly slug: string }>;
@@ -50,6 +53,8 @@ export default async function CountryPage({ params }: RouteParams) {
   const ixps = (country.ixpSlugs ?? [])
     .map((s) => getIxp(s))
     .filter((i): i is NonNullable<typeof i> => Boolean(i));
+  const relatedInsights = listInsightsByEntityRef(`country:${country.slug}`);
+  const relatedGuides = listGuidesByEntityRef(`country:${country.slug}`);
 
   const breadcrumb = breadcrumbJsonLd([
     { name: "Countries", path: "/countries" },
@@ -117,6 +122,48 @@ export default async function CountryPage({ params }: RouteParams) {
           </p>
         </EntitySection>
       )}
+
+      {relatedGuides.length + relatedInsights.length > 0 ? (
+        <EntitySection
+          title="Further reading"
+          description="Reference guides and editorial insights related to this country."
+        >
+          <ul className="divide-y divide-line border-y border-line">
+            {relatedGuides.map((guide) => (
+              <li key={`guide-${guide.slug}`}>
+                <Link
+                  href={`/guides/${guide.slug}`}
+                  className="group block py-5"
+                >
+                  <p className="eyebrow text-accent-600">Guide</p>
+                  <p className="mt-2 font-display text-h3 font-semibold text-ink-900 transition group-hover:text-accent-700">
+                    {guide.title}
+                  </p>
+                  <p className="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed text-ink-500">
+                    {guide.dek}
+                  </p>
+                </Link>
+              </li>
+            ))}
+            {relatedInsights.map((insight) => (
+              <li key={`insight-${insight.slug}`}>
+                <Link
+                  href={`/insights/${insight.slug}`}
+                  className="group block py-5"
+                >
+                  <p className="eyebrow text-ink-500">Insight</p>
+                  <p className="mt-2 font-display text-h3 font-semibold text-ink-900 transition group-hover:text-accent-700">
+                    {insight.title}
+                  </p>
+                  <p className="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed text-ink-500">
+                    {insight.dek}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </EntitySection>
+      ) : null}
 
       <EntitySection
         title="Sources"

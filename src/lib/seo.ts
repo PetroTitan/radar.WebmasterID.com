@@ -123,6 +123,38 @@ export function cityJsonLd(input: {
 }
 
 /**
+ * Build a `schema.org` Article node for an editorial insight.
+ *
+ * Uses `TechArticle` because the content is technical infrastructure
+ * analysis. `headline`, `description`, `datePublished` and
+ * `dateModified` are the fields Google, Bing, and AI crawlers
+ * actually consume for editorial content.
+ */
+export function articleJsonLd(input: {
+  readonly title: string;
+  readonly dek: string;
+  readonly path: string;
+  readonly publishedAt: string;
+  readonly lastUpdated: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: input.title,
+    description: input.dek,
+    url: canonicalUrl(input.path),
+    datePublished: input.publishedAt,
+    dateModified: input.lastUpdated,
+    publisher: {
+      "@type": "Organization",
+      name: SITE.organization.name,
+      url: SITE.organization.url,
+    },
+    isAccessibleForFree: true,
+  } as const;
+}
+
+/**
  * Build a `schema.org` Organization node for an IXP entity page.
  *
  * IXPs map cleanly to Organization (the legal operator) with a

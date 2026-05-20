@@ -9,6 +9,8 @@ export const PRIMARY_NAV: ReadonlyArray<NavLink> = [
   { label: "Cities", href: "/cities", description: "Infrastructure hub metros." },
   { label: "Cloud", href: "/cloud", description: "Provider region directories." },
   { label: "IXPs", href: "/ixps", description: "Internet Exchange Points." },
+  { label: "Guides", href: "/guides", description: "Authority reference guides." },
+  { label: "Insights", href: "/insights", description: "Editorial infrastructure explainers." },
   { label: "Rankings", href: "/rankings", description: "Source-cited comparative rankings." },
 ];
 

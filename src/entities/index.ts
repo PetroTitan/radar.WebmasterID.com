@@ -8,3 +8,5 @@ export * from "./internet-exchange";
 export * from "./datacenter-facility";
 export * from "./subsea-cable";
 export * from "./infrastructure-metric";
+export * from "./insight";
+export * from "./guide";

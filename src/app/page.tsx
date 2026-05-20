@@ -9,6 +9,8 @@ import { datasetJsonLd } from "@/lib/seo";
 import { SITE } from "@/config/site";
 import { SOURCE_REGISTRY } from "@/source-registry";
 import { COUNTRIES, CITIES, IXPS } from "@/data";
+import { listInsightsByDate } from "@/content/insights";
+import { GUIDES } from "@/content/guides";
 import {
   METHODOLOGY_LAST_UPDATED,
   METHODOLOGY_SECTIONS,
@@ -71,7 +73,7 @@ const FEATURED_RANKINGS = [
   },
 ] as const;
 
-const FEATURED_REPORTS = [
+const FORTHCOMING_REPORTS = [
   {
     title: "AI infrastructure readiness",
     description:
@@ -107,9 +109,12 @@ export default function HomePage() {
       <Hero />
       <FeaturedHubs />
       <IntelligenceOverview />
+      <FeaturedGuides />
+      <FeaturedInsights />
       <FeaturedRankings />
       <FeaturedReports />
       <FeaturedMaps />
+
       <SourceTransparency />
       <MethodologyPreview />
       <InternalLinking />
@@ -283,15 +288,81 @@ function FeaturedRankings() {
   );
 }
 
+function FeaturedGuides() {
+  const guides = GUIDES.slice(0, 4);
+  if (guides.length === 0) return null;
+  return (
+    <Container as="section" className="py-section-y">
+      <SectionHeading
+        eyebrow="Reference guides"
+        title="The building blocks of internet infrastructure."
+        description="Authority reference on Internet Exchange Points, cloud regions, submarine cables, datacenter hubs, and AI infrastructure. Each guide opens with a definitive answer and a structured summary."
+        trailing={
+          <Link
+            href="/guides"
+            className="text-sm font-medium text-accent-600 hover:text-accent-700"
+          >
+            See all guides →
+          </Link>
+        }
+      />
+      <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        {guides.map((guide) => (
+          <Card
+            key={guide.slug}
+            title={guide.title}
+            description={guide.dek}
+            href={`/guides/${guide.slug}`}
+            eyebrow="Guide"
+          />
+        ))}
+      </div>
+    </Container>
+  );
+}
+
+function FeaturedInsights() {
+  const insights = listInsightsByDate().slice(0, 4);
+  if (insights.length === 0) return null;
+  return (
+    <Container as="section" className="py-section-y">
+      <SectionHeading
+        eyebrow="Featured insights"
+        title="Editorial explainers on the infrastructure that runs the internet."
+        description="Long-form, source-cited essays on internet exchanges, cloud regions, submarine cables, and the metros that anchor the global internet."
+        trailing={
+          <Link
+            href="/insights"
+            className="text-sm font-medium text-accent-600 hover:text-accent-700"
+          >
+            See all insights →
+          </Link>
+        }
+      />
+      <div className="mt-12 grid gap-5 md:grid-cols-2">
+        {insights.map((insight) => (
+          <Card
+            key={insight.slug}
+            title={insight.title}
+            description={insight.dek}
+            href={`/insights/${insight.slug}`}
+            eyebrow="Insight"
+          />
+        ))}
+      </div>
+    </Container>
+  );
+}
+
 function FeaturedReports() {
   return (
     <Container as="section" className="py-section-y">
       <SectionHeading
-        eyebrow="Featured reports"
+        eyebrow="Forthcoming reports"
         title="Editorial work, ingest-ready."
       />
       <div className="mt-12 grid gap-5 md:grid-cols-2">
-        {FEATURED_REPORTS.map((report) => (
+        {FORTHCOMING_REPORTS.map((report) => (
           <Card
             key={report.title}
             title={report.title}

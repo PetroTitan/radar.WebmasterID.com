@@ -30,8 +30,10 @@ import {
   getIxp,
 } from "../data";
 import { getSourceRecord } from "../source-registry";
+import { INSIGHTS } from "../content/insights";
+import { GUIDES } from "../content/guides";
 import { isValidIsoDate } from "../lib/dates";
-import type { EditorialBlock, Provenance } from "../entities";
+import type { EditorialBlock, Provenance, SourceCitation } from "../entities";
 
 const UNVERIFIED_PLACEHOLDER = "Data not yet verified.";
 
@@ -202,11 +204,209 @@ for (const provider of CLOUD_PROVIDERS) {
   validateProvenance("cloud-provider", id, provider.provenance);
 }
 
+function validateCitations(
+  scope: string,
+  id: string,
+  citations: ReadonlyArray<SourceCitation>,
+) {
+  if (citations.length === 0) {
+    fail(scope, id, "no source citations");
+  }
+  citations.forEach((citation, i) => {
+    if (!getSourceRecord(citation.sourceId)) {
+      fail(
+        scope,
+        id,
+        `sources[${i}].sourceId "${citation.sourceId}" not in registry`,
+      );
+    }
+    if (citation.checkedAt && !isValidIsoDate(citation.checkedAt)) {
+      fail(scope, id, `sources[${i}].checkedAt invalid: ${citation.checkedAt}`);
+    }
+  });
+}
+
+const seenInsightSlugs = new Set<string>();
+for (const insight of INSIGHTS) {
+  const id = insight.slug;
+  assertNonEmptyString("insight", id, "slug", insight.slug);
+  assertNonEmptyString("insight", id, "title", insight.title);
+  assertNonEmptyString("insight", id, "dek", insight.dek);
+  if (seenInsightSlugs.has(insight.slug)) {
+    fail("insight", id, `duplicate slug "${insight.slug}"`);
+  }
+  seenInsightSlugs.add(insight.slug);
+  if (!isValidIsoDate(insight.publishedAt)) {
+    fail("insight", id, `invalid publishedAt: ${insight.publishedAt}`);
+  }
+  if (!isValidIsoDate(insight.lastUpdated)) {
+    fail("insight", id, `invalid lastUpdated: ${insight.lastUpdated}`);
+  }
+  if (insight.sections.length === 0) {
+    fail("insight", id, "insight has no body sections");
+  }
+  const seenSectionIds = new Set<string>();
+  insight.sections.forEach((section, sIdx) => {
+    if (!section.id.trim()) {
+      fail("insight", id, `sections[${sIdx}].id is empty`);
+    }
+    if (seenSectionIds.has(section.id)) {
+      fail("insight", id, `duplicate section id "${section.id}"`);
+    }
+    seenSectionIds.add(section.id);
+    if (!section.paragraphs || section.paragraphs.length === 0) {
+      fail("insight", id, `sections[${sIdx}] has no paragraphs`);
+    }
+    section.paragraphs.forEach((p, pIdx) => {
+      if (typeof p !== "string" || !p.trim()) {
+        fail(
+          "insight",
+          id,
+          `sections[${sIdx}].paragraphs[${pIdx}] is empty or non-string`,
+        );
+      }
+      if (p === UNVERIFIED_PLACEHOLDER) {
+        fail(
+          "insight",
+          id,
+          `sections[${sIdx}].paragraphs[${pIdx}] literally equals the EmptyMetric placeholder string`,
+        );
+      }
+    });
+  });
+  for (const ref of insight.entityRefs ?? []) {
+    const [kind, slug] = ref.split(":");
+    if (!kind || !slug) {
+      fail("insight", id, `entityRefs entry "${ref}" is malformed`);
+      continue;
+    }
+    if (kind === "country") {
+      if (!getCountry(slug)) {
+        fail("insight", id, `entityRefs "${ref}" points at unknown country`);
+      }
+    } else if (kind === "city") {
+      if (!getCity(slug)) {
+        fail("insight", id, `entityRefs "${ref}" points at unknown city`);
+      }
+    } else if (kind === "ixp") {
+      if (!getIxp(slug)) {
+        fail("insight", id, `entityRefs "${ref}" points at unknown IXP`);
+      }
+    } else {
+      fail("insight", id, `entityRefs "${ref}" uses unknown kind "${kind}"`);
+    }
+  }
+  validateCitations("insight", id, insight.sources);
+}
+
+const seenGuideSlugs = new Set<string>();
+for (const guide of GUIDES) {
+  const id = guide.slug;
+  assertNonEmptyString("guide", id, "slug", guide.slug);
+  assertNonEmptyString("guide", id, "title", guide.title);
+  assertNonEmptyString("guide", id, "dek", guide.dek);
+  assertNonEmptyString("guide", id, "definition", guide.definition);
+  if (seenGuideSlugs.has(guide.slug)) {
+    fail("guide", id, `duplicate slug "${guide.slug}"`);
+  }
+  seenGuideSlugs.add(guide.slug);
+  if (!isValidIsoDate(guide.publishedAt)) {
+    fail("guide", id, `invalid publishedAt: ${guide.publishedAt}`);
+  }
+  if (!isValidIsoDate(guide.lastUpdated)) {
+    fail("guide", id, `invalid lastUpdated: ${guide.lastUpdated}`);
+  }
+  if (guide.keyTakeaways.length === 0) {
+    fail("guide", id, "guide has no keyTakeaways");
+  }
+  guide.keyTakeaways.forEach((t, i) => {
+    if (typeof t !== "string" || !t.trim()) {
+      fail("guide", id, `keyTakeaways[${i}] is empty or non-string`);
+    }
+    if (t === UNVERIFIED_PLACEHOLDER) {
+      fail("guide", id, `keyTakeaways[${i}] equals the EmptyMetric placeholder`);
+    }
+  });
+  if (guide.summary.length === 0) {
+    fail("guide", id, "guide has no summary facts");
+  }
+  guide.summary.forEach((fact, i) => {
+    if (!fact.label.trim() || !fact.value.trim()) {
+      fail("guide", id, `summary[${i}] has empty label or value`);
+    }
+  });
+  if (guide.sections.length === 0) {
+    fail("guide", id, "guide has no body sections");
+  }
+  const seenGuideSectionIds = new Set<string>();
+  guide.sections.forEach((section, sIdx) => {
+    if (!section.id.trim()) {
+      fail("guide", id, `sections[${sIdx}].id is empty`);
+    }
+    if (!section.heading.trim()) {
+      fail("guide", id, `sections[${sIdx}].heading is empty`);
+    }
+    if (seenGuideSectionIds.has(section.id)) {
+      fail("guide", id, `duplicate section id "${section.id}"`);
+    }
+    seenGuideSectionIds.add(section.id);
+    if (!section.paragraphs || section.paragraphs.length === 0) {
+      fail("guide", id, `sections[${sIdx}] has no paragraphs`);
+    }
+    section.paragraphs.forEach((p, pIdx) => {
+      if (typeof p !== "string" || !p.trim()) {
+        fail(
+          "guide",
+          id,
+          `sections[${sIdx}].paragraphs[${pIdx}] is empty or non-string`,
+        );
+      }
+      if (p === UNVERIFIED_PLACEHOLDER) {
+        fail(
+          "guide",
+          id,
+          `sections[${sIdx}].paragraphs[${pIdx}] equals the EmptyMetric placeholder`,
+        );
+      }
+    });
+  });
+  (guide.strategicImportance ?? []).forEach((p, i) => {
+    if (typeof p !== "string" || !p.trim()) {
+      fail("guide", id, `strategicImportance[${i}] is empty or non-string`);
+    }
+  });
+  for (const ref of guide.relatedEntityRefs ?? []) {
+    const [kind, slug] = ref.split(":");
+    if (!kind || !slug) {
+      fail("guide", id, `relatedEntityRefs "${ref}" is malformed`);
+      continue;
+    }
+    if (kind === "country") {
+      if (!getCountry(slug)) {
+        fail("guide", id, `relatedEntityRefs "${ref}" points at unknown country`);
+      }
+    } else if (kind === "city") {
+      if (!getCity(slug)) {
+        fail("guide", id, `relatedEntityRefs "${ref}" points at unknown city`);
+      }
+    } else if (kind === "ixp") {
+      if (!getIxp(slug)) {
+        fail("guide", id, `relatedEntityRefs "${ref}" points at unknown IXP`);
+      }
+    } else {
+      fail("guide", id, `relatedEntityRefs "${ref}" uses unknown kind "${kind}"`);
+    }
+  }
+  validateCitations("guide", id, guide.sources);
+}
+
 const counts = {
   countries: COUNTRIES.length,
   cities: CITIES.length,
   ixps: IXPS.length,
   cloudProviders: CLOUD_PROVIDERS.length,
+  insights: INSIGHTS.length,
+  guides: GUIDES.length,
 };
 
 if (failures.length > 0) {
@@ -220,5 +420,5 @@ if (failures.length > 0) {
 
 console.log("Data validation passed.");
 console.log(
-  `  countries: ${counts.countries}, cities: ${counts.cities}, ixps: ${counts.ixps}, cloud-providers: ${counts.cloudProviders}`,
+  `  countries: ${counts.countries}, cities: ${counts.cities}, ixps: ${counts.ixps}, cloud-providers: ${counts.cloudProviders}, insights: ${counts.insights}, guides: ${counts.guides}`,
 );
