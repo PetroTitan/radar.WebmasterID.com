@@ -44,23 +44,23 @@ export default function SourcesPage() {
 
   return (
     <Container as="article">
-      <header className="border-b border-graphite-800 pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-signal-orange-400">
+      <header className="border-b border-line pb-10">
+        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
           Source registry
         </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-graphite-50 md:text-5xl">
+        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
           Every fact traces back to a source.
         </h1>
-        <p className="mt-5 max-w-prose text-graphite-300 md:text-lg">
+        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
           The source registry is the contract behind every figure on Radar.
           Each entry is tier-assigned, license-noted, and dated by the last
           editorial review.
         </p>
-        <p className="mt-4 text-sm text-graphite-500">
+        <p className="mt-4 text-sm text-ink-9000">
           Registry last reviewed {LAST_UPDATED}. See{" "}
           <Link
             href="/methodology#governance"
-            className="text-signal-blue-300 hover:text-signal-blue-200"
+            className="text-accent-600 hover:text-accent-700"
           >
             source governance
           </Link>{" "}
@@ -69,18 +69,18 @@ export default function SourcesPage() {
       </header>
 
       <section className="mt-10">
-        <h2 className="text-xl font-semibold text-graphite-50">Trust tiers</h2>
+        <h2 className="text-xl font-semibold text-ink-900">Trust tiers</h2>
         <ul className="mt-4 grid gap-3 md:grid-cols-2">
           {TRUST_TIER_DEFINITIONS.map((tier) => (
             <li
               key={tier.tier}
-              className="rounded-lg border border-graphite-800 bg-graphite-900/50 p-4"
+              className="rounded-lg border border-line bg-surface-base p-4"
             >
-              <p className="font-mono text-xs uppercase text-signal-orange-400">
+              <p className="font-mono text-xs uppercase text-accent-600">
                 {tier.tier}
               </p>
-              <p className="mt-1 font-semibold text-graphite-50">{tier.label}</p>
-              <p className="mt-2 text-sm text-graphite-300">{tier.description}</p>
+              <p className="mt-1 font-semibold text-ink-900">{tier.label}</p>
+              <p className="mt-2 text-sm text-ink-700">{tier.description}</p>
             </li>
           ))}
         </ul>
@@ -90,7 +90,7 @@ export default function SourcesPage() {
         const sources = byCategory.get(category) ?? [];
         return (
           <section key={category} className="mt-14">
-            <h2 className="text-xl font-semibold text-graphite-50">
+            <h2 className="text-xl font-semibold text-ink-900">
               {CATEGORY_LABEL[category]}
             </h2>
             <ul className="mt-6 grid gap-4 md:grid-cols-2">

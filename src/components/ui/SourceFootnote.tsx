@@ -10,24 +10,29 @@ interface SourceFootnoteProps {
 export function SourceFootnote({ citations }: SourceFootnoteProps) {
   if (citations.length === 0) {
     return (
-      <p className="text-sm text-graphite-400">
+      <p className="text-sm italic text-ink-500">
         No sources cited. This record has not been verified.
       </p>
     );
   }
 
   return (
-    <ol className="space-y-3 text-sm text-graphite-300">
+    <ol className="space-y-4 text-sm leading-relaxed text-ink-700">
       {citations.map((citation, index) => {
         const source = getSourceRecord(citation.sourceId);
         const sourceName = source?.name ?? citation.sourceId;
         return (
-          <li key={`${citation.sourceId}-${index}`} className="flex gap-3">
-            <span className="text-graphite-500">[{index + 1}]</span>
+          <li
+            key={`${citation.sourceId}-${index}`}
+            className="flex gap-4 border-l-2 border-line pl-4"
+          >
+            <span className="shrink-0 font-mono text-xs text-ink-300">
+              [{String(index + 1).padStart(2, "0")}]
+            </span>
             <span>
               <Link
                 href={`/sources#${citation.sourceId}`}
-                className="font-medium text-signal-blue-300 hover:text-signal-blue-200"
+                className="font-medium text-accent-600 hover:text-accent-700"
               >
                 {sourceName}
               </Link>
@@ -38,20 +43,20 @@ export function SourceFootnote({ citations }: SourceFootnoteProps) {
                     href={citation.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline decoration-graphite-600 underline-offset-2 hover:text-graphite-100"
+                    className="underline decoration-line-strong underline-offset-2 hover:text-ink-900"
                   >
                     record
                   </a>
                 </>
               ) : null}
               {citation.checkedAt ? (
-                <span className="text-graphite-500">
+                <span className="text-ink-500">
                   {" "}
                   · checked {formatDisplayDate(citation.checkedAt)}
                 </span>
               ) : null}
               {citation.note ? (
-                <span className="text-graphite-500"> · {citation.note}</span>
+                <span className="text-ink-500"> · {citation.note}</span>
               ) : null}
             </span>
           </li>

@@ -32,23 +32,23 @@ export default function IxpsIndex() {
 
   return (
     <Container as="article">
-      <header className="border-b border-graphite-800 pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-signal-orange-400">
+      <header className="border-b border-line pb-10">
+        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
           Index · Internet Exchange Points
         </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-graphite-50 md:text-5xl">
+        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
           The peering fabrics that move regional traffic.
         </h1>
-        <p className="mt-5 max-w-prose text-graphite-300 md:text-lg">
+        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
           IXPs are the physical interconnect points where networks exchange
           traffic directly. The largest IXPs carry traffic on the same order of
           magnitude as the largest national backbones.
         </p>
-        <p className="mt-4 max-w-prose text-sm text-graphite-500">
+        <p className="mt-4 max-w-prose text-sm text-ink-9000">
           Index updated {LAST_UPDATED}. IXP identity records reference{" "}
           <Link
             href="/sources#peeringdb"
-            className="text-signal-blue-300 hover:text-signal-blue-200"
+            className="text-accent-600 hover:text-accent-700"
           >
             PeeringDB
           </Link>

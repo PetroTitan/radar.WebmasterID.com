@@ -4,37 +4,43 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   html {
-    background-color: #05080d;
+    background-color: #ffffff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-graphite-950 text-graphite-200 font-sans;
-    background-image:
-      radial-gradient(
-        1200px 600px at 50% -200px,
-        rgba(31, 95, 208, 0.08),
-        transparent 60%
-      ),
-      radial-gradient(
-        800px 400px at 100% 0%,
-        rgba(245, 131, 42, 0.04),
-        transparent 70%
-      );
-    background-attachment: fixed;
+    @apply bg-surface-base text-ink-700 font-sans;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-ink-900;
   }
 
   ::selection {
-    background-color: rgba(31, 95, 208, 0.35);
-    color: #f6f7f9;
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #0f172a;
   }
 
   a {
     text-decoration: none;
+  }
+
+  /* Native disclosure used by the mobile nav. Hide the default
+     triangle marker so the styled chevron carries the affordance. */
+  details > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  details > summary::-webkit-details-marker {
+    display: none;
   }
 }

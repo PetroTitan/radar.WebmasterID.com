@@ -54,8 +54,8 @@ export default async function CloudProviderPage({ params }: RouteParams) {
       />
 
       <section className="mt-12">
-        <h2 className="text-xl font-semibold text-graphite-50">Key metrics</h2>
-        <p className="mt-2 max-w-prose text-sm text-graphite-400">
+        <h2 className="text-xl font-semibold text-ink-900">Key metrics</h2>
+        <p className="mt-2 max-w-prose text-sm text-ink-500">
           Provider-level structural metrics drawn from the operator&apos;s own
           region directory.
         </p>
@@ -72,14 +72,14 @@ export default async function CloudProviderPage({ params }: RouteParams) {
       </section>
 
       <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-graphite-50">
+        <h2 className="text-xl font-semibold text-ink-900">
           Infrastructure role
         </h2>
-        <p className="mt-3 text-graphite-300">{provider.summary}</p>
+        <p className="mt-3 text-ink-700">{provider.summary}</p>
       </section>
 
       <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-graphite-50">Sources</h2>
+        <h2 className="text-xl font-semibold text-ink-900">Sources</h2>
         <div className="mt-4">
           <SourceFootnote citations={provider.provenance.sources} />
         </div>

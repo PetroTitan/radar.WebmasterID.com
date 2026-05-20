@@ -15,17 +15,19 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   const Heading = level === 2 ? "h2" : "h3";
   return (
-    <div className="max-w-prose">
+    <div className="max-w-editorial">
       {eyebrow ? (
-        <p className="mb-3 text-xs font-medium uppercase tracking-eyebrow text-signal-orange-400">
+        <p className="mb-4 text-xs font-semibold uppercase tracking-eyebrow text-accent-600">
           {eyebrow}
         </p>
       ) : null}
-      <Heading className="text-balance text-2xl font-semibold text-graphite-50 md:text-3xl">
+      <Heading className="text-balance font-display text-display font-semibold text-ink-900">
         {title}
       </Heading>
       {description ? (
-        <p className="mt-3 text-graphite-300 md:text-lg">{description}</p>
+        <p className="mt-4 max-w-prose text-lg leading-relaxed text-ink-500">
+          {description}
+        </p>
       ) : null}
     </div>
   );

@@ -7,8 +7,15 @@
  */
 export function EmptyMetric() {
   return (
-    <span className="text-graphite-400" aria-label="Data not yet verified.">
-      Data not yet verified.
+    <span
+      className="inline-flex items-center gap-1.5 text-ink-300"
+      aria-label="Data not yet verified."
+    >
+      <span
+        aria-hidden="true"
+        className="inline-block size-1.5 rounded-full bg-ink-300"
+      />
+      <span className="italic">Data not yet verified.</span>
     </span>
   );
 }

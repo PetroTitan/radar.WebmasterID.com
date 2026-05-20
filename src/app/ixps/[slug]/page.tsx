@@ -6,9 +6,9 @@ import { EntityHeader } from "@/components/ui/EntityHeader";
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
-import { IXPS, getIxp, getCity } from "@/data";
+import { IXPS, getIxp, getCity, getCountryByCode } from "@/data";
 import { buildPageMetadata } from "@/lib/metadata";
-import { breadcrumbJsonLd } from "@/lib/seo";
+import { breadcrumbJsonLd, ixpJsonLd } from "@/lib/seo";
 
 interface RouteParams {
   readonly params: Promise<{ readonly slug: string }>;
@@ -39,11 +39,22 @@ export default async function IxpPage({ params }: RouteParams) {
   const ixp = getIxp(slug);
   if (!ixp) notFound();
   const city = getCity(ixp.citySlug);
+  const country = getCountryByCode(ixp.countryCode);
 
-  const ld = breadcrumbJsonLd([
+  const breadcrumb = breadcrumbJsonLd([
     { name: "IXPs", path: "/ixps" },
     { name: ixp.name, path: `/ixps/${ixp.slug}` },
   ]);
+  const orgLd = ixpJsonLd({
+    name: ixp.name,
+    operator: ixp.operator,
+    cityName: city?.name ?? "",
+    countryCode: ixp.countryCode,
+    path: `/ixps/${ixp.slug}`,
+    websiteUrl: ixp.websiteUrl,
+    description: ixp.summary,
+  });
+  const ldNodes = [breadcrumb, orgLd];
 
   return (
     <Container as="article">
@@ -56,8 +67,8 @@ export default async function IxpPage({ params }: RouteParams) {
       />
 
       <section className="mt-12">
-        <h2 className="text-xl font-semibold text-graphite-50">Key metrics</h2>
-        <p className="mt-2 max-w-prose text-sm text-graphite-400">
+        <h2 className="text-xl font-semibold text-ink-900">Key metrics</h2>
+        <p className="mt-2 max-w-prose text-sm text-ink-500">
           Identity facts plus the most recent observed traffic and membership
           values. Observation dates are recorded with each value.
         </p>
@@ -88,34 +99,42 @@ export default async function IxpPage({ params }: RouteParams) {
         />
         <RelatedEntities
           title="Country"
-          items={[
-            {
-              href: `/countries/${ixp.countryCode.toLowerCase()}`,
-              label: ixp.countryCode,
-            },
-          ]}
+          items={
+            country
+              ? [
+                  {
+                    href: `/countries/${country.slug}`,
+                    label: country.name,
+                    note: country.code,
+                  },
+                ]
+              : []
+          }
         />
       </section>
 
       <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-graphite-50">
+        <h2 className="text-xl font-semibold text-ink-900">
           Infrastructure role
         </h2>
-        <p className="mt-3 text-graphite-300">{ixp.summary}</p>
+        <p className="mt-3 text-ink-700">{ixp.summary}</p>
       </section>
 
       <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-graphite-50">Sources</h2>
+        <h2 className="text-xl font-semibold text-ink-900">Sources</h2>
         <div className="mt-4">
           <SourceFootnote citations={ixp.provenance.sources} />
         </div>
       </section>
 
-      <Script
-        id={`ld-ixp-${ixp.slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
-      />
+      {ldNodes.map((node, i) => (
+        <Script
+          key={i}
+          id={`ld-ixp-${ixp.slug}-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(node) }}
+        />
+      ))}
     </Container>
   );
 }

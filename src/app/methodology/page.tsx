@@ -23,25 +23,25 @@ export default function MethodologyPage() {
 
   return (
     <Container as="article">
-      <header className="border-b border-graphite-800 pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-signal-orange-400">
+      <header className="border-b border-line pb-10">
+        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
           Methodology
         </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-graphite-50 md:text-5xl">
+        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
           What we publish, and what we refuse to publish.
         </h1>
-        <p className="mt-5 max-w-prose text-graphite-300 md:text-lg">
+        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
           The Radar methodology is the contract behind every figure on the
           platform. It governs sourcing, confidence, scoring, and the public
           editorial position when data is unknown or contested.
         </p>
-        <p className="mt-4 text-sm text-graphite-500">
+        <p className="mt-4 text-sm text-ink-9000">
           Last reviewed {METHODOLOGY_LAST_UPDATED}.
         </p>
       </header>
 
       <nav aria-label="Methodology contents" className="mt-10">
-        <p className="text-xs font-semibold uppercase tracking-eyebrow text-graphite-500">
+        <p className="text-xs font-semibold uppercase tracking-eyebrow text-ink-9000">
           Contents
         </p>
         <ol className="mt-3 grid gap-2 text-sm md:grid-cols-2">
@@ -49,7 +49,7 @@ export default function MethodologyPage() {
             <li key={section.id}>
               <a
                 href={`#${section.id}`}
-                className="text-signal-blue-300 hover:text-signal-blue-200"
+                className="text-accent-600 hover:text-accent-700"
               >
                 {String(i + 1).padStart(2, "0")} · {section.title}
               </a>
@@ -65,19 +65,19 @@ export default function MethodologyPage() {
             id={section.id}
             className="scroll-mt-24 max-w-prose"
           >
-            <h2 className="text-2xl font-semibold text-graphite-50">
+            <h2 className="text-2xl font-semibold text-ink-900">
               {section.title}
             </h2>
             {section.paragraphs.map((paragraph) => (
-              <p key={paragraph} className="mt-4 text-graphite-300">
+              <p key={paragraph} className="mt-4 text-ink-700">
                 {paragraph}
               </p>
             ))}
             {section.bullets ? (
-              <ul className="mt-4 space-y-2 text-graphite-300">
+              <ul className="mt-4 space-y-2 text-ink-700">
                 {section.bullets.map((bullet) => (
                   <li key={bullet} className="flex gap-3">
-                    <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-signal-orange-500" />
+                    <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-amber-500" />
                     <span>{bullet}</span>
                   </li>
                 ))}

@@ -63,21 +63,21 @@ export default function RankingsPage() {
 
   return (
     <Container as="article">
-      <header className="border-b border-graphite-800 pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-signal-orange-400">
+      <header className="border-b border-line pb-10">
+        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
           Rankings
         </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-graphite-50 md:text-5xl">
+        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
           Comparative views, source-cited.
         </h1>
-        <p className="mt-5 max-w-prose text-graphite-300 md:text-lg">
+        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
           Radar does not publish a single overall &ldquo;infrastructure score&rdquo;. Operators
           care about different dimensions; we rank each dimension separately and
           document the inputs.
         </p>
-        <p className="mt-4 max-w-prose text-sm text-graphite-500">
+        <p className="mt-4 max-w-prose text-sm text-ink-9000">
           Updated {LAST_UPDATED}. See{" "}
-          <Link href="/methodology#scoring" className="text-signal-blue-300 hover:text-signal-blue-200">
+          <Link href="/methodology#scoring" className="text-accent-600 hover:text-accent-700">
             scoring methodology
           </Link>{" "}
           for the editorial position.

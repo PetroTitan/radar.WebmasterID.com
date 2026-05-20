@@ -19,6 +19,8 @@
     "start": "next start -p 3100",
     "lint": "eslint src --ext .ts,.tsx --max-warnings=0",
     "typecheck": "tsc --noEmit",
+    "validate": "tsx src/scripts/validate-data.ts",
+    "prebuild": "tsx src/scripts/validate-data.ts",
     "clean": "rm -rf .next *.tsbuildinfo"
   },
   "dependencies": {
@@ -35,6 +37,7 @@
     "eslint-config-next": "^15.1.2",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }

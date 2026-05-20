@@ -17,46 +17,46 @@ interface MetricTableProps {
 
 export function MetricTable({ caption, rows }: MetricTableProps) {
   return (
-    <div className="overflow-hidden rounded-lg border border-graphite-700/60 bg-graphite-900/60">
+    <div className="overflow-x-auto rounded-card border border-line bg-surface-base">
       <table className="w-full border-collapse text-sm">
         {caption ? (
-          <caption className="px-4 py-3 text-left text-xs font-medium uppercase tracking-eyebrow text-graphite-400">
+          <caption className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-eyebrow text-ink-500">
             {caption}
           </caption>
         ) : null}
-        <thead className="border-b border-graphite-700/60 bg-graphite-800/60">
-          <tr>
-            <th className="px-4 py-3 text-left font-medium text-graphite-200">
+        <thead>
+          <tr className="border-b border-line bg-surface-subtle">
+            <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-eyebrow text-ink-500">
               Metric
             </th>
-            <th className="px-4 py-3 text-left font-medium text-graphite-200">
+            <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-eyebrow text-ink-500">
               Value
             </th>
-            <th className="px-4 py-3 text-left font-medium text-graphite-200">
+            <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-eyebrow text-ink-500">
               Source
             </th>
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => (
+          {rows.map((row, i) => (
             <tr
               key={row.label}
-              className="border-b border-graphite-800/60 last:border-b-0"
+              className={i < rows.length - 1 ? "border-b border-line/70" : ""}
             >
-              <td className="px-4 py-3 text-graphite-300">{row.label}</td>
-              <td className="px-4 py-3 font-mono text-graphite-100">
+              <td className="whitespace-nowrap px-6 py-4 text-ink-700">{row.label}</td>
+              <td className="px-6 py-4 text-ink-900">
                 {row.value === null ? (
                   <EmptyMetric />
                 ) : (
-                  <>
+                  <span className="font-medium">
                     {row.value}
                     {row.unit ? (
-                      <span className="ml-1 text-graphite-400">{row.unit}</span>
+                      <span className="ml-1 text-ink-500">{row.unit}</span>
                     ) : null}
-                  </>
+                  </span>
                 )}
               </td>
-              <td className="px-4 py-3 text-graphite-400">
+              <td className="whitespace-nowrap px-6 py-4 text-sm text-ink-500">
                 {row.sourceLabel ?? "—"}
               </td>
             </tr>

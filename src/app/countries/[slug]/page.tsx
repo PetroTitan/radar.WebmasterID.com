@@ -8,7 +8,7 @@ import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { COUNTRIES, getCountry, getCity, getIxp } from "@/data";
 import { buildPageMetadata } from "@/lib/metadata";
-import { breadcrumbJsonLd } from "@/lib/seo";
+import { breadcrumbJsonLd, countryJsonLd } from "@/lib/seo";
 
 interface RouteParams {
   readonly params: Promise<{ readonly slug: string }>;
@@ -46,10 +46,17 @@ export default async function CountryPage({ params }: RouteParams) {
     .map((s) => getIxp(s))
     .filter((i): i is NonNullable<typeof i> => Boolean(i));
 
-  const ld = breadcrumbJsonLd([
+  const breadcrumb = breadcrumbJsonLd([
     { name: "Countries", path: "/countries" },
     { name: country.name, path: `/countries/${country.slug}` },
   ]);
+  const countryLd = countryJsonLd({
+    name: country.name,
+    code: country.code,
+    path: `/countries/${country.slug}`,
+    description: country.summary,
+  });
+  const ldNodes = [breadcrumb, countryLd];
 
   return (
     <Container as="article">
@@ -62,8 +69,8 @@ export default async function CountryPage({ params }: RouteParams) {
       />
 
       <section className="mt-12">
-        <h2 className="text-xl font-semibold text-graphite-50">Key metrics</h2>
-        <p className="mt-2 max-w-prose text-sm text-graphite-400">
+        <h2 className="text-xl font-semibold text-ink-900">Key metrics</h2>
+        <p className="mt-2 max-w-prose text-sm text-ink-500">
           Country-level structural metrics. Values appear here only after
           editorial review against the cited sources.
         </p>
@@ -94,32 +101,35 @@ export default async function CountryPage({ params }: RouteParams) {
       </section>
 
       <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-graphite-50">
+        <h2 className="text-xl font-semibold text-ink-900">
           Infrastructure role
         </h2>
-        <p className="mt-3 text-graphite-300">{country.summary}</p>
+        <p className="mt-3 text-ink-700">{country.summary}</p>
       </section>
 
       <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-graphite-50">Sources</h2>
-        <p className="mt-2 text-sm text-graphite-400">
+        <h2 className="text-xl font-semibold text-ink-900">Sources</h2>
+        <p className="mt-2 text-sm text-ink-500">
           Records and direct citations supporting this page.
         </p>
         <div className="mt-4">
           <SourceFootnote citations={country.provenance.sources} />
         </div>
         {country.provenance.note ? (
-          <p className="mt-4 text-sm italic text-graphite-400">
+          <p className="mt-4 text-sm italic text-ink-500">
             {country.provenance.note}
           </p>
         ) : null}
       </section>
 
-      <Script
-        id={`ld-country-${country.slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
-      />
+      {ldNodes.map((node, i) => (
+        <Script
+          key={i}
+          id={`ld-country-${country.slug}-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(node) }}
+        />
+      ))}
     </Container>
   );
 }

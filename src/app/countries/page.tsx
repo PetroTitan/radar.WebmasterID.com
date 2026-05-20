@@ -33,21 +33,21 @@ export default function CountriesIndex() {
 
   return (
     <Container as="article">
-      <header className="border-b border-graphite-800 pb-10">
-        <p className="text-xs font-medium uppercase tracking-eyebrow text-signal-orange-400">
+      <header className="border-b border-line pb-10">
+        <p className="text-xs font-medium uppercase tracking-eyebrow text-accent-600">
           Index · Countries
         </p>
-        <h1 className="mt-4 text-balance text-4xl font-semibold text-graphite-50 md:text-5xl">
+        <h1 className="mt-4 text-balance text-4xl font-semibold text-ink-900 md:text-5xl">
           Countries as infrastructure jurisdictions.
         </h1>
-        <p className="mt-5 max-w-prose text-graphite-300 md:text-lg">
+        <p className="mt-5 max-w-prose text-ink-700 md:text-lg">
           The country is the legal and policy unit of internet infrastructure.
           Every IXP, cloud region, cable landing, and datacenter facility in the
           Radar graph resolves back to a country record.
         </p>
-        <p className="mt-4 max-w-prose text-sm text-graphite-500">
+        <p className="mt-4 max-w-prose text-sm text-ink-9000">
           Index updated {LAST_UPDATED}. See{" "}
-          <Link href="/methodology" className="text-signal-blue-300 hover:text-signal-blue-200">
+          <Link href="/methodology" className="text-accent-600 hover:text-accent-700">
             methodology
           </Link>{" "}
           for verification criteria.

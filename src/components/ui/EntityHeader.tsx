@@ -18,19 +18,24 @@ export function EntityHeader({
   lastUpdated,
 }: EntityHeaderProps) {
   return (
-    <header className="flex flex-col gap-5 border-b border-graphite-800 pb-10">
-      <p className="text-xs font-medium uppercase tracking-eyebrow text-signal-orange-400">
+    <header className="flex flex-col gap-6 border-b border-line pb-12">
+      <p className="text-xs font-semibold uppercase tracking-eyebrow text-accent-600">
         {eyebrow}
       </p>
-      <h1 className="text-balance text-4xl font-semibold text-graphite-50 md:text-5xl">
+      <h1 className="text-balance font-display text-hero font-semibold text-ink-900">
         {title}
       </h1>
       {summary ? (
-        <p className="max-w-prose text-graphite-300 md:text-lg">{summary}</p>
+        <p className="max-w-editorial text-lg leading-relaxed text-ink-500 md:text-xl">
+          {summary}
+        </p>
       ) : null}
-      <div className="flex flex-wrap items-center gap-3 text-xs text-graphite-400">
+      <div className="flex flex-wrap items-center gap-3 text-xs text-ink-500">
         <ConfidenceBadge level={confidence} />
-        <span>Last reviewed {formatDisplayDate(lastUpdated)}</span>
+        <span className="inline-flex items-center gap-1.5">
+          <span aria-hidden="true" className="size-1 rounded-full bg-ink-300" />
+          Last reviewed {formatDisplayDate(lastUpdated)}
+        </span>
       </div>
     </header>
   );

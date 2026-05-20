@@ -6,9 +6,9 @@ import { EntityHeader } from "@/components/ui/EntityHeader";
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
-import { CITIES, getCity, getIxp } from "@/data";
+import { CITIES, getCity, getCountry, getIxp } from "@/data";
 import { buildPageMetadata } from "@/lib/metadata";
-import { breadcrumbJsonLd } from "@/lib/seo";
+import { breadcrumbJsonLd, cityJsonLd } from "@/lib/seo";
 
 interface RouteParams {
   readonly params: Promise<{ readonly slug: string }>;
@@ -42,11 +42,20 @@ export default async function CityPage({ params }: RouteParams) {
   const ixps = (city.ixpSlugs ?? [])
     .map((s) => getIxp(s))
     .filter((i): i is NonNullable<typeof i> => Boolean(i));
+  const country = getCountry(city.countrySlug);
 
-  const ld = breadcrumbJsonLd([
+  const breadcrumb = breadcrumbJsonLd([
     { name: "Cities", path: "/cities" },
     { name: city.name, path: `/cities/${city.slug}` },
   ]);
+  const cityLd = cityJsonLd({
+    name: city.name,
+    countryName: country?.name ?? city.countryCode,
+    countryCode: city.countryCode,
+    path: `/cities/${city.slug}`,
+    description: city.summary,
+  });
+  const ldNodes = [breadcrumb, cityLd];
 
   return (
     <Container as="article">
@@ -59,8 +68,8 @@ export default async function CityPage({ params }: RouteParams) {
       />
 
       <section className="mt-12">
-        <h2 className="text-xl font-semibold text-graphite-50">Key metrics</h2>
-        <p className="mt-2 max-w-prose text-sm text-graphite-400">
+        <h2 className="text-xl font-semibold text-ink-900">Key metrics</h2>
+        <p className="mt-2 max-w-prose text-sm text-ink-500">
           Metro-level structural metrics. Volatile observations (peering peaks,
           latency samples) carry their own observation date and confidence.
         </p>
@@ -83,34 +92,43 @@ export default async function CityPage({ params }: RouteParams) {
         />
         <RelatedEntities
           title="Country"
-          items={[{ href: `/countries/${city.countrySlug}`, label: city.countryCode }]}
+          items={[
+            {
+              href: `/countries/${city.countrySlug}`,
+              label: country?.name ?? city.countryCode,
+              note: city.countryCode,
+            },
+          ]}
         />
       </section>
 
       <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-graphite-50">
+        <h2 className="text-xl font-semibold text-ink-900">
           Infrastructure role
         </h2>
-        <p className="mt-3 text-graphite-300">{city.summary}</p>
+        <p className="mt-3 text-ink-700">{city.summary}</p>
       </section>
 
       <section className="mt-12 max-w-prose">
-        <h2 className="text-xl font-semibold text-graphite-50">Sources</h2>
+        <h2 className="text-xl font-semibold text-ink-900">Sources</h2>
         <div className="mt-4">
           <SourceFootnote citations={city.provenance.sources} />
         </div>
         {city.provenance.note ? (
-          <p className="mt-4 text-sm italic text-graphite-400">
+          <p className="mt-4 text-sm italic text-ink-500">
             {city.provenance.note}
           </p>
         ) : null}
       </section>
 
-      <Script
-        id={`ld-city-${city.slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
-      />
+      {ldNodes.map((node, i) => (
+        <Script
+          key={i}
+          id={`ld-city-${city.slug}-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(node) }}
+        />
+      ))}
     </Container>
   );
 }

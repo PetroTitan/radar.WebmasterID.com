@@ -74,3 +74,85 @@ export function breadcrumbJsonLd(
     itemListElement: items,
   } as const;
 }
+
+/**
+ * Build a `schema.org` Country node for an entity page.
+ *
+ * Uses `addressCountry` as the ISO 3166-1 alpha-2 anchor — the same
+ * identifier the structured-data parsers used by Google, Bing and
+ * AI crawlers resolve to.
+ */
+export function countryJsonLd(input: {
+  readonly name: string;
+  readonly code: string;
+  readonly path: string;
+  readonly description: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Country",
+    name: input.name,
+    identifier: input.code,
+    url: canonicalUrl(input.path),
+    description: input.description,
+  } as const;
+}
+
+/**
+ * Build a `schema.org` City node for an entity page.
+ */
+export function cityJsonLd(input: {
+  readonly name: string;
+  readonly countryName: string;
+  readonly countryCode: string;
+  readonly path: string;
+  readonly description: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "City",
+    name: input.name,
+    url: canonicalUrl(input.path),
+    description: input.description,
+    containedInPlace: {
+      "@type": "Country",
+      name: input.countryName,
+      identifier: input.countryCode,
+    },
+  } as const;
+}
+
+/**
+ * Build a `schema.org` Organization node for an IXP entity page.
+ *
+ * IXPs map cleanly to Organization (the legal operator) with a
+ * `location` pointing at the metro the fabric serves.
+ */
+export function ixpJsonLd(input: {
+  readonly name: string;
+  readonly operator: string;
+  readonly cityName: string;
+  readonly countryCode: string;
+  readonly path: string;
+  readonly websiteUrl?: string;
+  readonly description: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: input.name,
+    legalName: input.operator,
+    url: canonicalUrl(input.path),
+    sameAs: input.websiteUrl ? [input.websiteUrl] : undefined,
+    description: input.description,
+    location: {
+      "@type": "Place",
+      name: input.cityName,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: input.cityName,
+        addressCountry: input.countryCode,
+      },
+    },
+  } as const;
+}
