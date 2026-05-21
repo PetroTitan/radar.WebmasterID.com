@@ -24,10 +24,12 @@ import {
   CITIES,
   IXPS,
   CLOUD_PROVIDERS,
+  DATACENTER_FACILITIES,
   getCity,
   getCountry,
   getCountryByCode,
   getIxp,
+  getDatacenterFacility,
 } from "../data";
 import { getSourceRecord } from "../source-registry";
 import { INSIGHTS } from "../content/insights";
@@ -210,6 +212,84 @@ for (const city of CITIES) {
   validateEditorial("city", id, city.editorial);
 }
 
+// ---------------------------------------------------------------
+// Datacenter facilities
+//
+// Identity records for named datacenter facilities. The validator
+// enforces:
+//   - unique slug
+//   - city/country agreement (citySlug's country must match the
+//     facility's countryCode)
+//   - relatedIxpSlugs resolve to IXP entities
+//   - cloudRegionRefs match the `<provider-slug>:<region-slug>`
+//     shape and the provider prefix is one of the known providers
+//   - statedPowerMw is a positive number when present
+//   - no editorial field carries the canonical "Data not yet
+//     verified." placeholder
+// ---------------------------------------------------------------
+const seenFacilitySlugs = new Set<string>();
+const KNOWN_CLOUD_PROVIDER_SLUGS = new Set(["aws", "gcp", "azure"]);
+
+for (const facility of DATACENTER_FACILITIES) {
+  const id = facility.slug;
+  if (seenFacilitySlugs.has(facility.slug)) {
+    fail("facility", id, `duplicate slug "${facility.slug}"`);
+  }
+  seenFacilitySlugs.add(facility.slug);
+  assertNonEmptyString("facility", id, "slug", facility.slug);
+  assertNonEmptyString("facility", id, "name", facility.name);
+  assertNonEmptyString("facility", id, "operator", facility.operator);
+  assertNonEmptyString("facility", id, "countryCode", facility.countryCode);
+  assertNonEmptyString("facility", id, "citySlug", facility.citySlug);
+  if (facility.countryCode.length !== 2) {
+    fail("facility", id, `countryCode "${facility.countryCode}" must be ISO 3166-1 alpha-2`);
+  }
+  const city = getCity(facility.citySlug);
+  if (!city) {
+    fail("facility", id, `citySlug "${facility.citySlug}" not in cities registry`);
+  } else if (city.countryCode !== facility.countryCode) {
+    fail(
+      "facility",
+      id,
+      `countryCode "${facility.countryCode}" disagrees with citySlug "${facility.citySlug}" (city sits in ${city.countryCode})`,
+    );
+  }
+  if (!getCountryByCode(facility.countryCode)) {
+    fail("facility", id, `countryCode "${facility.countryCode}" not in countries registry`);
+  }
+  if (facility.statedPowerMw !== undefined && facility.statedPowerMw <= 0) {
+    fail("facility", id, `statedPowerMw must be a positive number when present`);
+  }
+  for (const ixpSlug of facility.relatedIxpSlugs ?? []) {
+    if (!getIxp(ixpSlug)) {
+      fail("facility", id, `relatedIxpSlugs "${ixpSlug}" not in IXP registry`);
+    }
+  }
+  for (const ref of facility.cloudRegionRefs ?? []) {
+    const [provider, regionCode] = ref.split(":");
+    if (!provider || !regionCode) {
+      fail("facility", id, `cloudRegionRefs "${ref}" must use "<provider>:<region>" form`);
+      continue;
+    }
+    if (!KNOWN_CLOUD_PROVIDER_SLUGS.has(provider)) {
+      fail("facility", id, `cloudRegionRefs "${ref}" uses unknown provider "${provider}"`);
+    }
+  }
+  if (facility.openedYear && !/^[0-9]{4}$/.test(facility.openedYear)) {
+    fail("facility", id, `openedYear "${facility.openedYear}" must be a four-digit year`);
+  }
+  (facility.editorialNotes ?? []).forEach((n, i) => {
+    if (typeof n !== "string" || !n.trim()) {
+      fail("facility", id, `editorialNotes[${i}] is empty or non-string`);
+    }
+    if (n === UNVERIFIED_PLACEHOLDER) {
+      fail("facility", id, `editorialNotes[${i}] equals the EmptyMetric placeholder`);
+    }
+  });
+  validateProvenance("facility", id, facility.provenance);
+  validateEditorial("facility", id, facility.editorial);
+}
+
 const seenIxpSlugs = new Set<string>();
 const seenIxpPeeringDbIds = new Map<number, string>();
 for (const ixp of IXPS) {
@@ -363,7 +443,8 @@ const indicatorSlugs = new Set(INDICATORS.map((i) => i.slug));
 const rankingSlugs = new Set(RANKINGS.map((r) => r.slug));
 const mediaIds = new Set(MEDIA_ASSETS.map((m) => m.id));
 
-const ENTITY_REF_PATTERN = /^(country|city|ixp):[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const ENTITY_REF_PATTERN =
+  /^(country|city|ixp|facility):[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 const seenGuideSlugs = new Set<string>();
 for (const guide of GUIDES) {
@@ -521,7 +602,7 @@ function validateEntityRef(scope: string, id: string, ref: string, field: string
     fail(
       scope,
       id,
-      `${field} "${ref}" must match \`(country|city|ixp):<kebab-slug>\``,
+      `${field} "${ref}" must match \`(country|city|ixp|facility):<kebab-slug>\``,
     );
     return;
   }
@@ -532,6 +613,10 @@ function validateEntityRef(scope: string, id: string, ref: string, field: string
     if (!getCity(slug!)) fail(scope, id, `${field} "${ref}" points at unknown city`);
   } else if (kind === "ixp") {
     if (!getIxp(slug!)) fail(scope, id, `${field} "${ref}" points at unknown IXP`);
+  } else if (kind === "facility") {
+    if (!getDatacenterFacility(slug!)) {
+      fail(scope, id, `${field} "${ref}" points at unknown datacenter facility`);
+    }
   }
 }
 
@@ -1138,6 +1223,7 @@ const counts = {
   wikimediaCandidates: WIKIMEDIA_CANDIDATES.length,
   history: HISTORY_PAGES.length,
   subseaCables: SUBSEA_CABLES.length,
+  facilities: DATACENTER_FACILITIES.length,
 };
 
 if (failures.length > 0) {
@@ -1157,4 +1243,4 @@ console.log(
   `  reviewed rows: cloud-regions: ${counts.reviewedCloudRegions}, peeringdb-ixps: ${counts.reviewedPeeringdbIxps}, peeringdb-facilities: ${counts.reviewedPeeringdbFacilities}`,
 );
 console.log(`  wikimedia candidates: ${counts.wikimediaCandidates}`);
-console.log(`  history pages: ${counts.history}, subsea cables: ${counts.subseaCables}`);
+console.log(`  history pages: ${counts.history}, subsea cables: ${counts.subseaCables}, facilities: ${counts.facilities}`);

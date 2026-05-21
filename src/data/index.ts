@@ -3,3 +3,4 @@ export * from "./cities";
 export * from "./cloud-providers";
 export * from "./ixps";
 export * from "./subsea-cables";
+export * from "./datacenter-facilities";

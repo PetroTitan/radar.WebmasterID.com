@@ -135,6 +135,40 @@ export const MEDIA_ASSETS: ReadonlyArray<MediaAsset> = [
     lastVerified: VERIFIED_AT,
   },
   {
+    id: "metro-ecosystem-topology",
+    title: "Metro datacenter-ecosystem model",
+    type: "topology-diagram",
+    status: "verified",
+    source: {
+      name: "Self-authored",
+      pageUrl:
+        "https://radar.webmasterid.com/visuals/metro-ecosystem-topology",
+    },
+    license: {
+      name: "CC BY 4.0",
+      url: "https://creativecommons.org/licenses/by/4.0/",
+      attributionRequired: true,
+    },
+    attribution: "Radar WebmasterID, CC BY 4.0.",
+    author: "Radar WebmasterID editorial",
+    altText:
+      "Concentric three-tier model of a metro datacenter ecosystem: carrier-neutral facilities at the centre, an IXP interconnection fabric around them, and a hyperscaler cloud-region on-ramp surface on the outside.",
+    caption:
+      "The metro substrate is the carrier-neutral facility cluster; the interconnection fabric and the cloud on-ramp surface stack on top of it.",
+    relatedEntityRefs: [
+      "city:frankfurt",
+      "city:ashburn",
+      "city:singapore",
+      "facility:equinix-fr5",
+      "facility:equinix-dc11",
+      "facility:equinix-sg3",
+    ],
+    category: "datacenter",
+    inlineComponent: "EcosystemTopologyDiagram",
+    dimensions: { width: 720, height: 380 },
+    lastVerified: REVIEWED_AT_3,
+  },
+  {
     id: "transatlantic-cable-history",
     title: "Transatlantic cable history across three eras",
     type: "topology-diagram",

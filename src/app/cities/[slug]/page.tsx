@@ -14,6 +14,8 @@ import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { InfrastructureEvidenceTable } from "@/components/ui/InfrastructureEvidenceTable";
 import { VisualEvidenceBlock } from "@/components/ui/VisualEvidenceBlock";
+import { MetroInfrastructureGraph } from "@/components/ui/MetroInfrastructureGraph";
+import { listDatacenterFacilitiesByCitySlug } from "@/data";
 import { CITIES, getCity, getCountry, getIxp } from "@/data";
 import { listInsightsByEntityRef } from "@/content/insights";
 import { listGuidesByEntityRef } from "@/content/guides";
@@ -62,6 +64,7 @@ export default async function CityPage({ params }: RouteParams) {
   const relatedGuides = listGuidesByEntityRef(`city:${city.slug}`);
   const hasVisualEvidence =
     listMediaAssetsByEntityRef(`city:${city.slug}`).length > 0;
+  const cityFacilities = listDatacenterFacilitiesByCitySlug(city.slug);
 
   const breadcrumb = breadcrumbJsonLd([
     { name: "Cities", path: "/cities" },
@@ -152,6 +155,48 @@ export default async function CityPage({ params }: RouteParams) {
         description="Source-cited dataset rows linked to this metro. Cloud regions, IXPs and carrier-neutral facilities citing this metro's slug are listed here."
       >
         <InfrastructureEvidenceTable entityRef={`city:${city.slug}`} />
+      </EntitySection>
+
+      {cityFacilities.length > 0 ? (
+        <EntitySection
+          title="Datacenter facilities"
+          description="Radar-registered facility identity records anchored at this metro. Power envelopes, occupancy, and tenant lists are deliberately out of scope."
+        >
+          <ul className="divide-y divide-line border-y border-line">
+            {cityFacilities.map((f) => (
+              <li key={f.slug} className="py-5">
+                <Link
+                  href={`/facilities/${f.slug}`}
+                  className="group flex flex-wrap items-baseline gap-x-4 gap-y-1"
+                >
+                  <span className="eyebrow text-ink-500">{f.operator}</span>
+                  {f.carrierNeutral ? (
+                    <span className="rounded-full bg-accent-50 px-2.5 py-0.5 text-[0.7rem] font-medium text-accent-700">
+                      carrier-neutral
+                    </span>
+                  ) : null}
+                  <span className="basis-full" />
+                  <span className="font-display text-lg font-semibold text-ink-900 transition group-hover:text-accent-700">
+                    {f.name}
+                  </span>
+                  <span className="basis-full" />
+                  {f.ecosystemRole ? (
+                    <span className="text-[0.875rem] text-ink-500">
+                      {f.ecosystemRole}
+                    </span>
+                  ) : null}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </EntitySection>
+      ) : null}
+
+      <EntitySection
+        title="Metro infrastructure graph"
+        description="Every Radar-registered facility, IXP, and reviewed cloud region anchored at this metro, in a single static table."
+      >
+        <MetroInfrastructureGraph citySlug={city.slug} heading="Layered view" />
       </EntitySection>
 
       {hasVisualEvidence ? (

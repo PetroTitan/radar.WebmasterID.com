@@ -14,7 +14,13 @@ import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { InfrastructureEvidenceTable } from "@/components/ui/InfrastructureEvidenceTable";
 import { VisualEvidenceBlock } from "@/components/ui/VisualEvidenceBlock";
-import { IXPS, getIxp, getCity, getCountryByCode } from "@/data";
+import {
+  IXPS,
+  getIxp,
+  getCity,
+  getCountryByCode,
+  listDatacenterFacilitiesByIxpSlug,
+} from "@/data";
 import { listInsightsByEntityRef } from "@/content/insights";
 import { listGuidesByEntityRef } from "@/content/guides";
 import { listMediaAssetsByEntityRef } from "@/content/media";
@@ -56,6 +62,7 @@ export default async function IxpPage({ params }: RouteParams) {
   const relatedGuides = listGuidesByEntityRef(`ixp:${ixp.slug}`);
   const hasVisualEvidence =
     listMediaAssetsByEntityRef(`ixp:${ixp.slug}`).length > 0;
+  const ixpFacilities = listDatacenterFacilitiesByIxpSlug(ixp.slug);
 
   const breadcrumb = breadcrumbJsonLd([
     { name: "IXPs", path: "/ixps" },
@@ -148,6 +155,35 @@ export default async function IxpPage({ params }: RouteParams) {
       >
         <InfrastructureEvidenceTable entityRef={`ixp:${ixp.slug}`} />
       </EntitySection>
+
+      {ixpFacilities.length > 0 ? (
+        <EntitySection
+          title="Carrier-neutral facilities hosting this fabric"
+          description="Radar-registered facility entities whose page lists this IXP among their fabric nodes."
+        >
+          <ul className="divide-y divide-line border-y border-line">
+            {ixpFacilities.map((f) => (
+              <li key={f.slug} className="py-5">
+                <Link
+                  href={`/facilities/${f.slug}`}
+                  className="group flex flex-wrap items-baseline gap-x-4 gap-y-1"
+                >
+                  <span className="eyebrow text-ink-500">{f.operator}</span>
+                  {f.carrierNeutral ? (
+                    <span className="rounded-full bg-accent-50 px-2.5 py-0.5 text-[0.7rem] font-medium text-accent-700">
+                      carrier-neutral
+                    </span>
+                  ) : null}
+                  <span className="basis-full" />
+                  <span className="font-display text-lg font-semibold text-ink-900 transition group-hover:text-accent-700">
+                    {f.name}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </EntitySection>
+      ) : null}
 
       {hasVisualEvidence ? (
         <EntitySection

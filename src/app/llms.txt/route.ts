@@ -6,7 +6,13 @@ import { INDICATORS } from "@/content/indicators";
 import { RANKINGS } from "@/content/rankings";
 import { MEDIA_ASSETS } from "@/content/media";
 import { HISTORY_PAGES } from "@/content/history";
-import { COUNTRIES, CITIES, IXPS, SUBSEA_CABLES } from "@/data";
+import {
+  COUNTRIES,
+  CITIES,
+  IXPS,
+  SUBSEA_CABLES,
+  DATACENTER_FACILITIES,
+} from "@/data";
 import { SOURCE_REGISTRY } from "@/source-registry";
 
 /**
@@ -80,6 +86,15 @@ function generateLlmsTxt(): string {
   for (const i of IXPS) {
     lines.push(
       `- [${i.name}](${abs(`/ixps/${i.slug}`)}): operated by ${i.operator}, ${i.countryCode}.`,
+    );
+  }
+  lines.push("");
+
+  lines.push("## Datacenter facilities");
+  lines.push("");
+  for (const f of DATACENTER_FACILITIES) {
+    lines.push(
+      `- [${f.name}](${abs(`/facilities/${f.slug}`)}): ${f.operator}, ${f.countryCode}${f.carrierNeutral ? " · carrier-neutral" : ""}${f.ecosystemRole ? ` · ${f.ecosystemRole}` : ""}.`,
     );
   }
   lines.push("");

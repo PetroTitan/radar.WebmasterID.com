@@ -57,7 +57,12 @@ export const REVIEWED_PEERINGDB_FACILITIES: ReadonlyArray<PeeringDBFacilityRecor
     countryCode: "DE",
     metroSlug: "frankfurt",
     carrierNeutral: true,
-    relatedEntityRefs: ["city:frankfurt", "country:germany"],
+    relatedEntityRefs: [
+      "facility:equinix-fr5",
+      "ixp:de-cix-frankfurt",
+      "city:frankfurt",
+      "country:germany",
+    ],
   }),
   buildRow({
     id: "peeringdb-fac-equinix-dc11-ashburn",
@@ -67,7 +72,12 @@ export const REVIEWED_PEERINGDB_FACILITIES: ReadonlyArray<PeeringDBFacilityRecor
     countryCode: "US",
     metroSlug: "ashburn",
     carrierNeutral: true,
-    relatedEntityRefs: ["city:ashburn", "country:united-states"],
+    relatedEntityRefs: [
+      "facility:equinix-dc11",
+      "ixp:equinix-internet-exchange-ashburn",
+      "city:ashburn",
+      "country:united-states",
+    ],
   }),
   buildRow({
     id: "peeringdb-fac-equinix-sg3-singapore",
@@ -77,6 +87,10 @@ export const REVIEWED_PEERINGDB_FACILITIES: ReadonlyArray<PeeringDBFacilityRecor
     countryCode: "SG",
     metroSlug: "singapore",
     carrierNeutral: true,
-    relatedEntityRefs: ["city:singapore", "country:singapore"],
+    relatedEntityRefs: [
+      "facility:equinix-sg3",
+      "city:singapore",
+      "country:singapore",
+    ],
   }),
 ];

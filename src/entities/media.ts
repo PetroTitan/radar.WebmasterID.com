@@ -61,7 +61,8 @@ export type MediaInlineComponent =
   | "CloudRegionDistributionDiagram"
   | "CarrierNeutralFacilityDiagram"
   | "InfrastructureRedundancyDiagram"
-  | "TransatlanticCableHistoryDiagram";
+  | "TransatlanticCableHistoryDiagram"
+  | "EcosystemTopologyDiagram";
 
 export interface MediaSource {
   /** Source name, e.g. "Wikimedia Commons", "DE-CIX", "AWS",
