@@ -25,6 +25,7 @@ export const COUNTRIES: ReadonlyArray<Country> = [
       "Germany is a Western European country. It hosts Frankfurt, a major European interconnection metro, and DE-CIX Frankfurt, an Internet Exchange Point operated by DE-CIX Management GmbH.",
     hubCitySlugs: ["frankfurt"],
     ixpSlugs: ["de-cix-frankfurt"],
+    coordinates: { lat: 51.16, lon: 10.45 },
     editorial: {
       significance: [
         "Germany sits at the geographic and economic centre of European internet infrastructure. The combination of central position, stable jurisdiction and dense fibre infrastructure has made it the default European anchor for hyperscaler capacity, IXP traffic and continental backhaul.",
@@ -107,6 +108,7 @@ export const COUNTRIES: ReadonlyArray<Country> = [
       "Singapore is a Southeast Asian city-state. It is a convergence point for multiple submarine cable systems linking Southeast Asia to East Asia, Australia, and South Asia, as recorded on TeleGeography's Submarine Cable Map.",
     hubCitySlugs: ["singapore"],
     ixpSlugs: [],
+    coordinates: { lat: 1.35, lon: 103.82 },
     editorial: {
       significance: [
         "Singapore is the principal interconnection point for Southeast Asia. As a sovereign city-state with a long-running pro-infrastructure regulatory posture, it has concentrated submarine cable landings, hyperscale cloud capacity and regional IXP fabric on a footprint that fits inside a single metro.",
@@ -182,6 +184,7 @@ export const COUNTRIES: ReadonlyArray<Country> = [
       "The United States is a Northern American country. It hosts Ashburn, Virginia — a metro with a dense concentration of datacenter facilities listed on PeeringDB and the origin metro for several cloud-provider US east-coast regions.",
     hubCitySlugs: ["ashburn"],
     ixpSlugs: [],
+    coordinates: { lat: 39.83, lon: -98.58 },
     editorial: {
       significance: [
         "The United States is the largest internet jurisdiction by published cloud-region count, by IXP-reported traffic and by the size of its commercial colocation market. Each of the major hyperscaler control planes is rooted in US infrastructure per the provider directories.",

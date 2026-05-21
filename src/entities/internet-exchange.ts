@@ -1,4 +1,9 @@
-import type { CountryCode, EditorialBlock, Provenance } from "./shared";
+import type {
+  CountryCode,
+  EditorialBlock,
+  GeoCoordinates,
+  Provenance,
+} from "./shared";
 
 /**
  * An Internet Exchange Point (IXP).
@@ -28,5 +33,9 @@ export interface InternetExchange {
   readonly websiteUrl?: string;
   /** Editorial intelligence sections. */
   readonly editorial?: EditorialBlock;
+  /** Coordinates of the IXP's primary facility. Used by the map
+   *  system. Populate only when the location has been editorially
+   *  verified against PeeringDB or the operator's published page. */
+  readonly coordinates?: GeoCoordinates;
   readonly provenance: Provenance;
 }

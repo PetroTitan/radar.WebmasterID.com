@@ -24,6 +24,7 @@ export const IXPS: ReadonlyArray<InternetExchange> = [
     summary:
       "DE-CIX Frankfurt is an Internet Exchange Point in Frankfurt, Germany, operated by DE-CIX Management GmbH. It is one of the primary peering fabrics serving Central and Western European networks, as catalogued on PeeringDB.",
     websiteUrl: "https://www.de-cix.net/en/locations/frankfurt",
+    coordinates: { lat: 50.11, lon: 8.68 },
     editorial: {
       significance: [
         "DE-CIX Frankfurt is one of the world's largest Internet Exchange Points by connected-network count, as catalogued on PeeringDB. The exchange has run continuously since the mid-1990s and grew into its current scale alongside Frankfurt's emergence as the central European interconnection metro.",

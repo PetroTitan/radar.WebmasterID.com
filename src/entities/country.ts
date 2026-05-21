@@ -1,4 +1,9 @@
-import type { CountryCode, EditorialBlock, Provenance } from "./shared";
+import type {
+  CountryCode,
+  EditorialBlock,
+  GeoCoordinates,
+  Provenance,
+} from "./shared";
 
 /**
  * A sovereign country observed as an infrastructure jurisdiction.
@@ -32,5 +37,9 @@ export interface Country {
   /** Editorial intelligence sections. Author-curated, source-cited
    *  prose. Pages render present sections in document order. */
   readonly editorial?: EditorialBlock;
+  /** Approximate country centroid coordinates, used by the map
+   *  system. Optional — populate only when the centroid has been
+   *  editorially verified against a cited source. */
+  readonly coordinates?: GeoCoordinates;
   readonly provenance: Provenance;
 }

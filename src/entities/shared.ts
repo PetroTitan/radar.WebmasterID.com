@@ -72,6 +72,22 @@ export interface Provenance {
 export type CountryCode = string;
 
 /**
+ * Geographic coordinates in decimal degrees.
+ *
+ * Used by the map system to project entities into the SVG world
+ * view. Only populate when the location is editorially verified —
+ * for countries this is an approximate centroid, for cities and
+ * IXPs it is the metro / facility coordinates published by the
+ * cited source.
+ */
+export interface GeoCoordinates {
+  /** Latitude in decimal degrees. South is negative. */
+  readonly lat: number;
+  /** Longitude in decimal degrees. West is negative. */
+  readonly lon: number;
+}
+
+/**
  * Editorial intelligence for an entity.
  *
  * Five named sections, each an optional array of plain-prose

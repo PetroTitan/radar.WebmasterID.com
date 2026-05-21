@@ -1,4 +1,9 @@
-import type { CountryCode, EditorialBlock, Provenance } from "./shared";
+import type {
+  CountryCode,
+  EditorialBlock,
+  GeoCoordinates,
+  Provenance,
+} from "./shared";
 
 /**
  * An infrastructure hub city.
@@ -32,5 +37,9 @@ export interface City {
   readonly peerMetroSlugs?: ReadonlyArray<string>;
   /** Editorial intelligence sections. */
   readonly editorial?: EditorialBlock;
+  /** Metro coordinates. Used by the map system. */
+  readonly coordinates?: GeoCoordinates;
+  /** IANA timezone identifier, e.g. "Europe/Berlin". Optional. */
+  readonly timezone?: string;
   readonly provenance: Provenance;
 }

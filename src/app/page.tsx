@@ -439,16 +439,47 @@ function FeaturedReports() {
 }
 
 function FeaturedMaps() {
+  const maps = [
+    {
+      title: "Cloud regions",
+      description: "Where the three major hyperscalers operate verified cloud regions.",
+      href: "/maps/cloud-regions",
+    },
+    {
+      title: "Internet Exchange Points",
+      description: "Peering geography, anchored by PeeringDB.",
+      href: "/maps/ixps",
+    },
+    {
+      title: "Datacenter hubs",
+      description: "Metros that anchor the world's colocation clusters.",
+      href: "/maps/datacenters",
+    },
+    {
+      title: "Submarine cables",
+      description: "Cable landing geography, anchored by TeleGeography.",
+      href: "/maps/subsea-cables",
+    },
+  ] as const;
   return (
     <Container as="section" className="py-section-y">
       <SectionHeading
         eyebrow="Maps"
-        title="A map layer is on the way."
-        description="The graph is built map-ready: cities carry coordinates, cables carry landings, regions carry country anchors. Cartography ships once the underlying data passes verification."
+        title="Geographic intelligence layer."
+        description="Lightweight server-rendered SVG maps. Every plotted point cites a registered source; coordinates documented in the table beneath each map."
+        trailing={
+          <Link
+            href="/maps"
+            className="text-sm font-medium text-accent-600 hover:text-accent-700"
+          >
+            View all maps →
+          </Link>
+        }
       />
-      <div className="mt-12 rounded-card border border-dashed border-line-strong bg-surface-subtle px-8 py-16 text-center md:py-20">
-        <p className="eyebrow text-ink-500">Map module</p>
-        <p className="mt-3 text-ink-700">Data not yet verified.</p>
+      <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        {maps.map((m) => (
+          <Card key={m.href} title={m.title} description={m.description} href={m.href} eyebrow="Map" />
+        ))}
       </div>
     </Container>
   );

@@ -7,6 +7,7 @@ export interface NavLink {
 export const PRIMARY_NAV: ReadonlyArray<NavLink> = [
   { label: "Countries", href: "/countries", description: "Sovereign infrastructure jurisdictions." },
   { label: "Cities", href: "/cities", description: "Infrastructure hub metros." },
+  { label: "Maps", href: "/maps", description: "Geographic intelligence layer." },
   { label: "Cloud", href: "/cloud", description: "Provider region directories." },
   { label: "IXPs", href: "/ixps", description: "Internet Exchange Points." },
   { label: "Guides", href: "/guides", description: "Authority reference guides." },

@@ -31,6 +31,8 @@ export const CITIES: ReadonlyArray<City> = [
     ],
     cableSlugs: [],
     peerMetroSlugs: ["ashburn", "singapore"],
+    coordinates: { lat: 50.11, lon: 8.68 },
+    timezone: "Europe/Berlin",
     editorial: {
       significance: [
         "Frankfurt is the principal interconnection metro for Central Europe. PeeringDB's published facility data shows one of the densest carrier-neutral colocation clusters anywhere, with hundreds of distinct networks present.",
@@ -92,6 +94,12 @@ export const CITIES: ReadonlyArray<City> = [
           checkedAt: CHECKED_AT,
           note: "DE-CIX Frankfurt operator page.",
         },
+        {
+          sourceId: "geonames",
+          url: "https://www.geonames.org/2925533/frankfurt-am-main.html",
+          checkedAt: "2026-05-21",
+          note: "Frankfurt metro coordinates and timezone.",
+        },
       ],
       note: "Specific facility records and per-region cross-links await ingestion.",
     },
@@ -112,6 +120,8 @@ export const CITIES: ReadonlyArray<City> = [
     ],
     cableSlugs: [],
     peerMetroSlugs: ["frankfurt", "singapore"],
+    coordinates: { lat: 39.05, lon: -77.49 },
+    timezone: "America/New_York",
     editorial: {
       significance: [
         "Ashburn — frequently labelled \"Northern Virginia\" or \"NoVA\" in industry reporting — hosts one of the largest concentrations of datacenter facilities in the world. PeeringDB lists a particularly high count of carrier-neutral facilities in the Ashburn / Sterling / Reston area, all collapsed into a single routing metro.",
@@ -167,6 +177,12 @@ export const CITIES: ReadonlyArray<City> = [
           checkedAt: CHECKED_AT,
           note: "Microsoft Azure East US (Virginia) region listing.",
         },
+        {
+          sourceId: "geonames",
+          url: "https://www.geonames.org/4744709/ashburn.html",
+          checkedAt: "2026-05-21",
+          note: "Ashburn metro coordinates and timezone.",
+        },
       ],
       note: "Specific facility records and Ashburn IXP records await ingestion.",
     },
@@ -187,6 +203,8 @@ export const CITIES: ReadonlyArray<City> = [
     ],
     cableSlugs: [],
     peerMetroSlugs: ["frankfurt", "ashburn"],
+    coordinates: { lat: 1.35, lon: 103.82 },
+    timezone: "Asia/Singapore",
     editorial: {
       significance: [
         "Singapore is the principal Southeast Asian interconnection metro and one of the most densely connected metros in the broader Asia-Pacific region. As the country and the metro are coterminous, the city's infrastructure footprint is also the country's.",
@@ -240,6 +258,12 @@ export const CITIES: ReadonlyArray<City> = [
           url: "https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/",
           checkedAt: CHECKED_AT,
           note: "Microsoft Azure Southeast Asia (Singapore) region listing.",
+        },
+        {
+          sourceId: "geonames",
+          url: "https://www.geonames.org/1880252/singapore.html",
+          checkedAt: "2026-05-21",
+          note: "Singapore metro coordinates and timezone.",
         },
       ],
       note: "Specific facility records and Singapore IXP records await ingestion.",

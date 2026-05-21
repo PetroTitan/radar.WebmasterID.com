@@ -195,6 +195,19 @@ export const SOURCE_REGISTRY: ReadonlyArray<SourceRecord> = [
       "DE-CIX Management GmbH's corporate site. Authoritative operator primary doc for DE-CIX Frankfurt, Hamburg, Munich, Düsseldorf and DE-CIX's international IXP locations.",
     coverage: ["DE-CIX IXP locations", "Operator policy", "Member services"],
   },
+  {
+    id: "geonames",
+    name: "GeoNames",
+    category: "registry",
+    url: "https://www.geonames.org/",
+    trustTier: "tier-2",
+    licenseNote: "Open data, CC BY 4.0 with attribution.",
+    lastChecked: "2026-05-21",
+    updateFrequency: "weekly",
+    description:
+      "Open geographical database covering >11 million place names with coordinates, administrative hierarchies, timezones and population figures. Used as the canonical reference for city and metro coordinates.",
+    coverage: ["City coordinates", "Country centroids", "Administrative regions", "Timezones"],
+  },
 ];
 
 export function getSourceRecord(id: string): SourceRecord | undefined {
