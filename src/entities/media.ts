@@ -39,7 +39,9 @@ export type MediaAssetStatus = "verified" | "candidate" | "unverified";
 export type MediaInlineComponent =
   | "InterconnectionDiagram"
   | "CableLandingDiagram"
-  | "CloudRegionDistributionDiagram";
+  | "CloudRegionDistributionDiagram"
+  | "CarrierNeutralFacilityDiagram"
+  | "InfrastructureRedundancyDiagram";
 
 export interface MediaSource {
   /** Source name, e.g. "Wikimedia Commons", "DE-CIX", "AWS",

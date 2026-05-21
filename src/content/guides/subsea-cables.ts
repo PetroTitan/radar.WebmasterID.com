@@ -1,6 +1,6 @@
 import type { Guide } from "@/entities";
 
-const CHECKED_AT = "2026-05-20";
+const CHECKED_AT = "2026-05-22";
 
 export const SUBSEA_CABLES_GUIDE: Guide = {
   slug: "subsea-cables",
@@ -8,7 +8,7 @@ export const SUBSEA_CABLES_GUIDE: Guide = {
   dek:
     "Why fibre laid on the seabed — not satellites — carries the bulk of intercontinental internet traffic, and how to read the canonical map of cable systems.",
   publishedAt: "2026-05-20",
-  lastUpdated: "2026-05-20",
+  lastUpdated: "2026-05-22",
   definition:
     "Submarine cables are fibre-optic systems laid along the seabed that carry the bulk of intercontinental internet traffic. Each cable system is typically owned by a consortium of telcos and increasingly cloud providers, lands at a small number of coastal stations, and operates for 20–25 years. TeleGeography's Submarine Cable Map is the canonical public record of in-service and planned systems.",
   keyTakeaways: [
@@ -89,12 +89,38 @@ export const SUBSEA_CABLES_GUIDE: Guide = {
     "Submarine cables are the load-bearing element of intercontinental internet infrastructure. A region without diverse cable landings is structurally dependent on a small number of cable consortia and on the regions to which those cables actually route.",
     "For policy-makers, cable diversity is a security concern; for operators, it is a routing concern; for the rest of the internet, it is mostly invisible until something goes wrong.",
   ],
+  geographicImportance: [
+    {
+      entityRef: "country:singapore",
+      prose:
+        "Singapore is the principal landing-and-interconnect node for Southeast Asian subsea traffic — cable landings, cloud regions, and the regional IXP all reachable within the same metro.",
+    },
+    {
+      entityRef: "city:ashburn",
+      prose:
+        "Ashburn is the inland anchor for transatlantic cables that come ashore at Virginia Beach; backhaul from the landing corridor terminates in Ashburn's colocation cluster.",
+    },
+  ],
+  caveats: [
+    "TeleGeography's public Submarine Cable Map records identity and landing facts; capacity figures, exact route geography, and operating-state detail live in TeleGeography's commercial reports and are not on the public surface.",
+    "Cable landing facility identity is sometimes restricted from public documentation for security reasons; Radar records only what the operator or TeleGeography publishes.",
+    "Corridor concentration (Red Sea, Luzon Strait, Marseille) shifts over time as new cables enter service; resilience assertions tied to a specific corridor should be read against the current map state, not historical positioning.",
+  ],
+  methodologyNotes: [
+    "Subsea cable systems and landing stations are tracked separately. A landing station can host multiple cable systems, and a cable system typically has at least two landing stations.",
+    "Cable identity facts use the official cable system name as published by TeleGeography; operator branding (e.g. \"Project Echo\") and the published system name (e.g. \"Echo cable system\") are recorded distinctly.",
+  ],
   relatedEntityRefs: [
     "country:singapore",
     "city:singapore",
     "country:united-states",
     "city:ashburn",
   ],
+  relatedDatasetSlugs: ["subsea-cable-landings"],
+  relatedIndicatorSlugs: ["subsea-connectivity", "infrastructure-redundancy"],
+  relatedRankingSlugs: ["subsea-connectivity-hubs", "internet-resilience"],
+  relatedMapPaths: ["/maps/subsea-cables"],
+  relatedMediaIds: ["cable-landing-topology", "infrastructure-redundancy-model"],
   sources: [
     {
       sourceId: "telegeography",

@@ -1,6 +1,6 @@
 import type { Guide } from "@/entities";
 
-const CHECKED_AT = "2026-05-20";
+const CHECKED_AT = "2026-05-22";
 
 export const INTERNET_EXCHANGES_GUIDE: Guide = {
   slug: "internet-exchanges",
@@ -8,7 +8,7 @@ export const INTERNET_EXCHANGES_GUIDE: Guide = {
   dek:
     "What an Internet Exchange Point is, how the economics work, and why a handful of IXPs anchor most of the world's network traffic.",
   publishedAt: "2026-05-20",
-  lastUpdated: "2026-05-20",
+  lastUpdated: "2026-05-22",
   definition:
     "An Internet Exchange Point (IXP) is a Layer-2 switching fabric, hosted in one or more colocation facilities, where independent networks meet to exchange traffic directly via BGP peering — bypassing transit providers. PeeringDB is the authoritative public registry of IXPs and their member networks.",
   keyTakeaways: [
@@ -81,7 +81,38 @@ export const INTERNET_EXCHANGES_GUIDE: Guide = {
     "For any network operator, presence at the right IXP defines the routing geography of their traffic. For a national ISP, the decision is largely fixed by geography. For a global content network, it is a deliberate footprint choice — and one of the few infrastructure decisions in which getting it wrong has immediate operational consequences (in extra transit cost) rather than long-tail ones.",
     "For policy-makers and researchers, the IXP map is the practical map of how the internet is wired. A country without a healthy IXP ecosystem typically pays in transit cost for what it could otherwise solve domestically.",
   ],
-  relatedEntityRefs: ["ixp:de-cix-frankfurt"],
+  geographicImportance: [
+    {
+      entityRef: "ixp:de-cix-frankfurt",
+      prose:
+        "DE-CIX Frankfurt is among the largest IXPs globally by connected-network count. Its scale results from a network-effects loop running for over two decades inside Frankfurt's carrier-neutral colocation cluster.",
+    },
+    {
+      entityRef: "city:frankfurt",
+      prose:
+        "Frankfurt's role as the eastern anchor of the European FLAP cluster (Frankfurt, London, Amsterdam, Paris) is inseparable from the presence of DE-CIX inside its carrier-neutral facilities.",
+    },
+    {
+      entityRef: "city:ashburn",
+      prose:
+        "Ashburn / Northern Virginia is the equivalent IXP anchor on the US east coast, with the Equinix Internet Exchange Ashburn fabric and a comparable density of carrier-neutral facilities.",
+    },
+  ],
+  caveats: [
+    "PeeringDB's connected-network count is a useful headline but not a measure of traffic. Two IXPs with similar headline counts can carry very different traffic volumes, and PeeringDB does not publish per-IX traffic figures.",
+    "An IXP's published statistics page (peak traffic, member count by category) typically reports operator-collected figures whose collection methodology varies between operators. Cross-IXP comparisons should use the same source where possible.",
+    "Settlement-free peering is a contractual term, not a measurable network property. A peering session is settlement-free because both parties agreed it would be, not because the link itself charges nothing.",
+  ],
+  methodologyNotes: [
+    "IXP identity facts (operator, country, metro, official website) live on the IXP entity record. Volatile observations — peak traffic, current connected-network counts — belong on dated InfrastructureMetric records elsewhere.",
+    "Cross-references between IXPs and metros / countries / facilities use canonical slugs from the entity registry; PeeringDB's numeric IX IDs are stored only when verified at ingestion time.",
+  ],
+  relatedEntityRefs: ["ixp:de-cix-frankfurt", "city:frankfurt", "city:ashburn"],
+  relatedDatasetSlugs: ["internet-exchange-hubs"],
+  relatedIndicatorSlugs: ["ixp-density"],
+  relatedRankingSlugs: ["most-connected-cities"],
+  relatedMapPaths: ["/maps/ixps"],
+  relatedMediaIds: ["interconnection-topology", "carrier-neutral-facility-model"],
   sources: [
     {
       sourceId: "peeringdb",

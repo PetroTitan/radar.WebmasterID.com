@@ -1,6 +1,6 @@
 import type { MediaAsset } from "@/entities";
 
-const VERIFIED_AT = "2026-05-21";
+const VERIFIED_AT = "2026-05-22";
 
 /**
  * Visual media registry.
@@ -102,6 +102,59 @@ export const MEDIA_ASSETS: ReadonlyArray<MediaAsset> = [
     ],
     inlineComponent: "CloudRegionDistributionDiagram",
     dimensions: { width: 720, height: 320 },
+    lastVerified: VERIFIED_AT,
+  },
+  {
+    id: "carrier-neutral-facility-model",
+    title: "Carrier-neutral facility model",
+    type: "diagram",
+    status: "verified",
+    source: {
+      name: "Self-authored",
+      pageUrl: "https://radar.webmasterid.com/visuals/carrier-neutral-facility-model",
+    },
+    license: {
+      name: "CC BY 4.0",
+      url: "https://creativecommons.org/licenses/by/4.0/",
+      attributionRequired: true,
+    },
+    attribution: "Radar WebmasterID, CC BY 4.0.",
+    author: "Radar WebmasterID editorial",
+    altText:
+      "Schematic showing how a carrier-neutral colocation facility hosts independent networks (ISPs, transit providers, content networks, cloud on-ramps) side-by-side, all reaching each other through cross connects without paying the building's operator for connectivity.",
+    caption:
+      "A neutral facility sells only power, space, and cooling — connectivity stays between tenants.",
+    relatedEntityRefs: [
+      "city:frankfurt",
+      "city:ashburn",
+      "city:singapore",
+    ],
+    inlineComponent: "CarrierNeutralFacilityDiagram",
+    dimensions: { width: 720, height: 340 },
+    lastVerified: VERIFIED_AT,
+  },
+  {
+    id: "infrastructure-redundancy-model",
+    title: "Infrastructure redundancy model",
+    type: "diagram",
+    status: "verified",
+    source: {
+      name: "Self-authored",
+      pageUrl: "https://radar.webmasterid.com/visuals/infrastructure-redundancy-model",
+    },
+    license: {
+      name: "CC BY 4.0",
+      url: "https://creativecommons.org/licenses/by/4.0/",
+      attributionRequired: true,
+    },
+    attribution: "Radar WebmasterID, CC BY 4.0.",
+    author: "Radar WebmasterID editorial",
+    altText:
+      "Layered model of infrastructure redundancy: facility, metro, region, route diversity, and operator diversity stacked as independent failure domains.",
+    caption:
+      "Independent redundancy layers stack — facility, metro, region, route, operator — each handling a different class of failure.",
+    inlineComponent: "InfrastructureRedundancyDiagram",
+    dimensions: { width: 720, height: 360 },
     lastVerified: VERIFIED_AT,
   },
   {

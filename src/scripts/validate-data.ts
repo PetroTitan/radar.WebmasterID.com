@@ -313,6 +313,16 @@ for (const insight of INSIGHTS) {
   validateCitations("insight", id, insight.sources);
 }
 
+// Cross-registry slug sets — declared up front so they are
+// available to every page-content validator (guides, insights,
+// datasets, indicators, rankings) without depending on loop order.
+const datasetSlugs = new Set(DATASETS.map((d) => d.slug));
+const indicatorSlugs = new Set(INDICATORS.map((i) => i.slug));
+const rankingSlugs = new Set(RANKINGS.map((r) => r.slug));
+const mediaIds = new Set(MEDIA_ASSETS.map((m) => m.id));
+
+const ENTITY_REF_PATTERN = /^(country|city|ixp):[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 const seenGuideSlugs = new Set<string>();
 for (const guide of GUIDES) {
   const id = guide.slug;
@@ -411,10 +421,58 @@ for (const guide of GUIDES) {
       fail("guide", id, `relatedEntityRefs "${ref}" uses unknown kind "${kind}"`);
     }
   }
+  for (const slug of guide.relatedDatasetSlugs ?? []) {
+    if (!datasetSlugs.has(slug)) {
+      fail("guide", id, `relatedDatasetSlugs "${slug}" not in dataset registry`);
+    }
+  }
+  for (const slug of guide.relatedIndicatorSlugs ?? []) {
+    if (!indicatorSlugs.has(slug)) {
+      fail("guide", id, `relatedIndicatorSlugs "${slug}" not in indicator registry`);
+    }
+  }
+  for (const slug of guide.relatedRankingSlugs ?? []) {
+    if (!rankingSlugs.has(slug)) {
+      fail("guide", id, `relatedRankingSlugs "${slug}" not in ranking registry`);
+    }
+  }
+  for (const path of guide.relatedMapPaths ?? []) {
+    if (!path.startsWith("/maps/")) {
+      fail("guide", id, `relatedMapPaths "${path}" must be a /maps/* path`);
+    }
+  }
+  for (const mediaId of guide.relatedMediaIds ?? []) {
+    if (!mediaIds.has(mediaId)) {
+      fail("guide", id, `relatedMediaIds "${mediaId}" not in media registry`);
+    }
+  }
+  for (const entry of guide.geographicImportance ?? []) {
+    if (!entry.prose || !entry.prose.trim()) {
+      fail("guide", id, `geographicImportance entry for "${entry.entityRef}" has empty prose`);
+    }
+    if (entry.prose === UNVERIFIED_PLACEHOLDER) {
+      fail("guide", id, `geographicImportance prose equals the EmptyMetric placeholder`);
+    }
+    validateEntityRef("guide", id, entry.entityRef, "geographicImportance.entityRef");
+  }
+  (guide.caveats ?? []).forEach((c, i) => {
+    if (typeof c !== "string" || !c.trim()) {
+      fail("guide", id, `caveats[${i}] is empty or non-string`);
+    }
+    if (c === UNVERIFIED_PLACEHOLDER) {
+      fail("guide", id, `caveats[${i}] equals the EmptyMetric placeholder`);
+    }
+  });
+  (guide.methodologyNotes ?? []).forEach((m, i) => {
+    if (typeof m !== "string" || !m.trim()) {
+      fail("guide", id, `methodologyNotes[${i}] is empty or non-string`);
+    }
+    if (m === UNVERIFIED_PLACEHOLDER) {
+      fail("guide", id, `methodologyNotes[${i}] equals the EmptyMetric placeholder`);
+    }
+  });
   validateCitations("guide", id, guide.sources);
 }
-
-const ENTITY_REF_PATTERN = /^(country|city|ixp):[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function validateEntityRef(scope: string, id: string, ref: string, field: string) {
   if (!ENTITY_REF_PATTERN.test(ref)) {
@@ -435,9 +493,6 @@ function validateEntityRef(scope: string, id: string, ref: string, field: string
   }
 }
 
-const datasetSlugs = new Set(DATASETS.map((d) => d.slug));
-const indicatorSlugs = new Set(INDICATORS.map((i) => i.slug));
-const rankingSlugs = new Set(RANKINGS.map((r) => r.slug));
 
 const seenDatasetSlugs = new Set<string>();
 for (const d of DATASETS) {

@@ -1,6 +1,6 @@
 import type { Guide } from "@/entities";
 
-const CHECKED_AT = "2026-05-20";
+const CHECKED_AT = "2026-05-22";
 
 export const CLOUD_REGIONS_GUIDE: Guide = {
   slug: "cloud-regions",
@@ -8,7 +8,7 @@ export const CLOUD_REGIONS_GUIDE: Guide = {
   dek:
     "What a cloud region actually is, how to read each provider's directory, and why regions cluster in a small number of interconnection metros.",
   publishedAt: "2026-05-20",
-  lastUpdated: "2026-05-20",
+  lastUpdated: "2026-05-22",
   definition:
     "A cloud region is a collection of one or more datacenters in a single metro placed under a single administrative and naming scope by a cloud provider — for example AWS eu-central-1 (Frankfurt), Google Cloud asia-southeast1 (Singapore), or Microsoft Azure East US (Virginia). The provider's own published directory is the authoritative public record.",
   keyTakeaways: [
@@ -85,6 +85,32 @@ export const CLOUD_REGIONS_GUIDE: Guide = {
     "A new cloud region in a metro typically triggers a sequence of ancillary build-out: colocation operators expand or open new facilities, transit providers add capacity, the local IXP often gains the cloud's Direct Connect / Interconnect / ExpressRoute as a member, and the local power and cooling supply chains tighten.",
     "None of this is published on the cloud's own region page. It shows up downstream — in PeeringDB facility listings, in TeleGeography reports, and in trade press about new colocation builds. For policy and operator planning, the region announcement is the leading indicator; everything else trails it.",
   ],
+  geographicImportance: [
+    {
+      entityRef: "city:frankfurt",
+      prose:
+        "Frankfurt hosts AWS eu-central-1, Google Cloud europe-west3, and Microsoft Azure Germany West Central — the same metro chosen by all three hyperscalers for their primary EU region.",
+    },
+    {
+      entityRef: "city:ashburn",
+      prose:
+        "Ashburn hosts AWS us-east-1, Google Cloud us-east4, and Microsoft Azure East US, the canonical US east-coast clustering and the largest concentration of hyperscaler region capacity in the world.",
+    },
+    {
+      entityRef: "city:singapore",
+      prose:
+        "Singapore hosts AWS ap-southeast-1, Google Cloud asia-southeast1, and Microsoft Azure Southeast Asia, with the regions co-located alongside major submarine cable landings.",
+    },
+  ],
+  caveats: [
+    "Provider directories restructure occasionally; the canonical reference is whichever version of the directory page is current at the editorial check date, not a snapshot taken months earlier.",
+    "Availability-zone counts are published inconsistently across providers and across regions. Where a zone count is not officially published, Radar leaves the field undefined rather than guess.",
+    "Sovereignty regions are sometimes counted alongside general-availability regions in marketing material. Reading the directories carefully to separate the two avoids double-counting capacity.",
+  ],
+  methodologyNotes: [
+    "Each region row is pinned to its country by ISO 3166-1 alpha-2 code and, when Radar's entity registry has the metro, to a metro slug. Provider-published region identifiers (e.g. eu-central-1) are stored verbatim.",
+    "Hyperscaler region announcements that are not yet generally available are tracked separately from in-service regions; they do not appear in the in-service row corpus until the provider's own directory marks them generally available.",
+  ],
   relatedEntityRefs: [
     "city:frankfurt",
     "city:ashburn",
@@ -93,6 +119,11 @@ export const CLOUD_REGIONS_GUIDE: Guide = {
     "country:united-states",
     "country:singapore",
   ],
+  relatedDatasetSlugs: ["global-cloud-regions", "ai-infrastructure-regions"],
+  relatedIndicatorSlugs: ["cloud-region-concentration"],
+  relatedRankingSlugs: ["cloud-infrastructure-hubs"],
+  relatedMapPaths: ["/maps/cloud-regions"],
+  relatedMediaIds: ["cloud-region-distribution"],
   sources: [
     {
       sourceId: "aws-regions",

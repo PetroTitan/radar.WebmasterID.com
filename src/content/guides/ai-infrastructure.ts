@@ -1,6 +1,6 @@
 import type { Guide } from "@/entities";
 
-const CHECKED_AT = "2026-05-20";
+const CHECKED_AT = "2026-05-22";
 
 export const AI_INFRASTRUCTURE_GUIDE: Guide = {
   slug: "ai-infrastructure",
@@ -8,7 +8,7 @@ export const AI_INFRASTRUCTURE_GUIDE: Guide = {
   dek:
     "The compute, network, and power footprint of large-scale machine-learning workloads — and the structural constraints (power, cooling, fibre) that determine where it gets built.",
   publishedAt: "2026-05-20",
-  lastUpdated: "2026-05-20",
+  lastUpdated: "2026-05-22",
   definition:
     "AI infrastructure refers to the specialised compute, network, and power capacity required for large-scale machine-learning training and inference workloads — typically organised as GPU or accelerator clusters of significant power density, inside cloud regions or specialist colocation facilities. The principal constraint is power and cooling supply, not compute supply alone.",
   keyTakeaways: [
@@ -89,6 +89,33 @@ export const AI_INFRASTRUCTURE_GUIDE: Guide = {
     "For operators planning multi-year capacity, AI infrastructure is the supply chain that needs the longest lead time — power-purchase agreements, grid interconnect queues, planning permissions all run on multi-year horizons. AI infrastructure decisions in 2026 reflect site selection from several years earlier.",
     "For policy makers, AI infrastructure concentrates power-grid load in particular metros and adds a new dimension to grid-planning, water-rights, and economic-development calculations. The infrastructure question is increasingly an industrial-policy question.",
   ],
+  geographicImportance: [
+    {
+      entityRef: "city:ashburn",
+      prose:
+        "Ashburn already hosts dense hyperscaler region capacity and is therefore the destination of much US AI-infrastructure investment — at the cost of compounding power-grid constraints on the Northern Virginia substations that feed the metro.",
+    },
+    {
+      entityRef: "city:frankfurt",
+      prose:
+        "Frankfurt is the EU equivalent: existing hyperscaler regions and interconnection density make it attractive to AI workloads, while local power-planning constraints shape how quickly new capacity can land.",
+    },
+    {
+      entityRef: "city:singapore",
+      prose:
+        "Singapore's data-centre moratorium (and the subsequent guided-expansion programme) is a leading-edge example of regulator constraint shaping AI-infrastructure buildout.",
+    },
+  ],
+  caveats: [
+    "AI infrastructure facts move faster than the colocation industry's published facility lists. PeeringDB and TeleGeography are necessary but not sufficient; the hyperscaler announcement pages and trade-press coverage are the leading indicators.",
+    "Capacity claims for specific facilities (megawatt counts, GPU-rack counts) are usually operator-reported and not independently verifiable; Radar does not store such figures on identity records.",
+    "Specialist GPU operators (CoreWeave, Lambda, neoclouds) publish footprints inconsistently. Their absence from PeeringDB or TeleGeography reporting is not evidence of absence in the market.",
+    "AI-instance availability per cloud region is documented on each cloud's own pages and changes frequently; reading the provider's region directory at a recent date is more reliable than relying on third-party aggregation.",
+  ],
+  methodologyNotes: [
+    "Radar does not publish per-region AI-accelerator inventories; the indicators we maintain document the structural concentration question (where AI capacity is being added) rather than per-facility counts.",
+    "AI infrastructure cuts across the cloud-region, datacenter-hub, and power-supply layers. The guide stays explicitly cross-layer rather than collapsing into any single one.",
+  ],
   relatedEntityRefs: [
     "city:ashburn",
     "city:frankfurt",
@@ -97,6 +124,11 @@ export const AI_INFRASTRUCTURE_GUIDE: Guide = {
     "country:germany",
     "country:singapore",
   ],
+  relatedDatasetSlugs: ["ai-infrastructure-regions", "global-cloud-regions"],
+  relatedIndicatorSlugs: ["cloud-region-concentration", "datacenter-concentration"],
+  relatedRankingSlugs: ["ai-infrastructure-readiness", "cloud-infrastructure-hubs"],
+  relatedMapPaths: ["/maps/cloud-regions", "/maps/datacenters"],
+  relatedMediaIds: ["cloud-region-distribution", "carrier-neutral-facility-model"],
   sources: [
     {
       sourceId: "aws-regions",

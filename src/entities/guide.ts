@@ -58,8 +58,39 @@ export interface Guide {
    *
    *  Format: `country:<slug>` | `city:<slug>` | `ixp:<slug>`. */
   readonly relatedEntityRefs?: ReadonlyArray<string>;
+  /** Dataset slugs that operationalise this guide's claims. */
+  readonly relatedDatasetSlugs?: ReadonlyArray<string>;
+  /** Indicator slugs computed on top of those datasets. */
+  readonly relatedIndicatorSlugs?: ReadonlyArray<string>;
+  /** Ranking slugs that surface the indicators editorially. */
+  readonly relatedRankingSlugs?: ReadonlyArray<string>;
+  /** Map page paths whose geographic view supports the guide. */
+  readonly relatedMapPaths?: ReadonlyArray<string>;
+  /** Visual-media asset IDs the guide cites or embeds. */
+  readonly relatedMediaIds?: ReadonlyArray<string>;
+  /** Methodology notes — short paragraphs explaining how the
+   *  guide's claims would be falsified or refined. Rendered as a
+   *  distinct "Methodology notes" section. */
+  readonly methodologyNotes?: ReadonlyArray<string>;
+  /** Editor-supplied caveats / limitations. Rendered as the
+   *  CaveatBlock callout. Use this for caveats that affect how
+   *  the guide should be read, distinct from methodology
+   *  refinements. */
+  readonly caveats?: ReadonlyArray<string>;
+  /** Per-entity importance notes. Each entry attaches a short
+   *  prose paragraph to a single entity ref, explaining why that
+   *  entity is a canonical example of the guide's subject. */
+  readonly geographicImportance?: ReadonlyArray<GuideGeographicImportance>;
   /** Citations supporting the guide as a whole. */
   readonly sources: ReadonlyArray<SourceCitation>;
+}
+
+export interface GuideGeographicImportance {
+  /** Canonical entity ref: `country:<slug>` | `city:<slug>` | `ixp:<slug>`. */
+  readonly entityRef: string;
+  /** Short prose paragraph (one or two sentences) explaining the
+   *  importance of this entity to the guide's subject. */
+  readonly prose: string;
 }
 
 export interface GuideSection {

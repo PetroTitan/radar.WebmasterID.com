@@ -1,6 +1,6 @@
 import type { Guide } from "@/entities";
 
-const CHECKED_AT = "2026-05-20";
+const CHECKED_AT = "2026-05-22";
 
 export const DATACENTER_HUBS_GUIDE: Guide = {
   slug: "datacenter-hubs",
@@ -8,7 +8,7 @@ export const DATACENTER_HUBS_GUIDE: Guide = {
   dek:
     "What makes a metro a global datacenter hub — and why the same handful of metros (Ashburn, Frankfurt, Singapore, London, Amsterdam) keep appearing on every infrastructure map.",
   publishedAt: "2026-05-20",
-  lastUpdated: "2026-05-20",
+  lastUpdated: "2026-05-22",
   definition:
     "A datacenter hub is a metro with a high concentration of carrier-neutral colocation facilities, dense interconnection options, and access to fibre routes and power infrastructure that make it economically attractive to host computing infrastructure. PeeringDB tracks the facility-by-facility composition of every hub.",
   keyTakeaways: [
@@ -76,6 +76,32 @@ export const DATACENTER_HUBS_GUIDE: Guide = {
     "For application architects, the choice of hub metro for primary capacity determines the network geography of everything downstream — which clouds are reachable on private interconnect, which IXPs are present, which transit providers are competitive.",
     "For policy makers, hub status is an outsized economic and security factor: a hub metro is part of the critical infrastructure of its country and region. Loss of hub status — through power, policy, or sustained capacity drought — has consequences across a far wider geography than the metro itself.",
   ],
+  geographicImportance: [
+    {
+      entityRef: "city:ashburn",
+      prose:
+        "Ashburn is the largest datacenter cluster globally, anchored on Equinix DC-series and Digital Realty facilities, and the origin metro of the AWS us-east-1 region.",
+    },
+    {
+      entityRef: "city:frankfurt",
+      prose:
+        "Frankfurt is the eastern anchor of the FLAP European cluster — high carrier-neutral facility density, the DE-CIX Frankfurt fabric, and primary EU regions for all three hyperscalers.",
+    },
+    {
+      entityRef: "city:singapore",
+      prose:
+        "Singapore is the principal Southeast Asian hub: dense carrier-neutral colocation, submarine cable landings within the metro, and hyperscaler regions all in walking distance from each other.",
+    },
+  ],
+  caveats: [
+    "Trade-press claims about \"datacenter capacity\" in a metro mix carrier-neutral interconnection venues, single-carrier facilities, and hyperscaler-owned campuses. Reading the underlying PeeringDB facility records or TeleGeography colocation reporting separates the categories.",
+    "Power-constraint reporting (Northern Virginia substation queues, Frankfurt planning constraints) reflects a specific point in time. The slowdown manifests as longer build-out lead times rather than relocation to a different metro.",
+    "Hub status is not a discrete on/off label. Metros at the edge of the canonical list (Tokyo, Dublin, Hong Kong, São Paulo) qualify under some definitions and not others, depending on what threshold of network density is treated as decisive.",
+  ],
+  methodologyNotes: [
+    "Hub status is asserted by Radar only for metros whose facility density and network presence are corroborated by both PeeringDB records and TeleGeography reporting. Metros without those corroborating sources are not listed as hubs.",
+    "Underlying inputs (power, fibre topology, regulatory stability) are tracked as commentary, not as quantitative metrics. Radar refuses to publish a composite \"hub score\" because the denominator (every metro) is not well-defined.",
+  ],
   relatedEntityRefs: [
     "city:frankfurt",
     "city:ashburn",
@@ -84,6 +110,11 @@ export const DATACENTER_HUBS_GUIDE: Guide = {
     "country:united-states",
     "country:singapore",
   ],
+  relatedDatasetSlugs: ["internet-exchange-hubs", "global-cloud-regions"],
+  relatedIndicatorSlugs: ["datacenter-concentration", "carrier-neutrality"],
+  relatedRankingSlugs: ["cloud-infrastructure-hubs", "most-connected-cities"],
+  relatedMapPaths: ["/maps/datacenters", "/maps/ixps"],
+  relatedMediaIds: ["carrier-neutral-facility-model", "cloud-region-distribution"],
   sources: [
     {
       sourceId: "peeringdb",

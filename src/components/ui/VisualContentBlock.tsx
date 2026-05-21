@@ -3,6 +3,8 @@ import type { MediaAsset, MediaInlineComponent } from "@/entities";
 import { InterconnectionDiagram } from "@/components/diagrams/InterconnectionDiagram";
 import { CableLandingDiagram } from "@/components/diagrams/CableLandingDiagram";
 import { CloudRegionDistributionDiagram } from "@/components/diagrams/CloudRegionDistributionDiagram";
+import { CarrierNeutralFacilityDiagram } from "@/components/diagrams/CarrierNeutralFacilityDiagram";
+import { InfrastructureRedundancyDiagram } from "@/components/diagrams/InfrastructureRedundancyDiagram";
 import { VisualAttribution } from "./VisualAttribution";
 
 interface VisualContentBlockProps {
@@ -15,6 +17,8 @@ const INLINE_COMPONENTS: Readonly<
   InterconnectionDiagram,
   CableLandingDiagram,
   CloudRegionDistributionDiagram,
+  CarrierNeutralFacilityDiagram,
+  InfrastructureRedundancyDiagram,
 };
 
 /**
