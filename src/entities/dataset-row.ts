@@ -98,8 +98,36 @@ export interface PeeringDBFacilityRecord extends IngestedRecord {
   readonly carrierNeutral?: boolean;
 }
 
+export interface AICapableCloudRegionRecord extends IngestedRecord {
+  readonly recordType: "ai-capable-cloud-region";
+  /** Provider slug for the underlying cloud region. */
+  readonly provider: CloudProviderSlug;
+  /** Provider-published region code, verbatim. */
+  readonly regionCode: string;
+  /** Provider-published display name. */
+  readonly displayName: string;
+  /** ISO 3166-1 alpha-2 country code. */
+  readonly countryCode: string;
+  /** Radar city slug, when the region is anchored to a Radar metro. */
+  readonly metroSlug?: string;
+  /** Provider-published AI service whose regional availability this
+   *  row records, e.g. "AWS Bedrock", "Azure OpenAI", "Vertex AI". */
+  readonly aiService: string;
+  /** Whether the service is generally available, in preview, or
+   *  limited to specific model classes in this region per the
+   *  provider's own documentation. */
+  readonly availability: "generally-available" | "preview" | "limited";
+  /** Editor's free-text note: which specific models / surfaces the
+   *  provider lists for this region. The platform refuses to store
+   *  GPU counts, capacity figures, queue times, latency claims,
+   *  inference-throughput estimates, or any other speculative
+   *  metric. */
+  readonly modelNotes?: string;
+}
+
 /** Discriminated union of every row type the platform stores. */
 export type InfrastructureDatasetRow =
   | CloudProviderRegionRecord
   | PeeringDBInternetExchangeRecord
-  | PeeringDBFacilityRecord;
+  | PeeringDBFacilityRecord
+  | AICapableCloudRegionRecord;

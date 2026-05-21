@@ -18,6 +18,12 @@ const GROUPS: ReadonlyArray<RowGroup> = [
     datasetLabel: "Global cloud regions",
   },
   {
+    key: "ai-capable-cloud-region",
+    label: "AI-capable cloud regions",
+    datasetHref: "/research/datasets/ai-capable-cloud-regions",
+    datasetLabel: "AI-capable cloud regions",
+  },
+  {
     key: "peeringdb-ix",
     label: "Internet Exchange Points",
     datasetHref: "/research/datasets/internet-exchange-hubs",

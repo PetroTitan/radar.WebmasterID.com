@@ -126,6 +126,21 @@ function RowDetail({ row }: { readonly row: InfrastructureDatasetRow }) {
       </span>
     );
   }
+  if (row.recordType === "ai-capable-cloud-region") {
+    return (
+      <span>
+        <span className="font-medium uppercase tracking-wider text-[0.7rem] text-amber-600 mr-2">
+          {row.provider}
+        </span>
+        <span className="font-medium">{row.regionCode}</span>
+        <span className="ml-2 text-ink-500">— {row.aiService}</span>
+        <span className="ml-2 font-mono text-[0.6875rem] uppercase tracking-wider text-ink-300">
+          {row.availability}
+        </span>
+        <span className="ml-2 text-xs text-ink-500">({row.countryCode})</span>
+      </span>
+    );
+  }
   // peeringdb-facility
   return (
     <span>

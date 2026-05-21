@@ -7,6 +7,7 @@ import { CarrierNeutralFacilityDiagram } from "@/components/diagrams/CarrierNeut
 import { InfrastructureRedundancyDiagram } from "@/components/diagrams/InfrastructureRedundancyDiagram";
 import { TransatlanticCableHistoryDiagram } from "@/components/diagrams/TransatlanticCableHistoryDiagram";
 import { EcosystemTopologyDiagram } from "@/components/diagrams/EcosystemTopologyDiagram";
+import { AICapableRegionClusteringDiagram } from "@/components/diagrams/AICapableRegionClusteringDiagram";
 import { VisualAttribution } from "./VisualAttribution";
 
 interface VisualContentBlockProps {
@@ -23,6 +24,7 @@ const INLINE_COMPONENTS: Readonly<
   InfrastructureRedundancyDiagram,
   TransatlanticCableHistoryDiagram,
   EcosystemTopologyDiagram,
+  AICapableRegionClusteringDiagram,
 };
 
 /**

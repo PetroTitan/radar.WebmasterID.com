@@ -3,6 +3,8 @@ import { GLOBAL_CLOUD_REGIONS } from "./global-cloud-regions";
 import { INTERNET_EXCHANGE_HUBS } from "./internet-exchange-hubs";
 import { SUBSEA_CABLE_LANDINGS } from "./subsea-cable-landings";
 import { AI_INFRASTRUCTURE_REGIONS } from "./ai-infrastructure-regions";
+import { AI_CAPABLE_CLOUD_REGIONS } from "./ai-capable-cloud-regions";
+import { GPU_CLOUD_GEOGRAPHY } from "./gpu-cloud-geography";
 
 /**
  * Dataset registry.
@@ -16,6 +18,8 @@ export const DATASETS: ReadonlyArray<Dataset> = [
   INTERNET_EXCHANGE_HUBS,
   SUBSEA_CABLE_LANDINGS,
   AI_INFRASTRUCTURE_REGIONS,
+  AI_CAPABLE_CLOUD_REGIONS,
+  GPU_CLOUD_GEOGRAPHY,
 ];
 
 export function getDataset(slug: string): Dataset | undefined {

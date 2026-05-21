@@ -135,6 +135,39 @@ export const MEDIA_ASSETS: ReadonlyArray<MediaAsset> = [
     lastVerified: VERIFIED_AT,
   },
   {
+    id: "ai-capable-region-clustering",
+    title: "AI-capable cloud-region clustering",
+    type: "topology-diagram",
+    status: "verified",
+    source: {
+      name: "Self-authored",
+      pageUrl:
+        "https://radar.webmasterid.com/visuals/ai-capable-region-clustering",
+    },
+    license: {
+      name: "CC BY 4.0",
+      url: "https://creativecommons.org/licenses/by/4.0/",
+      attributionRequired: true,
+    },
+    attribution: "Radar WebmasterID, CC BY 4.0.",
+    author: "Radar WebmasterID editorial",
+    altText:
+      "Three-column schematic of AI-capable cloud-region geography: metros hosting all three hyperscalers' general-availability regions, the provider-published AI-instance layer overlaid on those regions, and the scaling constraints (power supply, regulator) that limit further build-out.",
+    caption:
+      "AI-instance availability overlays the three-hyperscaler general-availability geography rather than producing a separate map.",
+    relatedEntityRefs: [
+      "city:frankfurt",
+      "city:london",
+      "city:ashburn",
+      "city:singapore",
+      "city:tokyo",
+    ],
+    category: "cloud",
+    inlineComponent: "AICapableRegionClusteringDiagram",
+    dimensions: { width: 760, height: 360 },
+    lastVerified: REVIEWED_AT_3,
+  },
+  {
     id: "metro-ecosystem-topology",
     title: "Metro datacenter-ecosystem model",
     type: "topology-diagram",

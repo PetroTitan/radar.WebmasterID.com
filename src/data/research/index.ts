@@ -8,16 +8,19 @@ import type { InfrastructureDatasetRow } from "@/entities";
 import { REVIEWED_CLOUD_REGIONS } from "./cloud-regions.reviewed";
 import { REVIEWED_PEERINGDB_IXPS } from "./peeringdb-ixps.reviewed";
 import { REVIEWED_PEERINGDB_FACILITIES } from "./facilities.reviewed";
+import { REVIEWED_AI_CAPABLE_CLOUD_REGIONS } from "./ai-capable-cloud-regions.reviewed";
 
 export { REVIEWED_CLOUD_REGIONS } from "./cloud-regions.reviewed";
 export { REVIEWED_PEERINGDB_IXPS } from "./peeringdb-ixps.reviewed";
 export { REVIEWED_PEERINGDB_FACILITIES } from "./facilities.reviewed";
+export { REVIEWED_AI_CAPABLE_CLOUD_REGIONS } from "./ai-capable-cloud-regions.reviewed";
 
 /** Union of every reviewed row across every dataset. */
 export const REVIEWED_ROWS: ReadonlyArray<InfrastructureDatasetRow> = [
   ...REVIEWED_CLOUD_REGIONS,
   ...REVIEWED_PEERINGDB_IXPS,
   ...REVIEWED_PEERINGDB_FACILITIES,
+  ...REVIEWED_AI_CAPABLE_CLOUD_REGIONS,
 ];
 
 /**

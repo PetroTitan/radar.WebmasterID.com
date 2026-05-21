@@ -273,6 +273,84 @@ export const SOURCE_REGISTRY: ReadonlyArray<SourceRecord> = [
       "U.S. Federal Communications Commission. Authoritative primary source for merger filings, telecom-licensing decisions, submarine-cable landing licenses, and historical ownership transitions of US telecom assets.",
     coverage: ["Merger filings", "Submarine cable landing licenses", "Carrier licensing"],
   },
+  {
+    id: "eu-ai-act",
+    name: "EU AI Act",
+    category: "registry",
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689",
+    trustTier: "tier-1",
+    licenseNote: "EU legislation; primary doc published by EUR-Lex.",
+    lastChecked: "2026-05-27",
+    updateFrequency: "irregular",
+    description:
+      "EU Regulation 2024/1689 (the AI Act). Authoritative primary source for AI-system regulatory obligations applying to providers and deployers operating in the EU, including the high-risk AI-system and general-purpose-AI-model regimes that shape sovereign-AI infrastructure considerations.",
+    coverage: [
+      "AI system regulation",
+      "High-risk AI obligations",
+      "General-purpose AI model rules",
+      "EU sovereign-AI framing",
+    ],
+  },
+  {
+    id: "imda-singapore",
+    name: "Infocomm Media Development Authority (Singapore)",
+    category: "registry",
+    url: "https://www.imda.gov.sg/",
+    trustTier: "tier-1",
+    licenseNote: "Singapore government primary doc, freely citable.",
+    lastChecked: "2026-05-27",
+    updateFrequency: "irregular",
+    description:
+      "Singapore's Infocomm Media Development Authority. Authoritative primary source for Singapore data-centre regulation, including the 2019 moratorium, the 2022 guided-expansion programme, and the Green Data Centre Roadmap that shapes how AI-infrastructure capacity is admitted into the metro.",
+    coverage: [
+      "Singapore data-centre policy",
+      "Guided-expansion programme",
+      "Green Data Centre Roadmap",
+    ],
+  },
+  {
+    id: "aws-bedrock",
+    name: "AWS Bedrock service documentation",
+    category: "vendor",
+    url: "https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-regions.html",
+    trustTier: "tier-3",
+    licenseNote: "Vendor primary doc, freely citable with attribution.",
+    lastChecked: "2026-05-27",
+    updateFrequency: "irregular",
+    description:
+      "Amazon Web Services' published list of regions in which Amazon Bedrock (managed foundation-model service) is available. Authoritative for AWS-attested per-region availability of Bedrock and the foundation models served via the API.",
+    coverage: ["AWS Bedrock regions", "Foundation-model availability"],
+  },
+  {
+    id: "azure-openai",
+    name: "Azure OpenAI Service regional availability",
+    category: "vendor",
+    url: "https://learn.microsoft.com/azure/ai-services/openai/concepts/models",
+    trustTier: "tier-3",
+    licenseNote: "Vendor primary doc, freely citable with attribution.",
+    lastChecked: "2026-05-27",
+    updateFrequency: "irregular",
+    description:
+      "Microsoft's published documentation for Azure OpenAI Service, including per-region availability for each model class. Authoritative for Azure-attested geographic availability of the OpenAI-hosted models on Azure.",
+    coverage: ["Azure OpenAI regions", "Per-model regional availability"],
+  },
+  {
+    id: "vertex-ai",
+    name: "Google Cloud Vertex AI regional availability",
+    category: "vendor",
+    url: "https://cloud.google.com/vertex-ai/docs/general/locations",
+    trustTier: "tier-3",
+    licenseNote: "Vendor primary doc, freely citable with attribution.",
+    lastChecked: "2026-05-27",
+    updateFrequency: "irregular",
+    description:
+      "Google Cloud's published location list for the Vertex AI managed-ML platform, including per-region availability for the platform's serving and training surfaces. Authoritative for Google-attested geographic availability of the Vertex AI APIs.",
+    coverage: [
+      "Vertex AI regions",
+      "Per-API regional availability",
+      "Model Garden regional surface",
+    ],
+  },
 ];
 
 export function getSourceRecord(id: string): SourceRecord | undefined {

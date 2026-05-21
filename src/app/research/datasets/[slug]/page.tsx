@@ -20,6 +20,7 @@ import {
   REVIEWED_CLOUD_REGIONS,
   REVIEWED_PEERINGDB_IXPS,
   REVIEWED_PEERINGDB_FACILITIES,
+  REVIEWED_AI_CAPABLE_CLOUD_REGIONS,
 } from "@/data/research";
 import type { InfrastructureDatasetRow } from "@/entities";
 import { buildPageMetadata } from "@/lib/metadata";
@@ -108,7 +109,9 @@ export default async function DatasetPage({ params }: RouteParams) {
         ? [...REVIEWED_PEERINGDB_IXPS, ...REVIEWED_PEERINGDB_FACILITIES]
         : d.slug === "facilities"
           ? REVIEWED_PEERINGDB_FACILITIES
-          : [];
+          : d.slug === "ai-capable-cloud-regions"
+            ? REVIEWED_AI_CAPABLE_CLOUD_REGIONS
+            : [];
 
   const pendingByDataset: Record<string, ReadonlyArray<string>> = {
     "global-cloud-regions": [
@@ -128,6 +131,16 @@ export default async function DatasetPage({ params }: RouteParams) {
     "ai-infrastructure-regions": [
       "AI-accelerator availability is not published on cloud-region rows; the indicator awaits comparable disclosure across providers.",
       "Provider-disclosed accelerator generations (H100, MI300, TPUv5) appear inconsistently across region directories.",
+    ],
+    "ai-capable-cloud-regions": [
+      "Per-foundation-model availability inside each service changes irregularly; rows record service-level availability only.",
+      "Smaller AI-platform providers (Oracle, IBM, sovereign-cloud-region AI catalogues) are not yet ingested.",
+      "Provider regional surfaces interact with regulatory frameworks (EU AI Act, sovereignty rules, US export controls); rows record availability as the provider publishes it without encoding regulatory state.",
+    ],
+    "gpu-cloud-geography": [
+      "Per-region GPU and accelerator counts are intentionally never stored; the dataset documents structural patterns only.",
+      "Specialist GPU operators (CoreWeave, Lambda, neoclouds) publish location inconsistently; the dataset is silent on metros they have not disclosed.",
+      "Power and cooling supply signals — which determine whether a GPU-region can scale further — are tracked separately in the ai-infrastructure-regions dataset.",
     ],
     facilities: [
       "PeeringDB numeric facility IDs are intentionally undefined; rows publish operator name and source URL only.",

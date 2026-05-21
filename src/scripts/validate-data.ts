@@ -42,6 +42,7 @@ import {
   REVIEWED_CLOUD_REGIONS,
   REVIEWED_PEERINGDB_IXPS,
   REVIEWED_PEERINGDB_FACILITIES,
+  REVIEWED_AI_CAPABLE_CLOUD_REGIONS,
 } from "../data/research";
 import { WIKIMEDIA_CANDIDATES } from "../content/wikimedia-candidates";
 import { HISTORY_PAGES } from "../content/history";
@@ -55,6 +56,13 @@ import type {
 } from "../entities";
 
 const UNVERIFIED_PLACEHOLDER = "Data not yet verified.";
+
+/** Pattern for canonical composite entity references. Hoisted to
+ *  the top because every entity-ref-validating loop (insight,
+ *  guide, dataset, history, media, reviewed rows) calls
+ *  `validateEntityRef` indirectly during module evaluation. */
+const ENTITY_REF_PATTERN =
+  /^(country|city|ixp|facility):[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 interface Failure {
   readonly scope: string;
@@ -411,26 +419,7 @@ for (const insight of INSIGHTS) {
     });
   });
   for (const ref of insight.entityRefs ?? []) {
-    const [kind, slug] = ref.split(":");
-    if (!kind || !slug) {
-      fail("insight", id, `entityRefs entry "${ref}" is malformed`);
-      continue;
-    }
-    if (kind === "country") {
-      if (!getCountry(slug)) {
-        fail("insight", id, `entityRefs "${ref}" points at unknown country`);
-      }
-    } else if (kind === "city") {
-      if (!getCity(slug)) {
-        fail("insight", id, `entityRefs "${ref}" points at unknown city`);
-      }
-    } else if (kind === "ixp") {
-      if (!getIxp(slug)) {
-        fail("insight", id, `entityRefs "${ref}" points at unknown IXP`);
-      }
-    } else {
-      fail("insight", id, `entityRefs "${ref}" uses unknown kind "${kind}"`);
-    }
+    validateEntityRef("insight", id, ref, "entityRefs");
   }
   validateCitations("insight", id, insight.sources);
 }
@@ -442,9 +431,6 @@ const datasetSlugs = new Set(DATASETS.map((d) => d.slug));
 const indicatorSlugs = new Set(INDICATORS.map((i) => i.slug));
 const rankingSlugs = new Set(RANKINGS.map((r) => r.slug));
 const mediaIds = new Set(MEDIA_ASSETS.map((m) => m.id));
-
-const ENTITY_REF_PATTERN =
-  /^(country|city|ixp|facility):[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 const seenGuideSlugs = new Set<string>();
 for (const guide of GUIDES) {
@@ -523,26 +509,7 @@ for (const guide of GUIDES) {
     }
   });
   for (const ref of guide.relatedEntityRefs ?? []) {
-    const [kind, slug] = ref.split(":");
-    if (!kind || !slug) {
-      fail("guide", id, `relatedEntityRefs "${ref}" is malformed`);
-      continue;
-    }
-    if (kind === "country") {
-      if (!getCountry(slug)) {
-        fail("guide", id, `relatedEntityRefs "${ref}" points at unknown country`);
-      }
-    } else if (kind === "city") {
-      if (!getCity(slug)) {
-        fail("guide", id, `relatedEntityRefs "${ref}" points at unknown city`);
-      }
-    } else if (kind === "ixp") {
-      if (!getIxp(slug)) {
-        fail("guide", id, `relatedEntityRefs "${ref}" points at unknown IXP`);
-      }
-    } else {
-      fail("guide", id, `relatedEntityRefs "${ref}" uses unknown kind "${kind}"`);
-    }
+    validateEntityRef("guide", id, ref, "relatedEntityRefs");
   }
   for (const slug of guide.relatedDatasetSlugs ?? []) {
     if (!datasetSlugs.has(slug)) {
@@ -1190,6 +1157,101 @@ for (const row of REVIEWED_PEERINGDB_IXPS) {
   validateRowLocationConsistency(scope, row);
 }
 
+// ---------------------------------------------------------------
+// Reviewed AI-capable cloud regions
+//
+// Each row records that a provider-managed AI service is officially
+// documented as available in a specific cloud region, with the
+// provider's own documentation page as the source.
+//
+// The validator forbids speculative fields and editorial drift:
+//   - The row's `provider` is one of the known cloud provider slugs.
+//   - The row's `aiService` is non-empty and references a provider's
+//     own service name (no third-party labels).
+//   - The row's `availability` is one of the three allowed values.
+//   - The row's `metroSlug`, when present, resolves to a city and
+//     city.countryCode matches the row's countryCode.
+//   - The row must NOT carry any of the prohibited speculative
+//     fields (gpuCount, accelerators, aiReadinessScore, capacity,
+//     queueDepth, throughputTbps). The validator enforces this via
+//     defensive property lookups.
+//   - The row's source must resolve to an "ai-*" or provider
+//     primary doc source (we accept aws-bedrock, azure-openai,
+//     vertex-ai, plus the existing aws-regions / gcp-regions /
+//     azure-regions for fallback when a service-specific source
+//     hasn't been registered).
+// ---------------------------------------------------------------
+const PROHIBITED_AI_FIELDS = [
+  "gpuCount",
+  "accelerators",
+  "acceleratorCount",
+  "aiReadinessScore",
+  "readinessScore",
+  "capacity",
+  "queueDepth",
+  "throughputTbps",
+  "throughput",
+  "latencyMs",
+];
+const VALID_AI_AVAILABILITY = new Set([
+  "generally-available",
+  "preview",
+  "limited",
+] as const);
+for (const row of REVIEWED_AI_CAPABLE_CLOUD_REGIONS) {
+  const scope = "reviewed-ai-capable-cloud-region";
+  checkRowIdUnique(scope, row.id);
+  validateRow(scope, row);
+  rejectUnknownLiteral(scope, row.id, "regionCode", row.regionCode);
+  rejectUnknownLiteral(scope, row.id, "displayName", row.displayName);
+  rejectUnknownLiteral(scope, row.id, "countryCode", row.countryCode);
+  rejectUnknownLiteral(scope, row.id, "aiService", row.aiService);
+  if (!KNOWN_CLOUD_PROVIDER_SLUGS.has(row.provider)) {
+    fail(scope, row.id, `provider "${row.provider}" is not a known hyperscaler slug`);
+  }
+  if (!row.aiService || !row.aiService.trim()) {
+    fail(scope, row.id, "aiService is required");
+  }
+  if (!VALID_AI_AVAILABILITY.has(row.availability as never)) {
+    fail(
+      scope,
+      row.id,
+      `availability "${String(row.availability)}" must be one of generally-available, preview, limited`,
+    );
+  }
+  if (row.countryCode.length !== 2) {
+    fail(scope, row.id, `countryCode "${row.countryCode}" must be ISO 3166-1 alpha-2`);
+  }
+  if (row.metroSlug && !getCity(row.metroSlug)) {
+    fail(scope, row.id, `metroSlug "${row.metroSlug}" not in cities registry`);
+  }
+  validateRowLocationConsistency(scope, row);
+  // Defensive guard: catch any speculative AI-capacity field that
+  // sneaks onto a row via TypeScript widening or future schema
+  // drift. The platform refuses to publish GPU counts or
+  // AI-readiness scores.
+  const asRecord = row as unknown as Record<string, unknown>;
+  for (const banned of PROHIBITED_AI_FIELDS) {
+    if (asRecord[banned] !== undefined) {
+      fail(
+        scope,
+        row.id,
+        `row carries prohibited speculative field "${banned}" — AI-capable rows record service availability only`,
+      );
+    }
+  }
+  // Editorial-language guard: modelNotes must not contain
+  // unsourced "largest / fastest / best" superlatives.
+  const SUPERLATIVE_PATTERN = /\b(largest|fastest|best|biggest|first(?:-ever)?)\b/i;
+  if (row.modelNotes && SUPERLATIVE_PATTERN.test(row.modelNotes)) {
+    fail(
+      scope,
+      row.id,
+      `modelNotes uses unsourced superlative language — re-frame against the provider's own claims or remove`,
+    );
+  }
+}
+
 for (const row of REVIEWED_PEERINGDB_FACILITIES) {
   const scope = "reviewed-peeringdb-facility";
   checkRowIdUnique(scope, row.id);
@@ -1220,6 +1282,7 @@ const counts = {
   reviewedCloudRegions: REVIEWED_CLOUD_REGIONS.length,
   reviewedPeeringdbIxps: REVIEWED_PEERINGDB_IXPS.length,
   reviewedPeeringdbFacilities: REVIEWED_PEERINGDB_FACILITIES.length,
+  reviewedAiCapableCloudRegions: REVIEWED_AI_CAPABLE_CLOUD_REGIONS.length,
   wikimediaCandidates: WIKIMEDIA_CANDIDATES.length,
   history: HISTORY_PAGES.length,
   subseaCables: SUBSEA_CABLES.length,
@@ -1240,7 +1303,7 @@ console.log(
   `  countries: ${counts.countries}, cities: ${counts.cities}, ixps: ${counts.ixps}, cloud-providers: ${counts.cloudProviders}, insights: ${counts.insights}, guides: ${counts.guides}, datasets: ${counts.datasets}, indicators: ${counts.indicators}, rankings: ${counts.rankings}, media: ${counts.media}`,
 );
 console.log(
-  `  reviewed rows: cloud-regions: ${counts.reviewedCloudRegions}, peeringdb-ixps: ${counts.reviewedPeeringdbIxps}, peeringdb-facilities: ${counts.reviewedPeeringdbFacilities}`,
+  `  reviewed rows: cloud-regions: ${counts.reviewedCloudRegions}, peeringdb-ixps: ${counts.reviewedPeeringdbIxps}, peeringdb-facilities: ${counts.reviewedPeeringdbFacilities}, ai-capable-cloud-regions: ${counts.reviewedAiCapableCloudRegions}`,
 );
 console.log(`  wikimedia candidates: ${counts.wikimediaCandidates}`);
 console.log(`  history pages: ${counts.history}, subsea cables: ${counts.subseaCables}, facilities: ${counts.facilities}`);
