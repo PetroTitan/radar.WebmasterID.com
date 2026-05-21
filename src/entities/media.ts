@@ -63,7 +63,10 @@ export type MediaInlineComponent =
   | "InfrastructureRedundancyDiagram"
   | "TransatlanticCableHistoryDiagram"
   | "EcosystemTopologyDiagram"
-  | "AICapableRegionClusteringDiagram";
+  | "AICapableRegionClusteringDiagram"
+  | "EuropeanInterconnectionCorridorMap"
+  | "TransatlanticConnectivityCorridorMap"
+  | "AICloudGeographyMap";
 
 export interface MediaSource {
   /** Source name, e.g. "Wikimedia Commons", "DE-CIX", "AWS",

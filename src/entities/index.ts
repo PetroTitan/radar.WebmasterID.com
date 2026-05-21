@@ -16,4 +16,5 @@ export * from "./ranking";
 export * from "./media";
 export * from "./wikimedia-candidate";
 export * from "./history";
+export * from "./infrastructure-map";
 export * from "./dataset-row";

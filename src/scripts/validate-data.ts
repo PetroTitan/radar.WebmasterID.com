@@ -46,6 +46,7 @@ import {
 } from "../data/research";
 import { WIKIMEDIA_CANDIDATES } from "../content/wikimedia-candidates";
 import { HISTORY_PAGES } from "../content/history";
+import { INFRASTRUCTURE_MAPS } from "../content/maps";
 import { SUBSEA_CABLES } from "../data/subsea-cables";
 import { isValidIsoDate } from "../lib/dates";
 import type {
@@ -1121,6 +1122,139 @@ for (const page of HISTORY_PAGES) {
   validateCitations("history", id, page.sources);
 }
 
+// ---------------------------------------------------------------
+// Editorial infrastructure maps
+//
+// Each InfrastructureMap is a topology / corridor / clustering
+// diagram with explicit methodology + caveats. The validator
+// enforces:
+//   - unique slug
+//   - methodology + caveats non-empty
+//   - category is one of the documented literals
+//   - relatedEntityRefs / relatedGuideSlugs / relatedDatasetSlugs
+//     / relatedCableSlugs / relatedHistorySlugs all resolve
+//   - mediaId resolves to a verified media asset
+//   - subsea-category maps deliberately do not encode exact route
+//     claims — the validator scans methodology + caveats for
+//     "exact route" and rejects matches; corridor language is
+//     required instead
+// ---------------------------------------------------------------
+const VALID_MAP_CATEGORIES = new Set([
+  "topology",
+  "corridor",
+  "interconnection",
+  "subsea",
+  "cloud",
+  "ai-geography",
+  "metro-ecosystem",
+  "historical",
+] as const);
+
+const historySlugs = new Set(HISTORY_PAGES.map((p) => p.slug));
+const seenMapSlugs = new Set<string>();
+
+for (const map of INFRASTRUCTURE_MAPS) {
+  const id = map.slug;
+  if (seenMapSlugs.has(map.slug)) {
+    fail("infrastructure-map", id, `duplicate slug "${map.slug}"`);
+  }
+  seenMapSlugs.add(map.slug);
+  assertNonEmptyString("infrastructure-map", id, "slug", map.slug);
+  assertNonEmptyString("infrastructure-map", id, "title", map.title);
+  assertNonEmptyString("infrastructure-map", id, "dek", map.dek);
+  assertNonEmptyString("infrastructure-map", id, "geographicScope", map.geographicScope);
+  assertNonEmptyString("infrastructure-map", id, "summary", map.summary);
+  assertNonEmptyString("infrastructure-map", id, "mediaId", map.mediaId);
+  if (!isValidIsoDate(map.lastUpdated)) {
+    fail("infrastructure-map", id, `invalid lastUpdated: ${map.lastUpdated}`);
+  }
+  if (!VALID_MAP_CATEGORIES.has(map.category as never)) {
+    fail("infrastructure-map", id, `invalid category: ${String(map.category)}`);
+  }
+  if (map.methodology.length === 0) {
+    fail("infrastructure-map", id, "methodology must be non-empty");
+  }
+  if (map.caveats.length === 0) {
+    fail("infrastructure-map", id, "caveats must be non-empty");
+  }
+  map.methodology.forEach((m, i) => {
+    if (typeof m !== "string" || !m.trim()) {
+      fail("infrastructure-map", id, `methodology[${i}] is empty or non-string`);
+    }
+    if (m === UNVERIFIED_PLACEHOLDER) {
+      fail("infrastructure-map", id, `methodology[${i}] equals the EmptyMetric placeholder`);
+    }
+  });
+  map.caveats.forEach((c, i) => {
+    if (typeof c !== "string" || !c.trim()) {
+      fail("infrastructure-map", id, `caveats[${i}] is empty or non-string`);
+    }
+    if (c === UNVERIFIED_PLACEHOLDER) {
+      fail("infrastructure-map", id, `caveats[${i}] equals the EmptyMetric placeholder`);
+    }
+  });
+
+  // Subsea-category discipline: methodology + caveats must
+  // explicitly disavow exact route claims, and must not assert
+  // exact cable polylines.
+  if (map.category === "subsea") {
+    const allProse = [...map.methodology, ...map.caveats].join(" ").toLowerCase();
+    if (!/(corridor|abstract|abstracted)/.test(allProse)) {
+      fail(
+        "infrastructure-map",
+        id,
+        "subsea-category map methodology/caveats must use corridor-level framing (abstract / abstracted / corridor)",
+      );
+    }
+    const FORBIDDEN_EXACT_ROUTE = /\b(exact (cable )?(route|polyline)s?|cable polyline)/i;
+    map.methodology.forEach((m, i) => {
+      if (FORBIDDEN_EXACT_ROUTE.test(m) && !/(refuse|does not|never|abstract)/i.test(m)) {
+        fail(
+          "infrastructure-map",
+          id,
+          `methodology[${i}] mentions exact cable routing without disavowal — the platform refuses to draw cable polylines`,
+        );
+      }
+    });
+  }
+
+  for (const ref of map.relatedEntityRefs ?? []) {
+    validateEntityRef("infrastructure-map", id, ref, "relatedEntityRefs");
+  }
+  for (const slug of map.relatedGuideSlugs ?? []) {
+    if (!guideSlugs.has(slug)) {
+      fail("infrastructure-map", id, `relatedGuideSlugs "${slug}" not in guide registry`);
+    }
+  }
+  for (const slug of map.relatedDatasetSlugs ?? []) {
+    if (!datasetSlugs.has(slug)) {
+      fail("infrastructure-map", id, `relatedDatasetSlugs "${slug}" not in dataset registry`);
+    }
+  }
+  for (const slug of map.relatedCableSlugs ?? []) {
+    if (!seenCableSlugs.has(slug)) {
+      fail("infrastructure-map", id, `relatedCableSlugs "${slug}" not in subsea cable registry`);
+    }
+  }
+  for (const slug of map.relatedHistorySlugs ?? []) {
+    if (!historySlugs.has(slug)) {
+      fail("infrastructure-map", id, `relatedHistorySlugs "${slug}" not in history page registry`);
+    }
+  }
+  if (!mediaIds.has(map.mediaId)) {
+    fail("infrastructure-map", id, `mediaId "${map.mediaId}" not in media registry`);
+  }
+  if (!VALID_CONFIDENCE.has(map.confidence as never)) {
+    fail("infrastructure-map", id, `invalid confidence: ${String(map.confidence)}`);
+  }
+  validateCitations("infrastructure-map", id, map.sources);
+  (map.editorialNotes ?? []).forEach((n, i) => {
+    if (typeof n !== "string" || !n.trim()) {
+      fail("infrastructure-map", id, `editorialNotes[${i}] is empty or non-string`);
+    }
+  });
+}
+
 for (const row of REVIEWED_CLOUD_REGIONS) {
   const scope = "reviewed-cloud-region";
   checkRowIdUnique(scope, row.id);
@@ -1287,6 +1421,7 @@ const counts = {
   history: HISTORY_PAGES.length,
   subseaCables: SUBSEA_CABLES.length,
   facilities: DATACENTER_FACILITIES.length,
+  infrastructureMaps: INFRASTRUCTURE_MAPS.length,
 };
 
 if (failures.length > 0) {
@@ -1306,4 +1441,6 @@ console.log(
   `  reviewed rows: cloud-regions: ${counts.reviewedCloudRegions}, peeringdb-ixps: ${counts.reviewedPeeringdbIxps}, peeringdb-facilities: ${counts.reviewedPeeringdbFacilities}, ai-capable-cloud-regions: ${counts.reviewedAiCapableCloudRegions}`,
 );
 console.log(`  wikimedia candidates: ${counts.wikimediaCandidates}`);
-console.log(`  history pages: ${counts.history}, subsea cables: ${counts.subseaCables}, facilities: ${counts.facilities}`);
+console.log(
+  `  history pages: ${counts.history}, subsea cables: ${counts.subseaCables}, facilities: ${counts.facilities}, infrastructure maps: ${counts.infrastructureMaps}`,
+);

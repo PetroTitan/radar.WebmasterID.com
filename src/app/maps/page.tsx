@@ -6,44 +6,18 @@ import { QuickAnswer } from "@/components/ui/QuickAnswer";
 import { Card } from "@/components/ui/Card";
 import { buildPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd, datasetJsonLd } from "@/lib/seo";
+import { INFRASTRUCTURE_MAPS, LEGACY_ENTITY_MAPS } from "@/content/maps";
 
 const PAGE_PATH = "/maps";
-const LAST_UPDATED = "2026-05-21";
+const LAST_UPDATED = "2026-05-28";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Infrastructure maps",
   description:
-    "Editorial-quality geographic views of internet infrastructure: cloud regions, Internet Exchange Points, datacenters, and submarine cables. Lightweight, source-bound, server-rendered.",
+    "Editorial-quality geographic views of internet infrastructure: cloud regions, Internet Exchange Points, datacenters, submarine cables, and topology corridors. Lightweight, source-bound, server-rendered.",
   path: PAGE_PATH,
   lastUpdated: LAST_UPDATED,
 });
-
-const MAPS = [
-  {
-    slug: "cloud-regions",
-    title: "Cloud regions",
-    description:
-      "Where the three major hyperscalers operate verified cloud regions, per their published directories.",
-  },
-  {
-    slug: "ixps",
-    title: "Internet Exchange Points",
-    description:
-      "Where the principal peering fabrics live, anchored by PeeringDB and operator-published records.",
-  },
-  {
-    slug: "datacenters",
-    title: "Datacenter hubs",
-    description:
-      "Metros that anchor the world's carrier-neutral colocation clusters.",
-  },
-  {
-    slug: "subsea-cables",
-    title: "Submarine cables",
-    description:
-      "Cable landing geography, anchored by TeleGeography's Submarine Cable Map.",
-  },
-] as const;
 
 export default function MapsIndex() {
   const ld = [
@@ -82,14 +56,46 @@ export default function MapsIndex() {
       </div>
 
       <section className="mt-14 md:mt-20">
-        <ol className="grid gap-5 md:grid-cols-2">
-          {MAPS.map((m, i) => (
+        <p className="eyebrow text-ink-500">
+          Editorial topology maps · {INFRASTRUCTURE_MAPS.length}
+        </p>
+        <p className="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+          Corridor, clustering, and ecosystem diagrams. Each map
+          ships with explicit methodology and caveats and is anchored
+          to a verified self-authored SVG asset in the media registry.
+        </p>
+        <ol className="mt-8 grid gap-5 md:grid-cols-2">
+          {INFRASTRUCTURE_MAPS.map((m, i) => (
             <li key={m.slug}>
               <Card
                 title={m.title}
-                description={m.description}
+                description={m.dek}
                 href={`/maps/${m.slug}`}
-                eyebrow={`Map · ${String(i + 1).padStart(2, "0")}`}
+                eyebrow={`Topology · ${String(i + 1).padStart(2, "0")} · ${m.category}`}
+              />
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="mt-14 md:mt-20">
+        <p className="eyebrow text-ink-500">
+          Entity maps · {LEGACY_ENTITY_MAPS.length}
+        </p>
+        <p className="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+          Each entity map plots every reviewed entity in the
+          corresponding registry on an abstract longitude / latitude
+          grid. The coordinates and sources cite back to the entity
+          records themselves.
+        </p>
+        <ol className="mt-8 grid gap-5 md:grid-cols-2">
+          {LEGACY_ENTITY_MAPS.map((m, i) => (
+            <li key={m.slug}>
+              <Card
+                title={m.title}
+                description={m.dek}
+                href={`/maps/${m.slug}`}
+                eyebrow={`Entity map · ${String(i + 1).padStart(2, "0")} · ${m.category}`}
               />
             </li>
           ))}

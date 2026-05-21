@@ -8,6 +8,9 @@ import { InfrastructureRedundancyDiagram } from "@/components/diagrams/Infrastru
 import { TransatlanticCableHistoryDiagram } from "@/components/diagrams/TransatlanticCableHistoryDiagram";
 import { EcosystemTopologyDiagram } from "@/components/diagrams/EcosystemTopologyDiagram";
 import { AICapableRegionClusteringDiagram } from "@/components/diagrams/AICapableRegionClusteringDiagram";
+import { EuropeanInterconnectionCorridorMap } from "@/components/cartography/EuropeanInterconnectionCorridorMap";
+import { TransatlanticConnectivityCorridorMap } from "@/components/cartography/TransatlanticConnectivityCorridorMap";
+import { AICloudGeographyMap } from "@/components/cartography/AICloudGeographyMap";
 import { VisualAttribution } from "./VisualAttribution";
 
 interface VisualContentBlockProps {
@@ -25,6 +28,9 @@ const INLINE_COMPONENTS: Readonly<
   TransatlanticCableHistoryDiagram,
   EcosystemTopologyDiagram,
   AICapableRegionClusteringDiagram,
+  EuropeanInterconnectionCorridorMap,
+  TransatlanticConnectivityCorridorMap,
+  AICloudGeographyMap,
 };
 
 /**

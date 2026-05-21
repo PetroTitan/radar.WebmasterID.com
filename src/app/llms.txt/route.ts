@@ -6,6 +6,7 @@ import { INDICATORS } from "@/content/indicators";
 import { RANKINGS } from "@/content/rankings";
 import { MEDIA_ASSETS } from "@/content/media";
 import { HISTORY_PAGES } from "@/content/history";
+import { INFRASTRUCTURE_MAPS } from "@/content/maps";
 import {
   COUNTRIES,
   CITIES,
@@ -122,6 +123,19 @@ function generateLlmsTxt(): string {
   for (const r of RANKINGS) {
     lines.push(
       `- [${r.title}](${abs(`/research/rankings/${r.slug}`)}) [${r.status}]: ${r.dek}`,
+    );
+  }
+  lines.push("");
+
+  lines.push("## Infrastructure maps");
+  lines.push("");
+  lines.push(
+    "Editorial topology, corridor, and clustering maps. Server-rendered SVG only — no GIS, no tile servers, no client-side map frameworks. Subsea corridors are abstracted, not exact cable polylines. The methodology lives at docs/infrastructure-cartography-guidelines.md.",
+  );
+  lines.push("");
+  for (const map of INFRASTRUCTURE_MAPS) {
+    lines.push(
+      `- [${map.title}](${abs(`/maps/${map.slug}`)}) [${map.category} · ${map.geographicScope}]: ${map.dek}`,
     );
   }
   lines.push("");
