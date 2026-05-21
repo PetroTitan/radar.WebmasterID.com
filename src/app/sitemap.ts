@@ -1,12 +1,20 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/config/site";
-import { COUNTRIES, CITIES, CLOUD_PROVIDERS, IXPS } from "@/data";
+import {
+  COUNTRIES,
+  CITIES,
+  CLOUD_PROVIDERS,
+  IXPS,
+  DATACENTER_FACILITIES,
+} from "@/data";
 import { INSIGHTS } from "@/content/insights";
 import { GUIDES } from "@/content/guides";
 import { DATASETS } from "@/content/datasets";
 import { INDICATORS } from "@/content/indicators";
 import { RANKINGS } from "@/content/rankings";
 import { MEDIA_ASSETS } from "@/content/media";
+import { HISTORY_PAGES } from "@/content/history";
+import { INFRASTRUCTURE_MAPS } from "@/content/maps";
 
 const STATIC_PATHS: ReadonlyArray<{
   readonly path: string;
@@ -25,6 +33,8 @@ const STATIC_PATHS: ReadonlyArray<{
   { path: "/maps/ixps", changeFrequency: "weekly", priority: 0.8 },
   { path: "/maps/datacenters", changeFrequency: "weekly", priority: 0.8 },
   { path: "/maps/subsea-cables", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/facilities", changeFrequency: "weekly", priority: 0.85 },
+  { path: "/history", changeFrequency: "monthly", priority: 0.8 },
   // /rankings now redirects to /research/rankings; the static entry
   // is included via the research-rankings index below.
   { path: "/research", changeFrequency: "weekly", priority: 0.9 },
@@ -121,17 +131,41 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: m.status === "verified" ? 0.65 : 0.4,
   }));
 
+  const facilityEntries: MetadataRoute.Sitemap = DATACENTER_FACILITIES.map((f) => ({
+    url: new URL(`/facilities/${f.slug}`, SITE.url).toString(),
+    lastModified: new Date(f.provenance.lastUpdated),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  const historyEntries: MetadataRoute.Sitemap = HISTORY_PAGES.map((p) => ({
+    url: new URL(`/history/${p.slug}`, SITE.url).toString(),
+    lastModified: new Date(p.lastUpdated),
+    changeFrequency: "monthly",
+    priority: 0.75,
+  }));
+
+  const mapEntries: MetadataRoute.Sitemap = INFRASTRUCTURE_MAPS.map((m) => ({
+    url: new URL(`/maps/${m.slug}`, SITE.url).toString(),
+    lastModified: new Date(m.lastUpdated),
+    changeFrequency: "monthly",
+    priority: 0.75,
+  }));
+
   return [
     ...staticEntries,
     ...countryEntries,
     ...cityEntries,
     ...cloudEntries,
     ...ixpEntries,
+    ...facilityEntries,
     ...insightEntries,
     ...guideEntries,
     ...datasetEntries,
     ...indicatorEntries,
     ...rankingEntries,
     ...mediaEntries,
+    ...historyEntries,
+    ...mapEntries,
   ];
 }

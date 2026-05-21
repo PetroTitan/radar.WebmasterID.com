@@ -191,6 +191,33 @@ function generateLlmsTxt(): string {
   lines.push(
     `- [Editorial principles, scoring, confidence and source governance](${abs("/methodology")})`,
   );
+  lines.push(
+    `- [Research methodologies (ingestion lifecycle, reviewed vs generated data)](${abs("/research/methodologies")})`,
+  );
+  lines.push("");
+
+  lines.push("## Editorial governance");
+  lines.push("");
+  lines.push(
+    "Radar maintains a small set of editorial-discipline documents in the repository (docs/) covering the rules each layer is held to. The platform refuses to publish material that violates these rules:",
+  );
+  lines.push("- docs/data-ingestion.md — reviewed vs generated data, source governance.");
+  lines.push("- docs/media-governance.md — visual archive editorial rules.");
+  lines.push("- docs/history-editorial-guidelines.md — historical sourcing discipline.");
+  lines.push("- docs/subsea-intelligence-guidelines.md — submarine-cable identity-only posture.");
+  lines.push("- docs/datacenter-intelligence-guidelines.md — facility identity discipline.");
+  lines.push("- docs/ai-infrastructure-guidelines.md — no GPU counts, no AI-readiness rankings.");
+  lines.push("- docs/infrastructure-cartography-guidelines.md — no GIS pretence, no exact cable polylines.");
+  lines.push("");
+
+  lines.push("## Privacy and trust");
+  lines.push("");
+  lines.push(
+    `- [Privacy and cookies](${abs("/privacy")}) — one privacy-respecting analytics service, consent-gated. No advertising trackers.`,
+  );
+  lines.push(
+    `- [Full source registry](${abs("/sources")}) — every cited source, tier classification, and last-checked date.`,
+  );
   lines.push("");
 
   lines.push("## About");

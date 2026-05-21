@@ -65,6 +65,38 @@ const UNVERIFIED_PLACEHOLDER = "Data not yet verified.";
 const ENTITY_REF_PATTERN =
   /^(country|city|ixp|facility):[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+/**
+ * Production-URL guard.
+ *
+ * Catches accidental leakage of development / preview hosts into
+ * registered URLs (source citations, reviewed-row sourceUrls,
+ * media.source.pageUrl, license.url). Allowed: any production
+ * third-party URL plus the platform's own webmasterid.com hosts.
+ * Forbidden: localhost, 127.0.0.1, vercel.app, vercel.sh,
+ * ngrok.io, *.local.
+ *
+ * Hoisted next to ENTITY_REF_PATTERN because the citation
+ * validator runs during module evaluation as part of the insight
+ * loop, before later-declared constants would be available.
+ */
+const FORBIDDEN_URL_PATTERNS: ReadonlyArray<RegExp> = [
+  /\blocalhost\b/i,
+  /\b127\.0\.0\.1\b/,
+  /\bvercel\.app\b/i,
+  /\bvercel\.sh\b/i,
+  /\bngrok\.io\b/i,
+  /\.local(\/|$|:)/i,
+];
+
+function checkProductionUrl(scope: string, id: string, field: string, url: string) {
+  for (const pattern of FORBIDDEN_URL_PATTERNS) {
+    if (pattern.test(url)) {
+      fail(scope, id, `${field} "${url}" leaks a non-production host (${pattern.source})`);
+      return;
+    }
+  }
+}
+
 interface Failure {
   readonly scope: string;
   readonly id: string;
@@ -367,6 +399,9 @@ function validateCitations(
     }
     if (citation.checkedAt && !isValidIsoDate(citation.checkedAt)) {
       fail(scope, id, `sources[${i}].checkedAt invalid: ${citation.checkedAt}`);
+    }
+    if (citation.url) {
+      checkProductionUrl(scope, id, `sources[${i}].url`, citation.url);
     }
   });
 }
@@ -710,6 +745,12 @@ for (const m of MEDIA_ASSETS) {
   if (!isValidIsoDate(m.lastVerified)) {
     fail("media", id, `invalid lastVerified: ${m.lastVerified}`);
   }
+  if (m.source?.pageUrl) {
+    checkProductionUrl("media", id, "source.pageUrl", m.source.pageUrl);
+  }
+  if (m.license?.url) {
+    checkProductionUrl("media", id, "license.url", m.license.url);
+  }
   if (m.status === "verified") {
     assertNonEmptyString("media", id, "altText", m.altText);
     if (!m.source) fail("media", id, "verified asset has no source");
@@ -790,6 +831,7 @@ function validateRow(scope: string, row: IngestedRecord) {
   if (!isHttpUrl(row.sourceUrl)) {
     fail(scope, id, `sourceUrl "${row.sourceUrl}" is not a http(s) URL`);
   }
+  checkProductionUrl(scope, id, "sourceUrl", row.sourceUrl);
   if (!getSourceRecord(row.sourceId)) {
     fail(scope, id, `sourceId "${row.sourceId}" not in source registry`);
   }

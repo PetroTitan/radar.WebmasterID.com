@@ -10,12 +10,14 @@ export const PRIMARY_NAV: ReadonlyArray<NavLink> = [
   { label: "Maps", href: "/maps", description: "Geographic intelligence layer." },
   { label: "Cloud", href: "/cloud", description: "Provider region directories." },
   { label: "IXPs", href: "/ixps", description: "Internet Exchange Points." },
+  { label: "Facilities", href: "/facilities", description: "Datacenter facility identity records." },
   { label: "Guides", href: "/guides", description: "Authority reference guides." },
-  { label: "Insights", href: "/insights", description: "Editorial infrastructure explainers." },
   { label: "Research", href: "/research", description: "Datasets, indicators, rankings." },
 ];
 
 export const SECONDARY_NAV: ReadonlyArray<NavLink> = [
+  { label: "History", href: "/history" },
+  { label: "Insights", href: "/insights" },
   { label: "Methodology", href: "/methodology" },
   { label: "Sources", href: "/sources" },
   { label: "Visuals", href: "/visuals" },
