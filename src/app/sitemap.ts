@@ -3,6 +3,9 @@ import { SITE } from "@/config/site";
 import { COUNTRIES, CITIES, CLOUD_PROVIDERS, IXPS } from "@/data";
 import { INSIGHTS } from "@/content/insights";
 import { GUIDES } from "@/content/guides";
+import { DATASETS } from "@/content/datasets";
+import { INDICATORS } from "@/content/indicators";
+import { RANKINGS } from "@/content/rankings";
 
 const STATIC_PATHS: ReadonlyArray<{
   readonly path: string;
@@ -21,7 +24,13 @@ const STATIC_PATHS: ReadonlyArray<{
   { path: "/maps/ixps", changeFrequency: "weekly", priority: 0.8 },
   { path: "/maps/datacenters", changeFrequency: "weekly", priority: 0.8 },
   { path: "/maps/subsea-cables", changeFrequency: "weekly", priority: 0.8 },
-  { path: "/rankings", changeFrequency: "weekly", priority: 0.8 },
+  // /rankings now redirects to /research/rankings; the static entry
+  // is included via the research-rankings index below.
+  { path: "/research", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/research/datasets", changeFrequency: "weekly", priority: 0.85 },
+  { path: "/research/indicators", changeFrequency: "weekly", priority: 0.85 },
+  { path: "/research/rankings", changeFrequency: "weekly", priority: 0.85 },
+  { path: "/research/methodologies", changeFrequency: "monthly", priority: 0.75 },
   { path: "/methodology", changeFrequency: "monthly", priority: 0.7 },
   { path: "/sources", changeFrequency: "monthly", priority: 0.7 },
   { path: "/about", changeFrequency: "yearly", priority: 0.4 },
@@ -82,6 +91,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
+  const datasetEntries: MetadataRoute.Sitemap = DATASETS.map((d) => ({
+    url: new URL(`/research/datasets/${d.slug}`, SITE.url).toString(),
+    lastModified: new Date(d.lastUpdated),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  const indicatorEntries: MetadataRoute.Sitemap = INDICATORS.map((i) => ({
+    url: new URL(`/research/indicators/${i.slug}`, SITE.url).toString(),
+    lastModified: new Date(i.lastUpdated),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  const rankingEntries: MetadataRoute.Sitemap = RANKINGS.map((r) => ({
+    url: new URL(`/research/rankings/${r.slug}`, SITE.url).toString(),
+    lastModified: new Date(r.lastUpdated),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
   return [
     ...staticEntries,
     ...countryEntries,
@@ -90,5 +120,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...ixpEntries,
     ...insightEntries,
     ...guideEntries,
+    ...datasetEntries,
+    ...indicatorEntries,
+    ...rankingEntries,
   ];
 }

@@ -32,6 +32,9 @@ import {
 import { getSourceRecord } from "../source-registry";
 import { INSIGHTS } from "../content/insights";
 import { GUIDES } from "../content/guides";
+import { DATASETS } from "../content/datasets";
+import { INDICATORS } from "../content/indicators";
+import { RANKINGS } from "../content/rankings";
 import { isValidIsoDate } from "../lib/dates";
 import type { EditorialBlock, Provenance, SourceCitation } from "../entities";
 
@@ -400,6 +403,118 @@ for (const guide of GUIDES) {
   validateCitations("guide", id, guide.sources);
 }
 
+function validateEntityRef(scope: string, id: string, ref: string, field: string) {
+  const [kind, slug] = ref.split(":");
+  if (!kind || !slug) {
+    fail(scope, id, `${field} "${ref}" is malformed`);
+    return;
+  }
+  if (kind === "country") {
+    if (!getCountry(slug)) fail(scope, id, `${field} "${ref}" points at unknown country`);
+  } else if (kind === "city") {
+    if (!getCity(slug)) fail(scope, id, `${field} "${ref}" points at unknown city`);
+  } else if (kind === "ixp") {
+    if (!getIxp(slug)) fail(scope, id, `${field} "${ref}" points at unknown IXP`);
+  } else {
+    fail(scope, id, `${field} "${ref}" uses unknown kind "${kind}"`);
+  }
+}
+
+const datasetSlugs = new Set(DATASETS.map((d) => d.slug));
+const indicatorSlugs = new Set(INDICATORS.map((i) => i.slug));
+const rankingSlugs = new Set(RANKINGS.map((r) => r.slug));
+
+const seenDatasetSlugs = new Set<string>();
+for (const d of DATASETS) {
+  const id = d.slug;
+  assertNonEmptyString("dataset", id, "slug", d.slug);
+  assertNonEmptyString("dataset", id, "title", d.title);
+  assertNonEmptyString("dataset", id, "dek", d.dek);
+  assertNonEmptyString("dataset", id, "methodology", d.methodology);
+  if (seenDatasetSlugs.has(d.slug)) fail("dataset", id, `duplicate slug "${d.slug}"`);
+  seenDatasetSlugs.add(d.slug);
+  if (!isValidIsoDate(d.publishedAt)) fail("dataset", id, `invalid publishedAt: ${d.publishedAt}`);
+  if (!isValidIsoDate(d.lastUpdated)) fail("dataset", id, `invalid lastUpdated: ${d.lastUpdated}`);
+  if (d.limitations.length === 0) fail("dataset", id, "dataset has no limitations");
+  d.limitations.forEach((lim, i) => {
+    if (typeof lim !== "string" || !lim.trim()) fail("dataset", id, `limitations[${i}] empty`);
+    if (lim === UNVERIFIED_PLACEHOLDER) fail("dataset", id, `limitations[${i}] is placeholder`);
+  });
+  for (const ref of d.relatedEntityRefs ?? []) {
+    validateEntityRef("dataset", id, ref, "relatedEntityRefs");
+  }
+  for (const slug of d.indicatorSlugs ?? []) {
+    if (!indicatorSlugs.has(slug)) {
+      fail("dataset", id, `indicatorSlugs "${slug}" not in indicator registry`);
+    }
+  }
+  validateCitations("dataset", id, d.sources);
+}
+
+const seenIndicatorSlugs = new Set<string>();
+for (const ind of INDICATORS) {
+  const id = ind.slug;
+  assertNonEmptyString("indicator", id, "slug", ind.slug);
+  assertNonEmptyString("indicator", id, "title", ind.title);
+  assertNonEmptyString("indicator", id, "dek", ind.dek);
+  assertNonEmptyString("indicator", id, "measures", ind.measures);
+  assertNonEmptyString("indicator", id, "significance", ind.significance);
+  assertNonEmptyString("indicator", id, "methodology", ind.methodology);
+  assertNonEmptyString("indicator", id, "unit", ind.unit);
+  if (seenIndicatorSlugs.has(ind.slug)) fail("indicator", id, `duplicate slug "${ind.slug}"`);
+  seenIndicatorSlugs.add(ind.slug);
+  if (!isValidIsoDate(ind.publishedAt)) fail("indicator", id, `invalid publishedAt: ${ind.publishedAt}`);
+  if (!isValidIsoDate(ind.lastUpdated)) fail("indicator", id, `invalid lastUpdated: ${ind.lastUpdated}`);
+  if (ind.limitations.length === 0) fail("indicator", id, "indicator has no limitations");
+  ind.limitations.forEach((lim, i) => {
+    if (typeof lim !== "string" || !lim.trim()) fail("indicator", id, `limitations[${i}] empty`);
+  });
+  for (const slug of ind.datasetSlugs ?? []) {
+    if (!datasetSlugs.has(slug)) {
+      fail("indicator", id, `datasetSlugs "${slug}" not in dataset registry`);
+    }
+  }
+  for (const slug of ind.rankingSlugs ?? []) {
+    if (!rankingSlugs.has(slug)) {
+      fail("indicator", id, `rankingSlugs "${slug}" not in ranking registry`);
+    }
+  }
+  for (const ref of ind.relatedEntityRefs ?? []) {
+    validateEntityRef("indicator", id, ref, "relatedEntityRefs");
+  }
+  validateCitations("indicator", id, ind.sources);
+}
+
+const seenRankingSlugs = new Set<string>();
+for (const r of RANKINGS) {
+  const id = r.slug;
+  assertNonEmptyString("ranking", id, "slug", r.slug);
+  assertNonEmptyString("ranking", id, "title", r.title);
+  assertNonEmptyString("ranking", id, "dek", r.dek);
+  assertNonEmptyString("ranking", id, "dimension", r.dimension);
+  assertNonEmptyString("ranking", id, "methodology", r.methodology);
+  assertNonEmptyString("ranking", id, "weighting", r.weighting);
+  assertNonEmptyString("ranking", id, "recomputeCadence", r.recomputeCadence);
+  if (seenRankingSlugs.has(r.slug)) fail("ranking", id, `duplicate slug "${r.slug}"`);
+  seenRankingSlugs.add(r.slug);
+  if (!isValidIsoDate(r.publishedAt)) fail("ranking", id, `invalid publishedAt: ${r.publishedAt}`);
+  if (!isValidIsoDate(r.lastUpdated)) fail("ranking", id, `invalid lastUpdated: ${r.lastUpdated}`);
+  if (r.indicatorSlugs.length === 0) fail("ranking", id, "ranking has no indicators");
+  for (const slug of r.indicatorSlugs) {
+    if (!indicatorSlugs.has(slug)) {
+      fail("ranking", id, `indicatorSlugs "${slug}" not in indicator registry`);
+    }
+  }
+  if (r.limitations.length === 0) fail("ranking", id, "ranking has no limitations");
+  r.limitations.forEach((lim, i) => {
+    if (typeof lim !== "string" || !lim.trim()) fail("ranking", id, `limitations[${i}] empty`);
+  });
+  for (const ref of r.relatedEntityRefs ?? []) {
+    validateEntityRef("ranking", id, ref, "relatedEntityRefs");
+  }
+  validateCitations("ranking", id, r.sources);
+}
+
 const counts = {
   countries: COUNTRIES.length,
   cities: CITIES.length,
@@ -407,6 +522,9 @@ const counts = {
   cloudProviders: CLOUD_PROVIDERS.length,
   insights: INSIGHTS.length,
   guides: GUIDES.length,
+  datasets: DATASETS.length,
+  indicators: INDICATORS.length,
+  rankings: RANKINGS.length,
 };
 
 if (failures.length > 0) {
@@ -420,5 +538,5 @@ if (failures.length > 0) {
 
 console.log("Data validation passed.");
 console.log(
-  `  countries: ${counts.countries}, cities: ${counts.cities}, ixps: ${counts.ixps}, cloud-providers: ${counts.cloudProviders}, insights: ${counts.insights}, guides: ${counts.guides}`,
+  `  countries: ${counts.countries}, cities: ${counts.cities}, ixps: ${counts.ixps}, cloud-providers: ${counts.cloudProviders}, insights: ${counts.insights}, guides: ${counts.guides}, datasets: ${counts.datasets}, indicators: ${counts.indicators}, rankings: ${counts.rankings}`,
 );

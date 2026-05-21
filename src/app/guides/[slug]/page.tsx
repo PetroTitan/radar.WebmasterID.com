@@ -11,6 +11,8 @@ import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { GUIDES, getGuide } from "@/content/guides";
 import { getCountry, getCity, getIxp } from "@/data";
+import { InterconnectionDiagram } from "@/components/diagrams/InterconnectionDiagram";
+import { CableLandingDiagram } from "@/components/diagrams/CableLandingDiagram";
 import { buildPageMetadata } from "@/lib/metadata";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { formatDisplayDate } from "@/lib/dates";
@@ -123,6 +125,17 @@ export default async function GuidePage({ params }: RouteParams) {
           </div>
         </div>
       </div>
+
+      {guide.slug === "internet-exchanges" ? (
+        <div className="mt-14 md:mt-20">
+          <InterconnectionDiagram />
+        </div>
+      ) : null}
+      {guide.slug === "subsea-cables" ? (
+        <div className="mt-14 md:mt-20">
+          <CableLandingDiagram />
+        </div>
+      ) : null}
 
       <div className="mt-14 grid gap-12 md:mt-20 md:grid-cols-12 md:gap-16">
         {guide.sections.length > 1 ? (

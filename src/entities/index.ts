@@ -10,3 +10,6 @@ export * from "./subsea-cable";
 export * from "./infrastructure-metric";
 export * from "./insight";
 export * from "./guide";
+export * from "./dataset";
+export * from "./indicator";
+export * from "./ranking";

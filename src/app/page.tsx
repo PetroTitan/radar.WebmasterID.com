@@ -48,7 +48,7 @@ const INTELLIGENCE_OVERVIEW = [
     title: "Rankings",
     description:
       "Source-cited comparative views. Each ranked dimension documents its inputs, weights, and freshness.",
-    href: "/rankings",
+    href: "/research/rankings",
   },
 ] as const;
 
@@ -330,7 +330,7 @@ function FeaturedRankings() {
         description="Each ranking publishes its inputs, weights, and last-recomputed date."
         trailing={
           <Link
-            href="/rankings"
+            href="/research/rankings"
             className="text-sm font-medium text-accent-600 hover:text-accent-700"
           >
             See all rankings →
@@ -578,7 +578,7 @@ function InternalLinking() {
         <InternalLink href="/cities" label="All cities" />
         <InternalLink href="/ixps" label="All Internet Exchanges" />
         <InternalLink href="/cloud" label="Cloud providers" />
-        <InternalLink href="/rankings" label="Rankings" />
+        <InternalLink href="/research/rankings" label="Rankings" />
         <InternalLink href="/about" label="About Radar" />
       </div>
     </Container>

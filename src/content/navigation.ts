@@ -12,7 +12,7 @@ export const PRIMARY_NAV: ReadonlyArray<NavLink> = [
   { label: "IXPs", href: "/ixps", description: "Internet Exchange Points." },
   { label: "Guides", href: "/guides", description: "Authority reference guides." },
   { label: "Insights", href: "/insights", description: "Editorial infrastructure explainers." },
-  { label: "Rankings", href: "/rankings", description: "Source-cited comparative rankings." },
+  { label: "Research", href: "/research", description: "Datasets, indicators, rankings." },
 ];
 
 export const SECONDARY_NAV: ReadonlyArray<NavLink> = [

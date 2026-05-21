@@ -1,6 +1,9 @@
 import { SITE } from "@/config/site";
 import { GUIDES } from "@/content/guides";
-import { INSIGHTS, listInsightsByDate } from "@/content/insights";
+import { listInsightsByDate } from "@/content/insights";
+import { DATASETS } from "@/content/datasets";
+import { INDICATORS } from "@/content/indicators";
+import { RANKINGS } from "@/content/rankings";
 import { COUNTRIES, CITIES, IXPS } from "@/data";
 import { SOURCE_REGISTRY } from "@/source-registry";
 
@@ -75,6 +78,33 @@ function generateLlmsTxt(): string {
   for (const i of IXPS) {
     lines.push(
       `- [${i.name}](${abs(`/ixps/${i.slug}`)}): operated by ${i.operator}, ${i.countryCode}.`,
+    );
+  }
+  lines.push("");
+
+  lines.push("## Research — Datasets");
+  lines.push("");
+  for (const d of DATASETS) {
+    lines.push(
+      `- [${d.title}](${abs(`/research/datasets/${d.slug}`)}) [${d.status}]: ${d.dek}`,
+    );
+  }
+  lines.push("");
+
+  lines.push("## Research — Indicators");
+  lines.push("");
+  for (const ind of INDICATORS) {
+    lines.push(
+      `- [${ind.title}](${abs(`/research/indicators/${ind.slug}`)}): ${ind.dek}`,
+    );
+  }
+  lines.push("");
+
+  lines.push("## Research — Rankings");
+  lines.push("");
+  for (const r of RANKINGS) {
+    lines.push(
+      `- [${r.title}](${abs(`/research/rankings/${r.slug}`)}) [${r.status}]: ${r.dek}`,
     );
   }
   lines.push("");

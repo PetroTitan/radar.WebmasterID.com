@@ -33,6 +33,17 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // /rankings moved under /research/rankings in Phase 11.
+      // Permanent so external links and search index update.
+      {
+        source: "/rankings",
+        destination: "/research/rankings",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
