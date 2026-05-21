@@ -13,3 +13,4 @@ export * from "./guide";
 export * from "./dataset";
 export * from "./indicator";
 export * from "./ranking";
+export * from "./media";

@@ -6,6 +6,7 @@ import { GUIDES } from "@/content/guides";
 import { DATASETS } from "@/content/datasets";
 import { INDICATORS } from "@/content/indicators";
 import { RANKINGS } from "@/content/rankings";
+import { MEDIA_ASSETS } from "@/content/media";
 
 const STATIC_PATHS: ReadonlyArray<{
   readonly path: string;
@@ -31,6 +32,7 @@ const STATIC_PATHS: ReadonlyArray<{
   { path: "/research/indicators", changeFrequency: "weekly", priority: 0.85 },
   { path: "/research/rankings", changeFrequency: "weekly", priority: 0.85 },
   { path: "/research/methodologies", changeFrequency: "monthly", priority: 0.75 },
+  { path: "/visuals", changeFrequency: "monthly", priority: 0.7 },
   { path: "/methodology", changeFrequency: "monthly", priority: 0.7 },
   { path: "/sources", changeFrequency: "monthly", priority: 0.7 },
   { path: "/about", changeFrequency: "yearly", priority: 0.4 },
@@ -112,6 +114,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const mediaEntries: MetadataRoute.Sitemap = MEDIA_ASSETS.map((m) => ({
+    url: new URL(`/visuals/${m.id}`, SITE.url).toString(),
+    lastModified: new Date(m.lastVerified),
+    changeFrequency: "monthly",
+    priority: m.status === "verified" ? 0.65 : 0.4,
+  }));
+
   return [
     ...staticEntries,
     ...countryEntries,
@@ -123,5 +132,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...datasetEntries,
     ...indicatorEntries,
     ...rankingEntries,
+    ...mediaEntries,
   ];
 }

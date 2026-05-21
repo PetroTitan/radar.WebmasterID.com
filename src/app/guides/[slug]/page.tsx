@@ -13,6 +13,7 @@ import { GUIDES, getGuide } from "@/content/guides";
 import { getCountry, getCity, getIxp } from "@/data";
 import { InterconnectionDiagram } from "@/components/diagrams/InterconnectionDiagram";
 import { CableLandingDiagram } from "@/components/diagrams/CableLandingDiagram";
+import { CloudRegionDistributionDiagram } from "@/components/diagrams/CloudRegionDistributionDiagram";
 import { buildPageMetadata } from "@/lib/metadata";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { formatDisplayDate } from "@/lib/dates";
@@ -134,6 +135,11 @@ export default async function GuidePage({ params }: RouteParams) {
       {guide.slug === "subsea-cables" ? (
         <div className="mt-14 md:mt-20">
           <CableLandingDiagram />
+        </div>
+      ) : null}
+      {guide.slug === "cloud-regions" ? (
+        <div className="mt-14 md:mt-20">
+          <CloudRegionDistributionDiagram />
         </div>
       ) : null}
 

@@ -35,6 +35,7 @@ import { GUIDES } from "../content/guides";
 import { DATASETS } from "../content/datasets";
 import { INDICATORS } from "../content/indicators";
 import { RANKINGS } from "../content/rankings";
+import { MEDIA_ASSETS } from "../content/media";
 import { isValidIsoDate } from "../lib/dates";
 import type { EditorialBlock, Provenance, SourceCitation } from "../entities";
 
@@ -515,6 +516,38 @@ for (const r of RANKINGS) {
   validateCitations("ranking", id, r.sources);
 }
 
+const seenMediaIds = new Set<string>();
+for (const m of MEDIA_ASSETS) {
+  const id = m.id;
+  assertNonEmptyString("media", id, "id", m.id);
+  assertNonEmptyString("media", id, "title", m.title);
+  assertNonEmptyString("media", id, "altText", m.altText);
+  if (seenMediaIds.has(m.id)) fail("media", id, `duplicate id "${m.id}"`);
+  seenMediaIds.add(m.id);
+  if (!isValidIsoDate(m.lastVerified)) {
+    fail("media", id, `invalid lastVerified: ${m.lastVerified}`);
+  }
+  if (m.status === "verified") {
+    if (!m.source) fail("media", id, "verified asset has no source");
+    if (!m.license) fail("media", id, "verified asset has no license");
+    if (m.license?.attributionRequired && !m.attribution) {
+      fail("media", id, "verified asset requires attribution but has none");
+    }
+    if (!m.inlineComponent && !m.localPath) {
+      fail("media", id, "verified asset has neither inlineComponent nor localPath");
+    }
+    if (m.inlineComponent && m.localPath) {
+      fail("media", id, "verified asset declares both inlineComponent and localPath");
+    }
+  }
+  if (m.status === "candidate" && (!m.source || !m.license)) {
+    fail("media", id, "candidate asset must declare source and license");
+  }
+  for (const ref of m.relatedEntityRefs ?? []) {
+    validateEntityRef("media", id, ref, "relatedEntityRefs");
+  }
+}
+
 const counts = {
   countries: COUNTRIES.length,
   cities: CITIES.length,
@@ -525,6 +558,7 @@ const counts = {
   datasets: DATASETS.length,
   indicators: INDICATORS.length,
   rankings: RANKINGS.length,
+  media: MEDIA_ASSETS.length,
 };
 
 if (failures.length > 0) {
@@ -538,5 +572,5 @@ if (failures.length > 0) {
 
 console.log("Data validation passed.");
 console.log(
-  `  countries: ${counts.countries}, cities: ${counts.cities}, ixps: ${counts.ixps}, cloud-providers: ${counts.cloudProviders}, insights: ${counts.insights}, guides: ${counts.guides}, datasets: ${counts.datasets}, indicators: ${counts.indicators}, rankings: ${counts.rankings}`,
+  `  countries: ${counts.countries}, cities: ${counts.cities}, ixps: ${counts.ixps}, cloud-providers: ${counts.cloudProviders}, insights: ${counts.insights}, guides: ${counts.guides}, datasets: ${counts.datasets}, indicators: ${counts.indicators}, rankings: ${counts.rankings}, media: ${counts.media}`,
 );

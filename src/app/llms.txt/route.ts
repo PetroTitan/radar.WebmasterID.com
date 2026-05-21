@@ -4,6 +4,7 @@ import { listInsightsByDate } from "@/content/insights";
 import { DATASETS } from "@/content/datasets";
 import { INDICATORS } from "@/content/indicators";
 import { RANKINGS } from "@/content/rankings";
+import { MEDIA_ASSETS } from "@/content/media";
 import { COUNTRIES, CITIES, IXPS } from "@/data";
 import { SOURCE_REGISTRY } from "@/source-registry";
 
@@ -105,6 +106,15 @@ function generateLlmsTxt(): string {
   for (const r of RANKINGS) {
     lines.push(
       `- [${r.title}](${abs(`/research/rankings/${r.slug}`)}) [${r.status}]: ${r.dek}`,
+    );
+  }
+  lines.push("");
+
+  lines.push("## Visuals");
+  lines.push("");
+  for (const m of MEDIA_ASSETS) {
+    lines.push(
+      `- [${m.title}](${abs(`/visuals/${m.id}`)}) [${m.type} · ${m.status}]: ${m.caption ?? m.altText}`,
     );
   }
   lines.push("");
