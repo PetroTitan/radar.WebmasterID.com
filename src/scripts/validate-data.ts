@@ -42,6 +42,8 @@ import {
   REVIEWED_PEERINGDB_FACILITIES,
 } from "../data/research";
 import { WIKIMEDIA_CANDIDATES } from "../content/wikimedia-candidates";
+import { HISTORY_PAGES } from "../content/history";
+import { SUBSEA_CABLES } from "../data/subsea-cables";
 import { isValidIsoDate } from "../lib/dates";
 import type {
   EditorialBlock,
@@ -892,6 +894,181 @@ for (const c of WIKIMEDIA_CANDIDATES) {
   }
 }
 
+// ---------------------------------------------------------------
+// Subsea cables
+//
+// Identity records for submarine cable systems. The validator
+// enforces:
+//   - unique slugs
+//   - at least one source citation
+//   - readyForServiceAt is an ISO date when present
+//   - readyForServiceYear is a four-digit year when present and
+//     mutually exclusive with readyForServiceAt
+//   - landingCitySlugs all resolve to a city entity
+//   - designCapacityTbps, when present, is a positive number
+// ---------------------------------------------------------------
+const seenCableSlugs = new Set<string>();
+const YEAR_PATTERN = /^[0-9]{4}$/;
+const YEAR_OR_MONTH_PATTERN = /^[0-9]{4}(-(0[1-9]|1[0-2]))?$/;
+
+for (const cable of SUBSEA_CABLES) {
+  const id = cable.slug;
+  assertNonEmptyString("subsea-cable", id, "slug", cable.slug);
+  assertNonEmptyString("subsea-cable", id, "name", cable.name);
+  if (seenCableSlugs.has(cable.slug)) {
+    fail("subsea-cable", id, `duplicate slug "${cable.slug}"`);
+  }
+  seenCableSlugs.add(cable.slug);
+  if (cable.owners.length === 0) {
+    fail("subsea-cable", id, "cable has no declared owners");
+  }
+  if (cable.readyForServiceAt && cable.readyForServiceYear) {
+    fail(
+      "subsea-cable",
+      id,
+      "cable declares both readyForServiceAt and readyForServiceYear — use one",
+    );
+  }
+  if (cable.readyForServiceAt && !isValidIsoDate(cable.readyForServiceAt)) {
+    fail("subsea-cable", id, `invalid readyForServiceAt: ${cable.readyForServiceAt}`);
+  }
+  if (cable.readyForServiceYear && !YEAR_PATTERN.test(cable.readyForServiceYear)) {
+    fail(
+      "subsea-cable",
+      id,
+      `readyForServiceYear "${cable.readyForServiceYear}" must be a four-digit year`,
+    );
+  }
+  for (const slug of cable.landingCitySlugs) {
+    if (!getCity(slug)) {
+      fail("subsea-cable", id, `landingCitySlugs references unknown city "${slug}"`);
+    }
+  }
+  if (cable.designCapacityTbps !== undefined && cable.designCapacityTbps <= 0) {
+    fail("subsea-cable", id, "designCapacityTbps must be a positive number when present");
+  }
+  validateProvenance("subsea-cable", id, cable.provenance);
+}
+
+// ---------------------------------------------------------------
+// History pages
+//
+// Historical infrastructure intelligence pages. The validator
+// enforces:
+//   - unique slug
+//   - source coverage (at least one citation; every cited source
+//     resolves in the registry)
+//   - quickAnswer + context + whyItMattered + evolution non-empty
+//   - timeline events carry year-precision dates (YYYY or YYYY-MM)
+//   - timeline events with a cable ref must reference a known
+//     subsea cable
+//   - relatedEntityRefs / relatedDatasetSlugs / relatedGuideSlugs
+//     / relatedMapPaths / relatedMediaIds all resolve
+//   - no speculative-precision day-level event dates
+// ---------------------------------------------------------------
+const guideSlugs = new Set(GUIDES.map((g) => g.slug));
+const seenHistorySlugs = new Set<string>();
+
+for (const page of HISTORY_PAGES) {
+  const id = page.slug;
+  assertNonEmptyString("history", id, "slug", page.slug);
+  assertNonEmptyString("history", id, "title", page.title);
+  assertNonEmptyString("history", id, "dek", page.dek);
+  assertNonEmptyString("history", id, "period", page.period);
+  assertNonEmptyString("history", id, "quickAnswer", page.quickAnswer);
+  if (seenHistorySlugs.has(page.slug)) {
+    fail("history", id, `duplicate slug "${page.slug}"`);
+  }
+  seenHistorySlugs.add(page.slug);
+  if (!isValidIsoDate(page.publishedAt)) {
+    fail("history", id, `invalid publishedAt: ${page.publishedAt}`);
+  }
+  if (!isValidIsoDate(page.lastUpdated)) {
+    fail("history", id, `invalid lastUpdated: ${page.lastUpdated}`);
+  }
+  if (page.context.length === 0) fail("history", id, "page has no historical context");
+  if (page.whyItMattered.length === 0) fail("history", id, "page has no whyItMattered prose");
+  if (page.evolution.length === 0) fail("history", id, "page has no evolution prose");
+
+  if (page.timeline.length === 0) {
+    fail("history", id, "history page has no timeline events");
+  }
+  page.timeline.forEach((event, idx) => {
+    if (!event.title.trim()) fail("history", id, `timeline[${idx}].title is empty`);
+    if (!event.summary.trim()) fail("history", id, `timeline[${idx}].summary is empty`);
+    if (!event.year.trim()) {
+      fail("history", id, `timeline[${idx}].year is empty`);
+    } else if (!YEAR_OR_MONTH_PATTERN.test(event.year)) {
+      fail(
+        "history",
+        id,
+        `timeline[${idx}].year "${event.year}" must be YYYY or YYYY-MM (day-precision dates not supported on historical events)`,
+      );
+    }
+    if (event.confidence && !VALID_CONFIDENCE.has(event.confidence as never)) {
+      fail("history", id, `timeline[${idx}].confidence is invalid: ${String(event.confidence)}`);
+    }
+    for (const ref of event.relatedEntityRefs ?? []) {
+      validateEntityRef("history", id, ref, `timeline[${idx}].relatedEntityRefs`);
+    }
+    for (const cableSlug of event.relatedCableSlugs ?? []) {
+      if (!seenCableSlugs.has(cableSlug)) {
+        fail(
+          "history",
+          id,
+          `timeline[${idx}].relatedCableSlugs references unknown cable "${cableSlug}"`,
+        );
+      }
+    }
+    if (event.sources) {
+      validateCitations("history", id, event.sources);
+    }
+  });
+
+  for (const ref of page.relatedEntityRefs ?? []) {
+    validateEntityRef("history", id, ref, "relatedEntityRefs");
+  }
+  for (const slug of page.relatedDatasetSlugs ?? []) {
+    if (!datasetSlugs.has(slug)) {
+      fail("history", id, `relatedDatasetSlugs "${slug}" not in dataset registry`);
+    }
+  }
+  for (const slug of page.relatedGuideSlugs ?? []) {
+    if (!guideSlugs.has(slug)) {
+      fail("history", id, `relatedGuideSlugs "${slug}" not in guide registry`);
+    }
+  }
+  for (const slug of page.relatedCableSlugs ?? []) {
+    if (!seenCableSlugs.has(slug)) {
+      fail("history", id, `relatedCableSlugs references unknown cable "${slug}"`);
+    }
+  }
+  for (const path of page.relatedMapPaths ?? []) {
+    if (!path.startsWith("/maps/")) {
+      fail("history", id, `relatedMapPaths "${path}" must be a /maps/* path`);
+    }
+  }
+  for (const mediaId of page.relatedMediaIds ?? []) {
+    if (!mediaIds.has(mediaId)) {
+      fail("history", id, `relatedMediaIds "${mediaId}" not in media registry`);
+    }
+  }
+  if (!VALID_CONFIDENCE.has(page.confidence as never)) {
+    fail("history", id, `invalid confidence: ${String(page.confidence)}`);
+  }
+  (page.caveats ?? []).forEach((c, i) => {
+    if (typeof c !== "string" || !c.trim()) {
+      fail("history", id, `caveats[${i}] is empty or non-string`);
+    }
+  });
+  (page.methodologyNotes ?? []).forEach((m, i) => {
+    if (typeof m !== "string" || !m.trim()) {
+      fail("history", id, `methodologyNotes[${i}] is empty or non-string`);
+    }
+  });
+  validateCitations("history", id, page.sources);
+}
+
 for (const row of REVIEWED_CLOUD_REGIONS) {
   const scope = "reviewed-cloud-region";
   checkRowIdUnique(scope, row.id);
@@ -959,6 +1136,8 @@ const counts = {
   reviewedPeeringdbIxps: REVIEWED_PEERINGDB_IXPS.length,
   reviewedPeeringdbFacilities: REVIEWED_PEERINGDB_FACILITIES.length,
   wikimediaCandidates: WIKIMEDIA_CANDIDATES.length,
+  history: HISTORY_PAGES.length,
+  subseaCables: SUBSEA_CABLES.length,
 };
 
 if (failures.length > 0) {
@@ -978,3 +1157,4 @@ console.log(
   `  reviewed rows: cloud-regions: ${counts.reviewedCloudRegions}, peeringdb-ixps: ${counts.reviewedPeeringdbIxps}, peeringdb-facilities: ${counts.reviewedPeeringdbFacilities}`,
 );
 console.log(`  wikimedia candidates: ${counts.wikimediaCandidates}`);
+console.log(`  history pages: ${counts.history}, subsea cables: ${counts.subseaCables}`);

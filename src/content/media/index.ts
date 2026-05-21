@@ -135,6 +135,39 @@ export const MEDIA_ASSETS: ReadonlyArray<MediaAsset> = [
     lastVerified: VERIFIED_AT,
   },
   {
+    id: "transatlantic-cable-history",
+    title: "Transatlantic cable history across three eras",
+    type: "topology-diagram",
+    status: "verified",
+    source: {
+      name: "Self-authored",
+      pageUrl:
+        "https://radar.webmasterid.com/visuals/transatlantic-cable-history",
+    },
+    license: {
+      name: "CC BY 4.0",
+      url: "https://creativecommons.org/licenses/by/4.0/",
+      attributionRequired: true,
+    },
+    attribution: "Radar WebmasterID, CC BY 4.0.",
+    author: "Radar WebmasterID editorial",
+    altText:
+      "Three-swimlane schematic of the transatlantic subsea-cable corridor: telco-consortium era (1988 — early 2000s), consolidation period (2000s — early 2010s), and cloud-funded era (mid-2010s — present), each rendered as a curved line between a US east-coast and a Western European coast.",
+    caption:
+      "The cloud-funded era is the third structural shift in the transatlantic corridor since 1988.",
+    relatedEntityRefs: [
+      "city:ashburn",
+      "city:london",
+      "country:united-states",
+      "country:united-kingdom",
+    ],
+    category: "subsea",
+    historicalPeriod: "1988 — present",
+    inlineComponent: "TransatlanticCableHistoryDiagram",
+    dimensions: { width: 720, height: 340 },
+    lastVerified: REVIEWED_AT_3,
+  },
+  {
     id: "infrastructure-redundancy-model",
     title: "Infrastructure redundancy model",
     type: "diagram",

@@ -5,7 +5,8 @@ import { DATASETS } from "@/content/datasets";
 import { INDICATORS } from "@/content/indicators";
 import { RANKINGS } from "@/content/rankings";
 import { MEDIA_ASSETS } from "@/content/media";
-import { COUNTRIES, CITIES, IXPS } from "@/data";
+import { HISTORY_PAGES } from "@/content/history";
+import { COUNTRIES, CITIES, IXPS, SUBSEA_CABLES } from "@/data";
 import { SOURCE_REGISTRY } from "@/source-registry";
 
 /**
@@ -106,6 +107,25 @@ function generateLlmsTxt(): string {
   for (const r of RANKINGS) {
     lines.push(
       `- [${r.title}](${abs(`/research/rankings/${r.slug}`)}) [${r.status}]: ${r.dek}`,
+    );
+  }
+  lines.push("");
+
+  lines.push("## Historical infrastructure intelligence");
+  lines.push("");
+  for (const page of HISTORY_PAGES) {
+    lines.push(
+      `- [${page.title}](${abs(`/history/${page.slug}`)}) [${page.period}]: ${page.dek}`,
+    );
+  }
+  lines.push("");
+
+  lines.push("## Submarine cables");
+  lines.push("");
+  for (const cable of SUBSEA_CABLES) {
+    const rfs = cable.readyForServiceAt ?? cable.readyForServiceYear ?? "RFS year not recorded";
+    lines.push(
+      `- ${cable.name} [${cable.corridor ?? "corridor not labelled"}, RFS ${rfs}]: ${cable.summary ?? "Identity record only."}`,
     );
   }
   lines.push("");

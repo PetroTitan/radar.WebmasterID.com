@@ -234,6 +234,45 @@ export const SOURCE_REGISTRY: ReadonlyArray<SourceRecord> = [
       "London Internet Exchange Ltd.'s corporate site. Authoritative operator primary doc for the LINX exchanges in London (LON1, LON2), LINX Manchester, LINX Scotland, and the operator's published peering policy.",
     coverage: ["LINX exchanges", "LINX peering policy", "Member services"],
   },
+  {
+    id: "internet-hall-of-fame",
+    name: "Internet Hall of Fame",
+    category: "registry",
+    url: "https://www.internethalloffame.org/",
+    trustTier: "tier-2",
+    licenseNote: "Editorial reference; quotes freely citable with attribution.",
+    lastChecked: "2026-05-25",
+    updateFrequency: "irregular",
+    description:
+      "Editorial reference for early-internet biographical and infrastructural history, maintained by the Internet Society. Used for cross-checking NSFNET-era and early-commercial-NAP claims against other primary sources.",
+    coverage: ["Internet history", "Early commercial NAPs", "NSFNET transition"],
+  },
+  {
+    id: "nsf",
+    name: "National Science Foundation",
+    category: "registry",
+    url: "https://www.nsf.gov/",
+    trustTier: "tier-1",
+    licenseNote: "U.S. federal agency primary doc, public-domain by default.",
+    lastChecked: "2026-05-25",
+    updateFrequency: "irregular",
+    description:
+      "U.S. National Science Foundation. Authoritative primary source for the NSFNET backbone's design, operation, and 1995 decommissioning, including the chartering of the early commercial Network Access Points (MAE-East, MAE-West, Chicago NAP, New York NAP).",
+    coverage: ["NSFNET history", "NSF NAP chartering", "Internet-history primary docs"],
+  },
+  {
+    id: "fcc",
+    name: "Federal Communications Commission",
+    category: "registry",
+    url: "https://www.fcc.gov/",
+    trustTier: "tier-1",
+    licenseNote: "U.S. federal agency primary doc, public-domain by default.",
+    lastChecked: "2026-05-25",
+    updateFrequency: "irregular",
+    description:
+      "U.S. Federal Communications Commission. Authoritative primary source for merger filings, telecom-licensing decisions, submarine-cable landing licenses, and historical ownership transitions of US telecom assets.",
+    coverage: ["Merger filings", "Submarine cable landing licenses", "Carrier licensing"],
+  },
 ];
 
 export function getSourceRecord(id: string): SourceRecord | undefined {

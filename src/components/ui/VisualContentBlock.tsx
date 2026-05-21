@@ -5,6 +5,7 @@ import { CableLandingDiagram } from "@/components/diagrams/CableLandingDiagram";
 import { CloudRegionDistributionDiagram } from "@/components/diagrams/CloudRegionDistributionDiagram";
 import { CarrierNeutralFacilityDiagram } from "@/components/diagrams/CarrierNeutralFacilityDiagram";
 import { InfrastructureRedundancyDiagram } from "@/components/diagrams/InfrastructureRedundancyDiagram";
+import { TransatlanticCableHistoryDiagram } from "@/components/diagrams/TransatlanticCableHistoryDiagram";
 import { VisualAttribution } from "./VisualAttribution";
 
 interface VisualContentBlockProps {
@@ -19,6 +20,7 @@ const INLINE_COMPONENTS: Readonly<
   CloudRegionDistributionDiagram,
   CarrierNeutralFacilityDiagram,
   InfrastructureRedundancyDiagram,
+  TransatlanticCableHistoryDiagram,
 };
 
 /**
