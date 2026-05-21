@@ -32,7 +32,26 @@ export type MediaAssetType =
   | "diagram"
   | "map"
   | "illustration"
-  | "logo";
+  | "logo"
+  | "archival-image"
+  | "topology-diagram"
+  | "infrastructure-photo";
+
+/**
+ * Editorial grouping for the visual archive surface. Drives
+ * faceted browsing on /visuals and the entity-page evidence
+ * block layout. Categories are intentionally coarse — fine-
+ * grained classification lives on the asset's `relatedEntityRefs`.
+ */
+export type MediaArchiveCategory =
+  | "interconnection"
+  | "datacenter"
+  | "subsea"
+  | "cloud"
+  | "geography"
+  | "history"
+  | "diagram"
+  | "operator";
 
 export type MediaAssetStatus = "verified" | "candidate" | "unverified";
 
@@ -104,4 +123,28 @@ export interface MediaAsset {
   /** ISO date the editorial verification (or last placeholder
    *  review) was performed. */
   readonly lastVerified: ISODate;
+  /** Editorial archive category. Drives the visuals index grouping. */
+  readonly category?: MediaArchiveCategory;
+  /** ISO year (or year-month) the underlying media was captured.
+   *  Optional and only populated when the source records it. */
+  readonly captureYear?: string;
+  /** Editorial label for the era the visual depicts, e.g.
+   *  "MAE-East era", "post-2020 hyperscaler cluster". */
+  readonly historicalPeriod?: string;
+  /** Free-text geographic-coverage label, e.g. "Frankfurt metro",
+   *  "Northern Virginia datacenter corridor". */
+  readonly geographicCoverage?: string;
+  /** Operator (or operators) the asset depicts or names, e.g.
+   *  ["DE-CIX"], ["Equinix", "AMS-IX"]. */
+  readonly operatorMentioned?: ReadonlyArray<string>;
+  /** Whether the asset contains visible third-party brand marks
+   *  the editor flagged at review time. Verified assets with
+   *  `visibleBrandRisk: true` must document the brand in
+   *  `riskNotes`. */
+  readonly visibleBrandRisk?: boolean;
+  /** Free-text editorial notes that don't belong in `caption` or
+   *  `attribution` but matter for future review (e.g. "thumbnail
+   *  cropped from a larger CC BY-SA image; rights apply to the
+   *  full image, not just the crop"). */
+  readonly editorialNotes?: ReadonlyArray<string>;
 }

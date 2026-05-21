@@ -41,6 +41,7 @@ import {
   REVIEWED_PEERINGDB_IXPS,
   REVIEWED_PEERINGDB_FACILITIES,
 } from "../data/research";
+import { WIKIMEDIA_CANDIDATES } from "../content/wikimedia-candidates";
 import { isValidIsoDate } from "../lib/dates";
 import type {
   EditorialBlock,
@@ -640,22 +641,29 @@ for (const r of RANKINGS) {
   validateCitations("ranking", id, r.sources);
 }
 
+function isCommonsFileOrCategoryUrl(value: string): boolean {
+  return /^https:\/\/commons\.wikimedia\.org\/wiki\/(File|Category):/.test(value);
+}
+
 const seenMediaIds = new Set<string>();
 for (const m of MEDIA_ASSETS) {
   const id = m.id;
   assertNonEmptyString("media", id, "id", m.id);
   assertNonEmptyString("media", id, "title", m.title);
-  assertNonEmptyString("media", id, "altText", m.altText);
   if (seenMediaIds.has(m.id)) fail("media", id, `duplicate id "${m.id}"`);
   seenMediaIds.add(m.id);
   if (!isValidIsoDate(m.lastVerified)) {
     fail("media", id, `invalid lastVerified: ${m.lastVerified}`);
   }
   if (m.status === "verified") {
+    assertNonEmptyString("media", id, "altText", m.altText);
     if (!m.source) fail("media", id, "verified asset has no source");
     if (!m.license) fail("media", id, "verified asset has no license");
     if (m.license?.attributionRequired && !m.attribution) {
       fail("media", id, "verified asset requires attribution but has none");
+    }
+    if (m.license && /^unknown/i.test(m.license.name.trim())) {
+      fail("media", id, `verified asset license "${m.license.name}" must not read as "unknown"`);
     }
     if (!m.inlineComponent && !m.localPath) {
       fail("media", id, "verified asset has neither inlineComponent nor localPath");
@@ -663,9 +671,31 @@ for (const m of MEDIA_ASSETS) {
     if (m.inlineComponent && m.localPath) {
       fail("media", id, "verified asset declares both inlineComponent and localPath");
     }
+    if (!m.relatedEntityRefs || m.relatedEntityRefs.length === 0) {
+      // Self-authored diagrams may legitimately lack entity refs;
+      // photographic / archival evidence must point at something.
+      if (m.type === "photo" || m.type === "infrastructure-photo" || m.type === "archival-image") {
+        fail("media", id, "verified photographic asset must declare at least one relatedEntityRef");
+      }
+    }
+    if (m.visibleBrandRisk && (!m.riskNotes || m.riskNotes.length === 0)) {
+      fail("media", id, "verified asset with visibleBrandRisk=true must document the brand in riskNotes");
+    }
+    if (m.source && /commons\.wikimedia\.org/.test(m.source.pageUrl) && !isCommonsFileOrCategoryUrl(m.source.pageUrl)) {
+      fail("media", id, `verified Wikimedia source URL "${m.source.pageUrl}" must point at a File: or Category: page`);
+    }
   }
-  if (m.status === "candidate" && (!m.source || !m.license)) {
-    fail("media", id, "candidate asset must declare source and license");
+  if (m.status === "candidate") {
+    if (!m.source || !m.license) {
+      fail("media", id, "candidate asset must declare source and license");
+    }
+    // Candidates must not slip a localPath into the published bundle.
+    if (m.localPath) {
+      fail("media", id, "candidate asset must not declare localPath — promote to verified first");
+    }
+    if (m.inlineComponent) {
+      fail("media", id, "candidate asset must not declare inlineComponent — promote to verified first");
+    }
   }
   for (const ref of m.relatedEntityRefs ?? []) {
     validateEntityRef("media", id, ref, "relatedEntityRefs");
@@ -801,6 +831,67 @@ function checkRowIdUnique(scope: string, id: string) {
   scopeSet.add(id);
 }
 
+// ---------------------------------------------------------------
+// Wikimedia candidate registry
+//
+// Candidates are intent records that never render in public
+// pages. The validator enforces:
+//   - unique ids
+//   - commonsPageUrl points at a Commons File: or Category: page
+//   - recordedLicense is not literally "unknown"
+//   - reviewStatus is one of the valid literals
+//   - relatedEntityRefs (if present) all resolve
+//   - discoveredAt and lastReviewedAt are ISO dates
+// ---------------------------------------------------------------
+const VALID_WIKIMEDIA_REVIEW_STATUS = new Set([
+  "discovered",
+  "license-confirmed",
+  "attribution-pending",
+  "rejected",
+] as const);
+
+const seenWikimediaCandidateIds = new Set<string>();
+for (const c of WIKIMEDIA_CANDIDATES) {
+  const id = c.id;
+  assertNonEmptyString("wikimedia-candidate", id, "id", c.id);
+  assertNonEmptyString("wikimedia-candidate", id, "title", c.title);
+  assertNonEmptyString("wikimedia-candidate", id, "commonsPageUrl", c.commonsPageUrl);
+  assertNonEmptyString("wikimedia-candidate", id, "recordedLicense", c.recordedLicense);
+  if (seenWikimediaCandidateIds.has(c.id)) {
+    fail("wikimedia-candidate", id, `duplicate id "${c.id}"`);
+  }
+  seenWikimediaCandidateIds.add(c.id);
+  if (!isCommonsFileOrCategoryUrl(c.commonsPageUrl)) {
+    fail(
+      "wikimedia-candidate",
+      id,
+      `commonsPageUrl "${c.commonsPageUrl}" must point at https://commons.wikimedia.org/wiki/File:... or .../Category:...`,
+    );
+  }
+  if (c.commonsCategoryUrl && !isCommonsFileOrCategoryUrl(c.commonsCategoryUrl)) {
+    fail(
+      "wikimedia-candidate",
+      id,
+      `commonsCategoryUrl "${c.commonsCategoryUrl}" must point at a Commons File: or Category: page`,
+    );
+  }
+  if (/^unknown/i.test(c.recordedLicense.trim())) {
+    fail("wikimedia-candidate", id, `recordedLicense "${c.recordedLicense}" must not read as "unknown"`);
+  }
+  if (!VALID_WIKIMEDIA_REVIEW_STATUS.has(c.reviewStatus as never)) {
+    fail("wikimedia-candidate", id, `invalid reviewStatus: ${String(c.reviewStatus)}`);
+  }
+  if (!isValidIsoDate(c.discoveredAt)) {
+    fail("wikimedia-candidate", id, `invalid discoveredAt: ${c.discoveredAt}`);
+  }
+  if (!isValidIsoDate(c.lastReviewedAt)) {
+    fail("wikimedia-candidate", id, `invalid lastReviewedAt: ${c.lastReviewedAt}`);
+  }
+  for (const ref of c.relatedEntityRefs ?? []) {
+    validateEntityRef("wikimedia-candidate", id, ref, "relatedEntityRefs");
+  }
+}
+
 for (const row of REVIEWED_CLOUD_REGIONS) {
   const scope = "reviewed-cloud-region";
   checkRowIdUnique(scope, row.id);
@@ -867,6 +958,7 @@ const counts = {
   reviewedCloudRegions: REVIEWED_CLOUD_REGIONS.length,
   reviewedPeeringdbIxps: REVIEWED_PEERINGDB_IXPS.length,
   reviewedPeeringdbFacilities: REVIEWED_PEERINGDB_FACILITIES.length,
+  wikimediaCandidates: WIKIMEDIA_CANDIDATES.length,
 };
 
 if (failures.length > 0) {
@@ -885,3 +977,4 @@ console.log(
 console.log(
   `  reviewed rows: cloud-regions: ${counts.reviewedCloudRegions}, peeringdb-ixps: ${counts.reviewedPeeringdbIxps}, peeringdb-facilities: ${counts.reviewedPeeringdbFacilities}`,
 );
+console.log(`  wikimedia candidates: ${counts.wikimediaCandidates}`);

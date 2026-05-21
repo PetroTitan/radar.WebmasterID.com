@@ -112,6 +112,10 @@ function generateLlmsTxt(): string {
 
   lines.push("## Visuals");
   lines.push("");
+  lines.push(
+    "Radar publishes only source-bound, attribution-safe visual assets. Verified assets render inline; candidate and unverified placeholders are registered intent and do not render anywhere on entity, guide, or research pages. The full media-governance workflow is documented at docs/media-governance.md.",
+  );
+  lines.push("");
   for (const m of MEDIA_ASSETS) {
     lines.push(
       `- [${m.title}](${abs(`/visuals/${m.id}`)}) [${m.type} · ${m.status}]: ${m.caption ?? m.altText}`,

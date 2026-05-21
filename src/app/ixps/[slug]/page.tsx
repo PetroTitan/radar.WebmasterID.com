@@ -13,9 +13,11 @@ import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { InfrastructureEvidenceTable } from "@/components/ui/InfrastructureEvidenceTable";
+import { VisualEvidenceBlock } from "@/components/ui/VisualEvidenceBlock";
 import { IXPS, getIxp, getCity, getCountryByCode } from "@/data";
 import { listInsightsByEntityRef } from "@/content/insights";
 import { listGuidesByEntityRef } from "@/content/guides";
+import { listMediaAssetsByEntityRef } from "@/content/media";
 import { buildPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd, ixpJsonLd } from "@/lib/seo";
 import Link from "next/link";
@@ -52,6 +54,8 @@ export default async function IxpPage({ params }: RouteParams) {
   const country = getCountryByCode(ixp.countryCode);
   const relatedInsights = listInsightsByEntityRef(`ixp:${ixp.slug}`);
   const relatedGuides = listGuidesByEntityRef(`ixp:${ixp.slug}`);
+  const hasVisualEvidence =
+    listMediaAssetsByEntityRef(`ixp:${ixp.slug}`).length > 0;
 
   const breadcrumb = breadcrumbJsonLd([
     { name: "IXPs", path: "/ixps" },
@@ -144,6 +148,15 @@ export default async function IxpPage({ params }: RouteParams) {
       >
         <InfrastructureEvidenceTable entityRef={`ixp:${ixp.slug}`} />
       </EntitySection>
+
+      {hasVisualEvidence ? (
+        <EntitySection
+          title="Visual evidence"
+          description="Verified visual assets linked to this exchange. Candidate visuals appear as registered intent records and do not render inline until licensing is editorially confirmed."
+        >
+          <VisualEvidenceBlock entityRef={`ixp:${ixp.slug}`} />
+        </EntitySection>
+      ) : null}
 
       {relatedGuides.length + relatedInsights.length > 0 ? (
         <EntitySection

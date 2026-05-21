@@ -1,6 +1,7 @@
 import type { MediaAsset } from "@/entities";
 
 const VERIFIED_AT = "2026-05-22";
+const REVIEWED_AT_3 = "2026-05-25";
 
 /**
  * Visual media registry.
@@ -196,7 +197,7 @@ export const MEDIA_ASSETS: ReadonlyArray<MediaAsset> = [
   {
     id: "ashburn-datacenter",
     title: "Ashburn / Northern Virginia datacenter exterior",
-    type: "photo",
+    type: "infrastructure-photo",
     status: "unverified",
     source: {
       name: "Wikimedia Commons (candidate)",
@@ -205,12 +206,127 @@ export const MEDIA_ASSETS: ReadonlyArray<MediaAsset> = [
     },
     altText:
       "Datacenter exterior in the Ashburn / Northern Virginia metro, illustrating the carrier-neutral colocation cluster that anchors the US east coast.",
-    relatedEntityRefs: ["city:ashburn", "country:united-states"],
+    relatedEntityRefs: [
+      "city:ashburn",
+      "country:united-states",
+      "ixp:equinix-internet-exchange-ashburn",
+    ],
+    category: "datacenter",
+    geographicCoverage: "Ashburn / Northern Virginia metro",
+    operatorMentioned: ["Equinix", "Digital Realty"],
+    visibleBrandRisk: true,
     riskNotes: [
       "Most datacenter exterior photographs are operator-owned; CC-licensed exterior shots are rare. The specific candidate image must be confirmed as freely licensed (not vendor-supplied) before promotion to verified.",
       "Brand signage on the building exterior may be visible. The specific candidate must be reviewed.",
     ],
     lastVerified: VERIFIED_AT,
+  },
+  {
+    id: "amsterdam-canal-belt-overview",
+    title: "Amsterdam canal-belt overview",
+    type: "infrastructure-photo",
+    status: "unverified",
+    source: {
+      name: "Wikimedia Commons (candidate)",
+      pageUrl:
+        "https://commons.wikimedia.org/wiki/Category:Aerial_views_of_Amsterdam",
+    },
+    altText:
+      "Aerial overview of Amsterdam's canal belt, used as visual context for the metro's role as the northern FLAP cluster anchor and the home of AMS-IX.",
+    relatedEntityRefs: [
+      "city:amsterdam",
+      "country:netherlands",
+      "ixp:ams-ix",
+    ],
+    category: "geography",
+    geographicCoverage: "Amsterdam canal belt and central districts",
+    riskNotes: [
+      "Per-image license overrides the category-level license; the specific File page must be reviewed individually before promotion.",
+      "Aerial city views can include identifiable private properties; the chosen candidate must be reviewed.",
+    ],
+    editorialNotes: [
+      "Aerial canal-belt views are intentionally generic; the editorial use is geographic context for AMS-IX, not building identification.",
+    ],
+    lastVerified: REVIEWED_AT_3,
+  },
+  {
+    id: "london-docklands-overview",
+    title: "London Docklands overview",
+    type: "infrastructure-photo",
+    status: "unverified",
+    source: {
+      name: "Wikimedia Commons (candidate)",
+      pageUrl: "https://commons.wikimedia.org/wiki/Category:Docklands,_London",
+    },
+    altText:
+      "Skyline overview of London's Docklands district, used as visual context for the carrier-neutral colocation cluster that anchors LINX.",
+    relatedEntityRefs: [
+      "city:london",
+      "country:united-kingdom",
+      "ixp:linx-lon1",
+    ],
+    category: "datacenter",
+    geographicCoverage: "London Docklands / Canary Wharf area",
+    operatorMentioned: ["Telehouse", "Equinix", "LINX"],
+    visibleBrandRisk: true,
+    riskNotes: [
+      "Docklands imagery frequently features identifiable corporate buildings (Canary Wharf); brand-mark risk on any chosen candidate is high.",
+      "Per-image license overrides the category-level license; the specific File page must be reviewed individually before promotion.",
+    ],
+    lastVerified: REVIEWED_AT_3,
+  },
+  {
+    id: "tokyo-otemachi-overview",
+    title: "Tokyo Otemachi district overview",
+    type: "infrastructure-photo",
+    status: "unverified",
+    source: {
+      name: "Wikimedia Commons (candidate)",
+      pageUrl: "https://commons.wikimedia.org/wiki/Category:Otemachi,_Tokyo",
+    },
+    altText:
+      "Skyline view of Tokyo's Otemachi district, used as visual context for the metro's role as the principal Northeast Asian interconnection hub and the NTT Communications campus.",
+    relatedEntityRefs: ["city:tokyo", "country:japan"],
+    category: "datacenter",
+    geographicCoverage: "Tokyo Otemachi / Marunouchi business district",
+    operatorMentioned: ["NTT Communications"],
+    visibleBrandRisk: true,
+    riskNotes: [
+      "Otemachi is a corporate district; brand-mark risk on any chosen candidate is high.",
+      "Per-image license overrides the category-level license; the specific File page must be reviewed individually before promotion.",
+    ],
+    editorialNotes: [
+      "A skyline or street-level overview is preferred over building-identifiable shots to reduce brand-mark risk.",
+    ],
+    lastVerified: REVIEWED_AT_3,
+  },
+  {
+    id: "de-cix-fabric-overview",
+    title: "DE-CIX Frankfurt fabric overview",
+    type: "topology-diagram",
+    status: "unverified",
+    source: {
+      name: "DE-CIX (candidate, operator primary doc)",
+      pageUrl: "https://www.de-cix.net/en/locations/frankfurt",
+    },
+    altText:
+      "Operator-published visualisation of the DE-CIX Frankfurt fabric, showing the Layer-2 switching topology spanning multiple Frankfurt-metro carrier-neutral facilities.",
+    relatedEntityRefs: [
+      "ixp:de-cix-frankfurt",
+      "city:frankfurt",
+      "country:germany",
+    ],
+    category: "interconnection",
+    operatorMentioned: ["DE-CIX"],
+    visibleBrandRisk: true,
+    riskNotes: [
+      "Operator-published imagery is generally restricted to operator use; promotion requires written or published-reuse permission from DE-CIX, not just visibility on the operator site.",
+      "DE-CIX brand mark is integral to the image; verified usage must surface attribution prominently.",
+    ],
+    editorialNotes: [
+      "Recorded as a placeholder for the case where DE-CIX publishes a reusable diagram. The current operator site does not publish a reuse-licensed fabric overview.",
+    ],
+    lastVerified: REVIEWED_AT_3,
   },
 ];
 

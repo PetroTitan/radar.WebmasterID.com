@@ -14,4 +14,5 @@ export * from "./dataset";
 export * from "./indicator";
 export * from "./ranking";
 export * from "./media";
+export * from "./wikimedia-candidate";
 export * from "./dataset-row";

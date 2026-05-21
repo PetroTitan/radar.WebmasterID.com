@@ -6,6 +6,8 @@ import { EntitySection } from "@/components/ui/EntitySection";
 import { QuickAnswer } from "@/components/ui/QuickAnswer";
 import { VisualContentBlock } from "@/components/ui/VisualContentBlock";
 import { ImageCredit } from "@/components/ui/ImageCredit";
+import { AttributionPanel } from "@/components/ui/AttributionPanel";
+import { MediaRiskNote } from "@/components/ui/MediaRiskNote";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { MEDIA_ASSETS, getMediaAsset } from "@/content/media";
 import { getCountry, getCity, getIxp } from "@/data";
@@ -107,8 +109,21 @@ export default async function VisualPage({ params }: RouteParams) {
       </section>
 
       <EntitySection title="Credit and licensing">
-        <ImageCredit asset={asset} />
+        <div className="space-y-6">
+          <ImageCredit asset={asset} />
+          <AttributionPanel asset={asset} />
+        </div>
       </EntitySection>
+
+      {(asset.riskNotes && asset.riskNotes.length > 0) ||
+      (asset.editorialNotes && asset.editorialNotes.length > 0) ? (
+        <EntitySection
+          title="Risk and editorial notes"
+          description="Editor-captured caveats from the candidate review. Verified assets with active risk notes are re-confirmed at every editorial review."
+        >
+          <MediaRiskNote asset={asset} />
+        </EntitySection>
+      ) : null}
 
       {related.length > 0 ? (
         <EntitySection title="Related entities">

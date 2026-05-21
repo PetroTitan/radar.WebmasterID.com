@@ -13,9 +13,11 @@ import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { InfrastructureEvidenceTable } from "@/components/ui/InfrastructureEvidenceTable";
+import { VisualEvidenceBlock } from "@/components/ui/VisualEvidenceBlock";
 import { CITIES, getCity, getCountry, getIxp } from "@/data";
 import { listInsightsByEntityRef } from "@/content/insights";
 import { listGuidesByEntityRef } from "@/content/guides";
+import { listMediaAssetsByEntityRef } from "@/content/media";
 import { buildPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd, cityJsonLd } from "@/lib/seo";
 import Link from "next/link";
@@ -58,6 +60,8 @@ export default async function CityPage({ params }: RouteParams) {
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
   const relatedInsights = listInsightsByEntityRef(`city:${city.slug}`);
   const relatedGuides = listGuidesByEntityRef(`city:${city.slug}`);
+  const hasVisualEvidence =
+    listMediaAssetsByEntityRef(`city:${city.slug}`).length > 0;
 
   const breadcrumb = breadcrumbJsonLd([
     { name: "Cities", path: "/cities" },
@@ -149,6 +153,15 @@ export default async function CityPage({ params }: RouteParams) {
       >
         <InfrastructureEvidenceTable entityRef={`city:${city.slug}`} />
       </EntitySection>
+
+      {hasVisualEvidence ? (
+        <EntitySection
+          title="Visual evidence"
+          description="Verified visual assets linked to this metro. Candidate visuals appear as registered intent records and do not render inline until licensing is editorially confirmed."
+        >
+          <VisualEvidenceBlock entityRef={`city:${city.slug}`} />
+        </EntitySection>
+      ) : null}
 
       {relatedGuides.length + relatedInsights.length > 0 ? (
         <EntitySection

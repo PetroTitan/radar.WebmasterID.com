@@ -6,9 +6,10 @@ import { QuickAnswer } from "@/components/ui/QuickAnswer";
 import { buildPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd, datasetJsonLd } from "@/lib/seo";
 import { MEDIA_ASSETS } from "@/content/media";
+import { WIKIMEDIA_CANDIDATES } from "@/content/wikimedia-candidates";
 
 const PAGE_PATH = "/visuals";
-const LAST_UPDATED = "2026-05-21";
+const LAST_UPDATED = "2026-05-25";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Visual media registry",
@@ -92,6 +93,53 @@ export default function VisualsIndex() {
           description="Future visual records. Candidate source documented; no image bytes stored."
           assets={unverified}
         />
+      ) : null}
+
+      {WIKIMEDIA_CANDIDATES.length > 0 ? (
+        <section className="mt-14 md:mt-20">
+          <p className="eyebrow text-ink-500">
+            Wikimedia Commons candidates · {WIKIMEDIA_CANDIDATES.length}
+          </p>
+          <p className="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+            Candidate images identified on Wikimedia Commons but not yet
+            promoted to verified. Each entry records the Commons File or
+            Category page, the editor&apos;s recorded license reading,
+            and risk notes captured at discovery. Candidates do not render
+            anywhere on entity, guide, or research pages.
+          </p>
+          <ol className="mt-8 divide-y divide-line border-y border-line">
+            {WIKIMEDIA_CANDIDATES.map((c, i) => (
+              <li key={c.id} className="py-6 md:py-8">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+                  <span className="font-mono text-xs tabular-nums text-ink-300">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="eyebrow text-ink-500">Wikimedia</span>
+                  <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-[0.7rem] font-medium text-amber-600">
+                    {c.reviewStatus}
+                  </span>
+                  <span className="basis-full" />
+                  <span className="font-display text-lg font-semibold text-ink-900">
+                    {c.title}
+                  </span>
+                  <span className="basis-full" />
+                  <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-500">
+                    {c.recordedLicense}
+                  </p>
+                  <span className="basis-full" />
+                  <a
+                    href={c.commonsPageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-ink-700 underline decoration-line-strong underline-offset-2 hover:text-accent-700"
+                  >
+                    {c.commonsPageUrl}
+                  </a>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
       ) : null}
 
       <section className="mt-14 max-w-prose md:mt-20">

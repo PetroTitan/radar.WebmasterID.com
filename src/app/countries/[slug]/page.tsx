@@ -13,9 +13,11 @@ import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { InfrastructureEvidenceTable } from "@/components/ui/InfrastructureEvidenceTable";
+import { VisualEvidenceBlock } from "@/components/ui/VisualEvidenceBlock";
 import { COUNTRIES, getCountry, getCity, getIxp } from "@/data";
 import { listInsightsByEntityRef } from "@/content/insights";
 import { listGuidesByEntityRef } from "@/content/guides";
+import { listMediaAssetsByEntityRef } from "@/content/media";
 import { buildPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd, countryJsonLd } from "@/lib/seo";
 import Link from "next/link";
@@ -57,6 +59,8 @@ export default async function CountryPage({ params }: RouteParams) {
     .filter((i): i is NonNullable<typeof i> => Boolean(i));
   const relatedInsights = listInsightsByEntityRef(`country:${country.slug}`);
   const relatedGuides = listGuidesByEntityRef(`country:${country.slug}`);
+  const hasVisualEvidence =
+    listMediaAssetsByEntityRef(`country:${country.slug}`).length > 0;
 
   const breadcrumb = breadcrumbJsonLd([
     { name: "Countries", path: "/countries" },
@@ -134,6 +138,15 @@ export default async function CountryPage({ params }: RouteParams) {
       >
         <InfrastructureEvidenceTable entityRef={`country:${country.slug}`} />
       </EntitySection>
+
+      {hasVisualEvidence ? (
+        <EntitySection
+          title="Visual evidence"
+          description="Verified visual assets linked to this country. Candidate visuals appear as registered intent records and do not render inline until licensing is editorially confirmed."
+        >
+          <VisualEvidenceBlock entityRef={`country:${country.slug}`} />
+        </EntitySection>
+      ) : null}
 
       {relatedGuides.length + relatedInsights.length > 0 ? (
         <EntitySection
