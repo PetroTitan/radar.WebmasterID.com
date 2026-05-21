@@ -16,7 +16,7 @@ import {
   METHODOLOGY_SECTIONS,
 } from "@/content/methodology";
 
-const HOMEPAGE_UPDATED = "2026-05-20";
+const HOMEPAGE_UPDATED = "2026-05-21";
 
 export const metadata: Metadata = buildPageMetadata({
   title: `${SITE.name} — ${SITE.tagline}`,
@@ -107,6 +107,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <HowRadarWorks />
       <FeaturedHubs />
       <IntelligenceOverview />
       <FeaturedGuides />
@@ -205,6 +206,68 @@ function Stat({
         <p className="mt-1 text-[0.7rem] italic text-ink-300">{hint}</p>
       ) : null}
     </div>
+  );
+}
+
+function HowRadarWorks() {
+  const principles = [
+    {
+      title: "Source-governed",
+      body: "Every value on the platform cites a registered source. The source registry lives at /sources with each entry's trust tier, license posture, and last-checked date documented in public.",
+      href: "/sources",
+      cta: "Review the source registry",
+    },
+    {
+      title: "Honest absence",
+      body: "Where data is unknown, contested, or simply not yet ingested, Radar publishes “Data not yet verified.” rather than a guess. The absence is itself a published signal.",
+      href: "/methodology",
+      cta: "Read the methodology",
+    },
+    {
+      title: "Entity graph",
+      body: "Countries resolve to hub cities and IXPs. Cities resolve to their country plus peer hub metros. IXPs resolve to their operator, city, and country. Every record carries an explicit confidence level and a last-reviewed date.",
+      href: "/countries",
+      cta: "Explore the graph",
+    },
+    {
+      title: "Editorial cadence",
+      body: "Each entity, guide, and insight publishes a reviewed-on date. Quantitative metrics live on dated observations. The published surface advertises freshness so AI crawlers and human readers can judge it directly.",
+      href: "/guides",
+      cta: "See the reference guides",
+    },
+  ] as const;
+
+  return (
+    <Container as="section" className="py-section-y">
+      <SectionHeading
+        eyebrow="How Radar works"
+        title="What we publish, and how."
+        description="Radar is a source-governed knowledge graph, not a dashboard. Four operating principles set what makes it onto the platform and what stays out."
+      />
+      <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        {principles.map((p, i) => (
+          <li key={p.title}>
+            <article className="flex h-full flex-col rounded-card border border-line bg-surface-base p-7 sm:p-8">
+              <p className="font-mono text-xs tabular-nums text-ink-300">
+                {String(i + 1).padStart(2, "0")}
+              </p>
+              <h3 className="mt-3 font-display text-h3 font-semibold text-ink-900">
+                {p.title}
+              </h3>
+              <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-500">
+                {p.body}
+              </p>
+              <Link
+                href={p.href}
+                className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-accent-600 hover:text-accent-700"
+              >
+                {p.cta} <span aria-hidden="true">→</span>
+              </Link>
+            </article>
+          </li>
+        ))}
+      </ol>
+    </Container>
   );
 }
 

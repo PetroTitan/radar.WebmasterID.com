@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { EntityHeader } from "@/components/ui/EntityHeader";
 import { EntitySection } from "@/components/ui/EntitySection";
+import { QuickAnswer } from "@/components/ui/QuickAnswer";
 import {
   EditorialBlocks,
   hasEditorialContent,
@@ -75,10 +76,13 @@ export default async function CityPage({ params }: RouteParams) {
       <EntityHeader
         eyebrow={`${city.countryCode} · Hub city`}
         title={city.name}
-        summary={city.summary}
         confidence={city.provenance.confidence}
         lastUpdated={city.provenance.lastUpdated}
       />
+
+      <div className="mt-12 md:mt-16">
+        <QuickAnswer answer={city.summary} label="Quick answer" />
+      </div>
 
       <EntitySection
         title="Key metrics"

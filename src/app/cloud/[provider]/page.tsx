@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { EntityHeader } from "@/components/ui/EntityHeader";
 import { EntitySection } from "@/components/ui/EntitySection";
+import { QuickAnswer } from "@/components/ui/QuickAnswer";
 import { MetricTable } from "@/components/ui/MetricTable";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { CLOUD_PROVIDERS, getCloudProvider } from "@/data";
@@ -49,10 +50,13 @@ export default async function CloudProviderPage({ params }: RouteParams) {
       <EntityHeader
         eyebrow={`Cloud · ${provider.tier}`}
         title={provider.name}
-        summary={provider.summary}
         confidence={provider.provenance.confidence}
         lastUpdated={provider.provenance.lastUpdated}
       />
+
+      <div className="mt-12 md:mt-16">
+        <QuickAnswer answer={provider.summary} label="Quick answer" />
+      </div>
 
       <EntitySection
         title="Key metrics"

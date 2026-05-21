@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { EntityHeader } from "@/components/ui/EntityHeader";
 import { EntitySection } from "@/components/ui/EntitySection";
+import { QuickAnswer } from "@/components/ui/QuickAnswer";
 import {
   EditorialBlocks,
   hasEditorialContent,
@@ -71,10 +72,13 @@ export default async function IxpPage({ params }: RouteParams) {
       <EntityHeader
         eyebrow={`IXP · ${ixp.countryCode}`}
         title={ixp.name}
-        summary={ixp.summary}
         confidence={ixp.provenance.confidence}
         lastUpdated={ixp.provenance.lastUpdated}
       />
+
+      <div className="mt-12 md:mt-16">
+        <QuickAnswer answer={ixp.summary} label="Quick answer" />
+      </div>
 
       <EntitySection
         title="Key metrics"
