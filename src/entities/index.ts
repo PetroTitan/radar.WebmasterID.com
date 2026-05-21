@@ -14,3 +14,4 @@ export * from "./dataset";
 export * from "./indicator";
 export * from "./ranking";
 export * from "./media";
+export * from "./dataset-row";

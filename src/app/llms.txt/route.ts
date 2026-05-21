@@ -126,6 +126,13 @@ function generateLlmsTxt(): string {
   );
   lines.push("");
 
+  lines.push("## Data ingestion");
+  lines.push("");
+  lines.push(
+    `Radar's data layer is source-bound and manually reviewed. Public pages render only from src/data/research/*.reviewed.ts files. Adapters write to a gitignored src/generated/ directory; editorial review promotes rows from there. Lifecycle documented at ${abs("/research/methodologies")}.`,
+  );
+  lines.push("");
+
   lines.push("## Methodology");
   lines.push("");
   lines.push(

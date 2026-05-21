@@ -11,9 +11,16 @@ import { SourceCoverage } from "@/components/ui/SourceCoverage";
 import { ConfidenceBreakdown } from "@/components/ui/ConfidenceBreakdown";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
+import { ReviewedRowsTable } from "@/components/ui/ReviewedRowsTable";
 import { DATASETS, getDataset } from "@/content/datasets";
 import { listIndicatorsByDataset } from "@/content/indicators";
 import { getCountry, getCity, getIxp } from "@/data";
+import {
+  REVIEWED_CLOUD_REGIONS,
+  REVIEWED_PEERINGDB_IXPS,
+  REVIEWED_PEERINGDB_FACILITIES,
+} from "@/data/research";
+import type { InfrastructureDatasetRow } from "@/entities";
 import { buildPageMetadata } from "@/lib/metadata";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { formatDisplayDate } from "@/lib/dates";
@@ -90,6 +97,18 @@ export default async function DatasetPage({ params }: RouteParams) {
   });
   const ldNodes = [breadcrumb, article];
 
+  // Lookup reviewed rows by dataset slug. The map is explicit
+  // rather than registry-driven so adding a new dataset that has
+  // no reviewed rows yet remains a single-line change.
+  const reviewedRows: ReadonlyArray<InfrastructureDatasetRow> =
+    d.slug === "global-cloud-regions"
+      ? REVIEWED_CLOUD_REGIONS
+      : d.slug === "internet-exchange-hubs"
+        ? REVIEWED_PEERINGDB_IXPS
+        : d.slug === "facilities"
+          ? REVIEWED_PEERINGDB_FACILITIES
+          : [];
+
   return (
     <Container as="article">
       <header className="border-b border-line pb-12 md:pb-16">
@@ -123,9 +142,23 @@ export default async function DatasetPage({ params }: RouteParams) {
           <DatasetSummary dataset={d} />
         </div>
         <div className="md:col-span-2">
-          <ConfidenceBreakdown level={d.confidence} />
+          <ConfidenceBreakdown
+            level={d.confidence}
+            rationale={
+              reviewedRows.length > 0
+                ? `${reviewedRows.length} reviewed row${reviewedRows.length === 1 ? "" : "s"} promoted from ingestion; every row is source-cited and editor-signed.`
+                : "No reviewed rows yet. The published surface is the dataset card itself; row-level rendering activates once editorial review promotes ingestion output."
+            }
+          />
         </div>
       </div>
+
+      <EntitySection
+        title="Reviewed records"
+        description="Rows that have been promoted from ingestion output through editorial review. Each row links back to the specific source page it was verified against."
+      >
+        <ReviewedRowsTable rows={reviewedRows} heading="Reviewed rows" />
+      </EntitySection>
 
       <EntitySection title="Methodology">
         <p className="max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">

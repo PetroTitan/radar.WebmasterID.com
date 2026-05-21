@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { QuickAnswer } from "@/components/ui/QuickAnswer";
 import { ResearchNote } from "@/components/ui/ResearchNote";
 import { Card } from "@/components/ui/Card";
+import { IngestionPipelineDiagram } from "@/components/diagrams/IngestionPipelineDiagram";
 import { buildPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import { METHODOLOGY_SECTIONS } from "@/content/methodology";
@@ -77,6 +78,31 @@ export default function MethodologiesPage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section className="mt-14 md:mt-20">
+        <h2 className="font-display text-h1 font-semibold text-ink-900">
+          The ingestion pipeline
+        </h2>
+        <p className="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-ink-700">
+          Reviewed data reaches the platform through a five-stage
+          pipeline. Each stage has a clear input, a clear output, and
+          a clear boundary between developer machine and committed
+          public surface.
+        </p>
+        <div className="mt-8">
+          <IngestionPipelineDiagram />
+        </div>
+        <p className="mt-6 max-w-prose text-sm">
+          <Link
+            href="https://github.com/PetroTitan/radar.WebmasterID.com/blob/main/docs/data-ingestion.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent-600 hover:text-accent-700"
+          >
+            Read the full ingestion documentation →
+          </Link>
+        </p>
       </section>
 
       <section className="mt-14 max-w-prose md:mt-20">

@@ -36,8 +36,18 @@ import { DATASETS } from "../content/datasets";
 import { INDICATORS } from "../content/indicators";
 import { RANKINGS } from "../content/rankings";
 import { MEDIA_ASSETS } from "../content/media";
+import {
+  REVIEWED_CLOUD_REGIONS,
+  REVIEWED_PEERINGDB_IXPS,
+  REVIEWED_PEERINGDB_FACILITIES,
+} from "../data/research";
 import { isValidIsoDate } from "../lib/dates";
-import type { EditorialBlock, Provenance, SourceCitation } from "../entities";
+import type {
+  EditorialBlock,
+  IngestedRecord,
+  Provenance,
+  SourceCitation,
+} from "../entities";
 
 const UNVERIFIED_PLACEHOLDER = "Data not yet verified.";
 
@@ -548,6 +558,121 @@ for (const m of MEDIA_ASSETS) {
   }
 }
 
+// ---------------------------------------------------------------
+// Reviewed dataset rows
+//
+// Every row in src/data/research/*.reviewed.ts goes through the
+// same provenance integrity rules. Rules:
+//   - sourceId must resolve in the source registry.
+//   - sourceUrl must look like an http(s) URL.
+//   - observedAt + lastVerified must be ISO dates.
+//   - confidence is one of the four valid levels.
+//   - relatedEntityRefs (if present) must all resolve.
+//   - row IDs must be unique within their type.
+//   - no field may contain literal "unknown" as a value.
+// ---------------------------------------------------------------
+
+function isHttpUrl(value: string): boolean {
+  return /^https?:\/\//.test(value);
+}
+
+const VALID_CONFIDENCE = new Set([
+  "high",
+  "medium",
+  "low",
+  "unverified",
+] as const);
+
+function validateRow(scope: string, row: IngestedRecord) {
+  const id = row.id;
+  assertNonEmptyString(scope, id, "id", row.id);
+  assertNonEmptyString(scope, id, "sourceUrl", row.sourceUrl);
+  assertNonEmptyString(scope, id, "rawSourceName", row.rawSourceName);
+  if (!isHttpUrl(row.sourceUrl)) {
+    fail(scope, id, `sourceUrl "${row.sourceUrl}" is not a http(s) URL`);
+  }
+  if (!getSourceRecord(row.sourceId)) {
+    fail(scope, id, `sourceId "${row.sourceId}" not in source registry`);
+  }
+  if (!isValidIsoDate(row.observedAt)) {
+    fail(scope, id, `invalid observedAt: ${row.observedAt}`);
+  }
+  if (!isValidIsoDate(row.lastVerified)) {
+    fail(scope, id, `invalid lastVerified: ${row.lastVerified}`);
+  }
+  if (!VALID_CONFIDENCE.has(row.confidence as never)) {
+    fail(scope, id, `invalid confidence: ${String(row.confidence)}`);
+  }
+  for (const ref of row.relatedEntityRefs ?? []) {
+    validateEntityRef(scope, id, ref, "relatedEntityRefs");
+  }
+}
+
+function rejectUnknownLiteral(scope: string, id: string, field: string, value: unknown) {
+  if (typeof value === "string" && value.trim().toLowerCase() === "unknown") {
+    fail(
+      scope,
+      id,
+      `${field} contains the literal string "unknown" — use undefined for missing values`,
+    );
+  }
+}
+
+const seenRowIds = new Map<string, Set<string>>();
+function checkRowIdUnique(scope: string, id: string) {
+  let scopeSet = seenRowIds.get(scope);
+  if (!scopeSet) {
+    scopeSet = new Set();
+    seenRowIds.set(scope, scopeSet);
+  }
+  if (scopeSet.has(id)) {
+    fail(scope, id, `duplicate row id within ${scope}`);
+  }
+  scopeSet.add(id);
+}
+
+for (const row of REVIEWED_CLOUD_REGIONS) {
+  const scope = "reviewed-cloud-region";
+  checkRowIdUnique(scope, row.id);
+  validateRow(scope, row);
+  rejectUnknownLiteral(scope, row.id, "regionCode", row.regionCode);
+  rejectUnknownLiteral(scope, row.id, "displayName", row.displayName);
+  rejectUnknownLiteral(scope, row.id, "countryCode", row.countryCode);
+  rejectUnknownLiteral(scope, row.id, "geography", row.geography);
+  if (row.countryCode.length !== 2) {
+    fail(scope, row.id, `countryCode "${row.countryCode}" must be ISO 3166-1 alpha-2`);
+  }
+  if (row.metroSlug && !getCity(row.metroSlug)) {
+    fail(scope, row.id, `metroSlug "${row.metroSlug}" not in cities registry`);
+  }
+  if (row.availabilityZoneCount !== undefined && row.availabilityZoneCount < 1) {
+    fail(scope, row.id, `availabilityZoneCount must be >= 1 when present`);
+  }
+}
+
+for (const row of REVIEWED_PEERINGDB_IXPS) {
+  const scope = "reviewed-peeringdb-ix";
+  checkRowIdUnique(scope, row.id);
+  validateRow(scope, row);
+  rejectUnknownLiteral(scope, row.id, "name", row.name);
+  rejectUnknownLiteral(scope, row.id, "operator", row.operator);
+  rejectUnknownLiteral(scope, row.id, "countryCode", row.countryCode);
+  if (row.countryCode.length !== 2) {
+    fail(scope, row.id, `countryCode "${row.countryCode}" must be ISO 3166-1 alpha-2`);
+  }
+  if (row.metroSlug && !getCity(row.metroSlug)) {
+    fail(scope, row.id, `metroSlug "${row.metroSlug}" not in cities registry`);
+  }
+}
+
+for (const row of REVIEWED_PEERINGDB_FACILITIES) {
+  const scope = "reviewed-peeringdb-facility";
+  checkRowIdUnique(scope, row.id);
+  validateRow(scope, row);
+  rejectUnknownLiteral(scope, row.id, "name", row.name);
+  rejectUnknownLiteral(scope, row.id, "operator", row.operator);
+}
+
 const counts = {
   countries: COUNTRIES.length,
   cities: CITIES.length,
@@ -559,6 +684,9 @@ const counts = {
   indicators: INDICATORS.length,
   rankings: RANKINGS.length,
   media: MEDIA_ASSETS.length,
+  reviewedCloudRegions: REVIEWED_CLOUD_REGIONS.length,
+  reviewedPeeringdbIxps: REVIEWED_PEERINGDB_IXPS.length,
+  reviewedPeeringdbFacilities: REVIEWED_PEERINGDB_FACILITIES.length,
 };
 
 if (failures.length > 0) {
@@ -573,4 +701,7 @@ if (failures.length > 0) {
 console.log("Data validation passed.");
 console.log(
   `  countries: ${counts.countries}, cities: ${counts.cities}, ixps: ${counts.ixps}, cloud-providers: ${counts.cloudProviders}, insights: ${counts.insights}, guides: ${counts.guides}, datasets: ${counts.datasets}, indicators: ${counts.indicators}, rankings: ${counts.rankings}, media: ${counts.media}`,
+);
+console.log(
+  `  reviewed rows: cloud-regions: ${counts.reviewedCloudRegions}, peeringdb-ixps: ${counts.reviewedPeeringdbIxps}, peeringdb-facilities: ${counts.reviewedPeeringdbFacilities}`,
 );

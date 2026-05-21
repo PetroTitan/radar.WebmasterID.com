@@ -51,4 +51,5 @@ export const GLOBAL_CLOUD_REGIONS: Dataset = {
     },
   ],
   recordCount: 9,
+  // Reviewed rows live in src/data/research/cloud-regions.reviewed.ts.
 };

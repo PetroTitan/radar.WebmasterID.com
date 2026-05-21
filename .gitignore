@@ -26,3 +26,10 @@ node_modules
 # Test / coverage
 coverage
 *.lcov
+
+# Ingestion output — raw, unreviewed adapter dumps. Public pages
+# read only from src/data/research/*.reviewed.ts. Generated files
+# are inspected locally and promoted by hand.
+src/generated/*
+!src/generated/.gitkeep
+!src/generated/README.md

@@ -21,6 +21,8 @@
     "typecheck": "tsc --noEmit",
     "validate": "tsx src/scripts/validate-data.ts",
     "prebuild": "tsx src/scripts/validate-data.ts",
+    "radar:ingest:peeringdb:dry": "tsx src/ingestion/peeringdb/dry-run.ts",
+    "radar:ingest:cloud-regions:dry": "tsx src/ingestion/cloud-regions/dry-run.ts",
     "clean": "rm -rf .next *.tsbuildinfo"
   },
   "dependencies": {
