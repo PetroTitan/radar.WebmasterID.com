@@ -208,6 +208,32 @@ export const SOURCE_REGISTRY: ReadonlyArray<SourceRecord> = [
       "Open geographical database covering >11 million place names with coordinates, administrative hierarchies, timezones and population figures. Used as the canonical reference for city and metro coordinates.",
     coverage: ["City coordinates", "Country centroids", "Administrative regions", "Timezones"],
   },
+  {
+    id: "ams-ix",
+    name: "AMS-IX",
+    category: "vendor",
+    url: "https://www.ams-ix.net/",
+    trustTier: "tier-3",
+    licenseNote: "Operator primary doc, freely citable with attribution.",
+    lastChecked: "2026-05-22",
+    updateFrequency: "monthly",
+    description:
+      "Amsterdam Internet Exchange B.V.'s corporate site. Authoritative operator primary doc for AMS-IX Amsterdam, AMS-IX's international locations, and the operator's published peering policy.",
+    coverage: ["AMS-IX Amsterdam", "AMS-IX international locations", "Operator policy"],
+  },
+  {
+    id: "linx",
+    name: "LINX",
+    category: "vendor",
+    url: "https://www.linx.net/",
+    trustTier: "tier-3",
+    licenseNote: "Operator primary doc, freely citable with attribution.",
+    lastChecked: "2026-05-22",
+    updateFrequency: "monthly",
+    description:
+      "London Internet Exchange Ltd.'s corporate site. Authoritative operator primary doc for the LINX exchanges in London (LON1, LON2), LINX Manchester, LINX Scotland, and the operator's published peering policy.",
+    coverage: ["LINX exchanges", "LINX peering policy", "Member services"],
+  },
 ];
 
 export function getSourceRecord(id: string): SourceRecord | undefined {

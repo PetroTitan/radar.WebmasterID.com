@@ -1,6 +1,6 @@
 import type { Dataset } from "@/entities";
 
-const CHECKED_AT = "2026-05-21";
+const CHECKED_AT = "2026-05-22";
 
 export const GLOBAL_CLOUD_REGIONS: Dataset = {
   slug: "global-cloud-regions",
@@ -9,7 +9,7 @@ export const GLOBAL_CLOUD_REGIONS: Dataset = {
     "Hyperscaler-announced cloud regions normalised to a single schema and pinned to verified countries and metros.",
   category: "cloud",
   publishedAt: "2026-05-21",
-  lastUpdated: "2026-05-21",
+  lastUpdated: "2026-05-22",
   status: "partial",
   confidence: "high",
   methodology:
@@ -22,11 +22,17 @@ export const GLOBAL_CLOUD_REGIONS: Dataset = {
   ],
   relatedEntityRefs: [
     "country:germany",
+    "country:netherlands",
+    "country:united-kingdom",
     "country:singapore",
     "country:united-states",
+    "country:japan",
     "city:frankfurt",
+    "city:amsterdam",
+    "city:london",
     "city:ashburn",
     "city:singapore",
+    "city:tokyo",
   ],
   indicatorSlugs: ["cloud-region-concentration"],
   mapPath: "/maps/cloud-regions",
@@ -50,6 +56,6 @@ export const GLOBAL_CLOUD_REGIONS: Dataset = {
       note: "Microsoft Azure geographies and regions directory.",
     },
   ],
-  recordCount: 14,
+  recordCount: 15,
   // Reviewed rows live in src/data/research/cloud-regions.reviewed.ts.
 };

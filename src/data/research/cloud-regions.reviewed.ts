@@ -17,6 +17,8 @@ import { buildCloudRegionRow } from "@/ingestion/cloud-regions/adapter";
 
 const OBSERVED = "2026-05-21";
 const VERIFIED = "2026-05-21";
+const OBSERVED_2 = "2026-05-22";
+const VERIFIED_2 = "2026-05-22";
 
 export const REVIEWED_CLOUD_REGIONS: ReadonlyArray<CloudProviderRegionRecord> = [
   // AWS — three anchor regions
@@ -134,15 +136,15 @@ export const REVIEWED_CLOUD_REGIONS: ReadonlyArray<CloudProviderRegionRecord> = 
   }),
 
   // London + Tokyo expansion — provider directories list these
-  // metros as published regions. Radar does not yet have city
-  // entities for London or Tokyo in its registry, so `metroSlug`
-  // is omitted; the row remains pinned to its country.
+  // metros as published regions. Radar now has city entities for
+  // London and Tokyo, so `metroSlug` pins each row to its metro.
   buildCloudRegionRow({
     provider: "aws",
     regionCode: "eu-west-2",
     displayName: "Europe (London)",
     countryCode: "GB",
     geography: "Europe",
+    metroSlug: "london",
     purpose: "general",
     observedAt: OBSERVED,
     lastVerified: VERIFIED,
@@ -154,6 +156,7 @@ export const REVIEWED_CLOUD_REGIONS: ReadonlyArray<CloudProviderRegionRecord> = 
     displayName: "Asia Pacific (Tokyo)",
     countryCode: "JP",
     geography: "Asia Pacific",
+    metroSlug: "tokyo",
     purpose: "general",
     observedAt: OBSERVED,
     lastVerified: VERIFIED,
@@ -165,6 +168,7 @@ export const REVIEWED_CLOUD_REGIONS: ReadonlyArray<CloudProviderRegionRecord> = 
     displayName: "London",
     countryCode: "GB",
     geography: "Europe",
+    metroSlug: "london",
     purpose: "general",
     observedAt: OBSERVED,
     lastVerified: VERIFIED,
@@ -176,6 +180,7 @@ export const REVIEWED_CLOUD_REGIONS: ReadonlyArray<CloudProviderRegionRecord> = 
     displayName: "UK South",
     countryCode: "GB",
     geography: "Europe",
+    metroSlug: "london",
     purpose: "general",
     observedAt: OBSERVED,
     lastVerified: VERIFIED,
@@ -187,9 +192,25 @@ export const REVIEWED_CLOUD_REGIONS: ReadonlyArray<CloudProviderRegionRecord> = 
     displayName: "Japan East",
     countryCode: "JP",
     geography: "Asia Pacific",
+    metroSlug: "tokyo",
     purpose: "general",
     observedAt: OBSERVED,
     lastVerified: VERIFIED,
+    confidence: "high",
+  }),
+
+  // Google Cloud asia-northeast1 (Tokyo). Added after the Tokyo
+  // city entity was seeded, so the row is pinned to a metro.
+  buildCloudRegionRow({
+    provider: "gcp",
+    regionCode: "asia-northeast1",
+    displayName: "Tokyo",
+    countryCode: "JP",
+    geography: "Asia Pacific",
+    metroSlug: "tokyo",
+    purpose: "general",
+    observedAt: OBSERVED_2,
+    lastVerified: VERIFIED_2,
     confidence: "high",
   }),
 ];

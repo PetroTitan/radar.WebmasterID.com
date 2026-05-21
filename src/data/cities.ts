@@ -13,6 +13,7 @@ import type { City } from "@/entities";
  */
 
 const CHECKED_AT = "2026-05-20";
+const CHECKED_AT_2 = "2026-05-22";
 
 export const CITIES: ReadonlyArray<City> = [
   {
@@ -30,7 +31,7 @@ export const CITIES: ReadonlyArray<City> = [
       "azure:germany-west-central",
     ],
     cableSlugs: [],
-    peerMetroSlugs: ["ashburn", "singapore"],
+    peerMetroSlugs: ["ashburn", "singapore", "amsterdam", "london"],
     coordinates: { lat: 50.11, lon: 8.68 },
     timezone: "Europe/Berlin",
     editorial: {
@@ -119,7 +120,7 @@ export const CITIES: ReadonlyArray<City> = [
       "azure:east-us",
     ],
     cableSlugs: [],
-    peerMetroSlugs: ["frankfurt", "singapore"],
+    peerMetroSlugs: ["frankfurt", "singapore", "london", "tokyo"],
     coordinates: { lat: 39.05, lon: -77.49 },
     timezone: "America/New_York",
     editorial: {
@@ -202,7 +203,7 @@ export const CITIES: ReadonlyArray<City> = [
       "azure:southeast-asia",
     ],
     cableSlugs: [],
-    peerMetroSlugs: ["frankfurt", "ashburn"],
+    peerMetroSlugs: ["frankfurt", "ashburn", "tokyo"],
     coordinates: { lat: 1.35, lon: 103.82 },
     timezone: "Asia/Singapore",
     editorial: {
@@ -267,6 +268,244 @@ export const CITIES: ReadonlyArray<City> = [
         },
       ],
       note: "Specific facility records and Singapore IXP records await ingestion.",
+    },
+  },
+  {
+    slug: "amsterdam",
+    name: "Amsterdam",
+    countryCode: "NL",
+    countrySlug: "netherlands",
+    aliases: ["AMS"],
+    summary:
+      "Amsterdam is one of the four FLAP cluster metros and the home of AMS-IX, the Amsterdam Internet Exchange operated by Amsterdam Internet Exchange B.V., per the operator's published location page and PeeringDB.",
+    ixpSlugs: [],
+    cloudRegionRefs: [],
+    cableSlugs: [],
+    peerMetroSlugs: ["frankfurt", "london"],
+    coordinates: { lat: 52.37, lon: 4.9 },
+    timezone: "Europe/Amsterdam",
+    editorial: {
+      significance: [
+        "Amsterdam is the northern anchor of the FLAP cluster (Frankfurt, London, Amsterdam, Paris). PeeringDB records a dense concentration of carrier-neutral colocation, IXP fabric, and network presence within the metro.",
+        "The metro is the home of AMS-IX, one of the largest IXPs globally by connected-network count, with a fabric spanning multiple Amsterdam-metro carrier-neutral facilities.",
+      ],
+      connectivityRole: [
+        "Amsterdam is the connective layer between the UK / North Sea corridor and the rest of continental Europe. Routes north into the Nordics and south into Frankfurt and Paris converge here.",
+        "Per TeleGeography, Amsterdam interconnects with the Dutch North Sea cable landings and with cross-Channel terrestrial routes to London.",
+      ],
+      cloudRelevance: [
+        "Hyperscaler cloud regions in the Amsterdam metro are not yet listed as reviewed rows in the Radar registry. AWS, Google Cloud, and Microsoft Azure publish Netherlands-located capacity in their respective directories; specific Amsterdam-metro pinning awaits editorial review.",
+      ],
+      interconnectionContext: [
+        "AMS-IX is the principal exchange in the metro; the fabric spans multiple carrier-neutral facilities operated by Equinix, Digital Realty (Interxion), and NorthC.",
+        "Carrier-neutral colocation in Amsterdam is anchored on Equinix AM-series and Digital Realty (Interxion) facilities, with a secondary cluster across the wider Schiphol area.",
+      ],
+      strategicImportance: [
+        "For European deployments that need anchored North European connectivity — UK, Nordics, Northern Germany — Amsterdam is the default routing anchor. For pan-European peering, an Amsterdam presence is generally considered table stakes alongside Frankfurt.",
+      ],
+    },
+    provenance: {
+      lastUpdated: CHECKED_AT_2,
+      confidence: "high",
+      sources: [
+        {
+          sourceId: "peeringdb",
+          url: "https://www.peeringdb.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "AMS-IX identity and Amsterdam-metro facility presence.",
+        },
+        {
+          sourceId: "ams-ix",
+          url: "https://www.ams-ix.net/ams",
+          checkedAt: CHECKED_AT_2,
+          note: "AMS-IX operator page for the Amsterdam exchange.",
+        },
+        {
+          sourceId: "telegeography",
+          url: "https://www.telegeography.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "FLAP cluster framing and Amsterdam's role in European interconnection.",
+        },
+        {
+          sourceId: "geonames",
+          url: "https://www.geonames.org/2759794/amsterdam.html",
+          checkedAt: CHECKED_AT_2,
+          note: "Amsterdam metro coordinates and timezone.",
+        },
+      ],
+      note: "Amsterdam IXP and cloud-region records await editorial seeding; the metro is wired into the graph via AMS-IX reviewed rows.",
+    },
+  },
+  {
+    slug: "london",
+    name: "London",
+    countryCode: "GB",
+    countrySlug: "united-kingdom",
+    aliases: ["LON", "Greater London"],
+    summary:
+      "London is one of the four FLAP cluster metros and the home of LINX (LON1, LON2), operated by London Internet Exchange Ltd. AWS, Google Cloud, and Microsoft Azure each operate London-anchored cloud regions per their published directories.",
+    ixpSlugs: [],
+    cloudRegionRefs: [
+      "aws:eu-west-2",
+      "gcp:europe-west2",
+      "azure:uk-south",
+    ],
+    cableSlugs: [],
+    peerMetroSlugs: ["frankfurt", "amsterdam"],
+    coordinates: { lat: 51.51, lon: -0.13 },
+    timezone: "Europe/London",
+    editorial: {
+      significance: [
+        "London is the western anchor of the FLAP cluster (Frankfurt, London, Amsterdam, Paris). PeeringDB records dense carrier-neutral colocation across central London, the Docklands, and the Slough corridor.",
+        "The metro is the home of LINX (London Internet Exchange), operated by London Internet Exchange Ltd., with a primary fabric (LON1) and a secondary fabric (LON2) spanning multiple London-metro carrier-neutral facilities.",
+      ],
+      connectivityRole: [
+        "London is the principal European termination point for transatlantic submarine cables — landings on the Cornish coast (Bude / Whitesand Bay) feed terrestrial routes inland to the metro.",
+        "Onward routing leaves the UK via cross-Channel terrestrial fibre into Amsterdam, Paris, and Frankfurt.",
+      ],
+      cloudRelevance: [
+        "AWS operates eu-west-2 in London (per AWS Global Infrastructure). Google Cloud operates europe-west2 in London (per Google Cloud's published locations). Microsoft Azure operates UK South in London (per Azure's geographies directory).",
+        "London is therefore one of the small set of metros worldwide that hosts general-availability regions of all three major hyperscalers within a single MAN.",
+      ],
+      interconnectionContext: [
+        "Carrier-neutral colocation in London is anchored on Equinix LD-series facilities, Telehouse (Digital Realty / KDDI Telehouse) in the Docklands, and NTT facilities. A deep secondary cluster operates in Slough, west of central London.",
+        "LINX is the principal exchange in the metro; its LON1 / LON2 fabric spans multiple central London and Docklands facilities.",
+      ],
+      strategicImportance: [
+        "For UK-facing services and transatlantic-routed European deployments, a London presence is the default. For pan-European peering, a London presence alongside Frankfurt is generally considered the minimum European footprint.",
+      ],
+    },
+    provenance: {
+      lastUpdated: CHECKED_AT_2,
+      confidence: "high",
+      sources: [
+        {
+          sourceId: "peeringdb",
+          url: "https://www.peeringdb.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "LINX identity and London-metro facility presence.",
+        },
+        {
+          sourceId: "linx",
+          url: "https://www.linx.net/about/our-exchanges/lon1/",
+          checkedAt: CHECKED_AT_2,
+          note: "LINX LON1 operator page.",
+        },
+        {
+          sourceId: "aws-regions",
+          url: "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/",
+          checkedAt: CHECKED_AT_2,
+          note: "AWS eu-west-2 (London) region listing.",
+        },
+        {
+          sourceId: "gcp-regions",
+          url: "https://cloud.google.com/about/locations",
+          checkedAt: CHECKED_AT_2,
+          note: "Google Cloud europe-west2 (London) region listing.",
+        },
+        {
+          sourceId: "azure-regions",
+          url: "https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/",
+          checkedAt: CHECKED_AT_2,
+          note: "Microsoft Azure UK South (London) region listing.",
+        },
+        {
+          sourceId: "telegeography",
+          url: "https://www.telegeography.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "Transatlantic cable landings into the UK and FLAP framing.",
+        },
+        {
+          sourceId: "geonames",
+          url: "https://www.geonames.org/2643743/london.html",
+          checkedAt: CHECKED_AT_2,
+          note: "London metro coordinates and timezone.",
+        },
+      ],
+      note: "LINX and Equinix IX London entity records await editorial seeding; cloud-region rows already wire London via metroSlug.",
+    },
+  },
+  {
+    slug: "tokyo",
+    name: "Tokyo",
+    countryCode: "JP",
+    countrySlug: "japan",
+    aliases: ["TYO", "Greater Tokyo"],
+    summary:
+      "Tokyo is the principal interconnection metro for Japan and the regional anchor for Northeast Asian hyperscaler capacity. AWS, Google Cloud, and Microsoft Azure each operate Tokyo-anchored cloud regions per their published directories.",
+    ixpSlugs: [],
+    cloudRegionRefs: [
+      "aws:ap-northeast-1",
+      "gcp:asia-northeast1",
+      "azure:japan-east",
+    ],
+    cableSlugs: [],
+    peerMetroSlugs: ["singapore", "ashburn"],
+    coordinates: { lat: 35.68, lon: 139.76 },
+    timezone: "Asia/Tokyo",
+    editorial: {
+      significance: [
+        "Tokyo is the principal Northeast Asian interconnection metro and the largest in-country interconnection cluster in Japan. PeeringDB records dense Japanese-operator presence across Otemachi, Shinagawa, and the wider Kanto-area facility cluster.",
+        "The metro is the regional default for hyperscaler regions: AWS ap-northeast-1, Google Cloud asia-northeast1, and Microsoft Azure Japan East all anchor here per the provider directories.",
+      ],
+      connectivityRole: [
+        "Tokyo is the principal eastern termination point for transpacific submarine cables; TeleGeography records dense landings on the Boso and Shima peninsulas, with onward terrestrial routes into Tokyo's interconnection facilities.",
+        "Onward regional routing reaches Hong Kong, Singapore, the US west coast, and Russia / Northeast Asia.",
+      ],
+      cloudRelevance: [
+        "AWS operates ap-northeast-1 in Tokyo (per AWS Global Infrastructure). Google Cloud operates asia-northeast1 in Tokyo (per Google Cloud's published locations). Microsoft Azure operates Japan East in Tokyo (per Azure's geographies directory).",
+        "Within Japan, Tokyo regions are the implicit primary; Osaka regions exist primarily for in-country disaster-recovery footprints.",
+      ],
+      interconnectionContext: [
+        "JPNAP, JPIX, and BBIX operate Tokyo-anchored exchange fabrics. These have not yet been promoted to Radar IXP entity records and await editorial seeding against PeeringDB.",
+        "Carrier-neutral colocation in Tokyo is anchored on Equinix TY-series facilities and the NTT Communications Otemachi / Shinagawa campus group.",
+      ],
+      strategicImportance: [
+        "For any operator serving Japanese end users, a Tokyo presence is the default. For regional Northeast Asian routing, Tokyo competes with Singapore depending on the latency profile of the workload.",
+      ],
+    },
+    provenance: {
+      lastUpdated: CHECKED_AT_2,
+      confidence: "high",
+      sources: [
+        {
+          sourceId: "peeringdb",
+          url: "https://www.peeringdb.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "Tokyo-metro facility records and Japanese IXP presence.",
+        },
+        {
+          sourceId: "aws-regions",
+          url: "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/",
+          checkedAt: CHECKED_AT_2,
+          note: "AWS ap-northeast-1 (Tokyo) region listing.",
+        },
+        {
+          sourceId: "gcp-regions",
+          url: "https://cloud.google.com/about/locations",
+          checkedAt: CHECKED_AT_2,
+          note: "Google Cloud asia-northeast1 (Tokyo) region listing.",
+        },
+        {
+          sourceId: "azure-regions",
+          url: "https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/",
+          checkedAt: CHECKED_AT_2,
+          note: "Microsoft Azure Japan East (Tokyo) region listing.",
+        },
+        {
+          sourceId: "telegeography",
+          url: "https://www.telegeography.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "Transpacific cable landings on the Boso and Shima peninsulas.",
+        },
+        {
+          sourceId: "geonames",
+          url: "https://www.geonames.org/1850147/tokyo.html",
+          checkedAt: CHECKED_AT_2,
+          note: "Tokyo metro coordinates and timezone.",
+        },
+      ],
+      note: "Japanese IXP entity records (JPNAP, JPIX, BBIX) and Osaka metro records await editorial seeding.",
     },
   },
 ];

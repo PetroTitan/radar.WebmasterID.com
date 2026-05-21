@@ -132,8 +132,18 @@ function validateEditorial(
   }
 }
 
+const seenCountrySlugs = new Set<string>();
+const seenCountryCodes = new Set<string>();
 for (const country of COUNTRIES) {
   const id = country.slug;
+  if (seenCountrySlugs.has(country.slug)) {
+    fail("country", id, `duplicate slug "${country.slug}"`);
+  }
+  seenCountrySlugs.add(country.slug);
+  if (seenCountryCodes.has(country.code)) {
+    fail("country", id, `duplicate ISO 3166-1 code "${country.code}"`);
+  }
+  seenCountryCodes.add(country.code);
   assertNonEmptyString("country", id, "slug", country.slug);
   assertNonEmptyString("country", id, "code", country.code);
   assertNonEmptyString("country", id, "name", country.name);
@@ -156,8 +166,13 @@ for (const country of COUNTRIES) {
   validateEditorial("country", id, country.editorial);
 }
 
+const seenCitySlugs = new Set<string>();
 for (const city of CITIES) {
   const id = city.slug;
+  if (seenCitySlugs.has(city.slug)) {
+    fail("city", id, `duplicate slug "${city.slug}"`);
+  }
+  seenCitySlugs.add(city.slug);
   assertNonEmptyString("city", id, "slug", city.slug);
   assertNonEmptyString("city", id, "name", city.name);
   assertNonEmptyString("city", id, "countryCode", city.countryCode);
@@ -581,6 +596,22 @@ for (const r of RANKINGS) {
   });
   for (const ref of r.relatedEntityRefs ?? []) {
     validateEntityRef("ranking", id, ref, "relatedEntityRefs");
+  }
+  // Rankings whose status is not "verified" must not publish
+  // positions or scores. The Ranking type does not yet carry a
+  // positions field, so this guard is defensive: any future
+  // ranking-position field must be added with a status === "verified"
+  // gate. We assert here so the discipline is enforced at build time.
+  if (r.status !== "verified") {
+    // Cast through unknown so a future `positions` addition is caught.
+    const maybeHasPositions = (r as unknown as { readonly positions?: unknown }).positions;
+    if (maybeHasPositions !== undefined) {
+      fail(
+        "ranking",
+        id,
+        `ranking carries positions while status is "${r.status}" — rankings must be verified before publishing positions`,
+      );
+    }
   }
   validateCitations("ranking", id, r.sources);
 }

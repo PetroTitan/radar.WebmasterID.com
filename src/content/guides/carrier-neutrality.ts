@@ -8,7 +8,7 @@ export const CARRIER_NEUTRALITY_GUIDE: Guide = {
   dek:
     "What it means for a colocation facility to be carrier-neutral, why neutrality is the precondition for dense interconnection, and how to read PeeringDB's facility records.",
   publishedAt: "2026-05-22",
-  lastUpdated: "2026-05-22",
+  lastUpdated: "2026-05-23",
   definition:
     "A carrier-neutral facility is a colocation building whose operator does not itself sell connectivity. Tenants — transit providers, content networks, cloud on-ramps, eyeball ISPs — reach each other through cross connects inside the building, not through bandwidth purchased from the operator. Neutrality is the structural condition that lets a facility host many competing networks side-by-side.",
   keyTakeaways: [
@@ -94,6 +94,16 @@ export const CARRIER_NEUTRALITY_GUIDE: Guide = {
         "Frankfurt's carrier-neutral cluster — Equinix FR series, Digital Realty (formerly Interxion), and NTT facilities — is what made it possible for DE-CIX Frankfurt to span multiple buildings and for hundreds of networks to colocate within the same metro.",
     },
     {
+      entityRef: "city:amsterdam",
+      prose:
+        "Amsterdam's neutral cluster (Equinix AM series, Digital Realty / Interxion, NorthC) is the substrate on which AMS-IX scales across multiple buildings; the metro is a benchmark for what a long-running carrier-neutral ecosystem can accumulate.",
+    },
+    {
+      entityRef: "city:london",
+      prose:
+        "London concentrates neutral colocation across central London, the Docklands (anchored by Telehouse and Equinix LD series), and the Slough corridor. The neutrality of those facilities is what lets LINX scale across the metro.",
+    },
+    {
       entityRef: "city:ashburn",
       prose:
         "Ashburn / Northern Virginia is anchored on Equinix's DC series of neutral facilities plus a dense Digital Realty footprint; the cluster's neutrality is what lets hyperscalers, transit providers, content networks and the Equinix Internet Exchange Ashburn fabric coexist inside the same metro.",
@@ -115,9 +125,13 @@ export const CARRIER_NEUTRALITY_GUIDE: Guide = {
   ],
   relatedEntityRefs: [
     "city:frankfurt",
+    "city:amsterdam",
+    "city:london",
     "city:ashburn",
     "city:singapore",
     "country:germany",
+    "country:netherlands",
+    "country:united-kingdom",
     "country:united-states",
     "country:singapore",
   ],

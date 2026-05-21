@@ -8,7 +8,7 @@ export const INTERCONNECTION_GUIDE: Guide = {
   dek:
     "What \"interconnection\" actually means in infrastructure terms — peering, transit, private network interconnects, and the bilateral economics that decide which networks meet where.",
   publishedAt: "2026-05-22",
-  lastUpdated: "2026-05-22",
+  lastUpdated: "2026-05-23",
   definition:
     "Interconnection is the set of arrangements through which independent networks exchange traffic with each other — public peering at an Internet Exchange Point, private network interconnects between two networks inside a colocation facility, and paid transit from an upstream provider. The choice between these arrangements is governed by network economics, not by any single technical standard.",
   keyTakeaways: [
@@ -95,6 +95,16 @@ export const INTERCONNECTION_GUIDE: Guide = {
         "Frankfurt anchors European interconnection: DE-CIX Frankfurt is the largest IXP by connected-network count globally, surrounded by a deep population of carrier-neutral facilities and an unusually dense terrestrial fibre topology into the rest of the continent.",
     },
     {
+      entityRef: "city:amsterdam",
+      prose:
+        "Amsterdam anchors AMS-IX and the FLAP cluster's northern hub — the connective layer between the UK / North Sea corridor and the rest of continental Europe.",
+    },
+    {
+      entityRef: "city:london",
+      prose:
+        "London anchors transatlantic-routed European interconnection. LINX (LON1 / LON2) sits inside the metro's Docklands carrier-neutral cluster and forms the FLAP western anchor.",
+    },
+    {
       entityRef: "city:ashburn",
       prose:
         "Ashburn / Northern Virginia is the US east-coast meeting point: hyperscaler cloud regions, the Equinix Internet Exchange Ashburn fabric, and a dense colocation cluster within a few mile-radius metro footprint.",
@@ -122,11 +132,17 @@ export const INTERCONNECTION_GUIDE: Guide = {
   relatedEntityRefs: [
     "ixp:de-cix-frankfurt",
     "city:frankfurt",
+    "city:amsterdam",
+    "city:london",
     "city:ashburn",
     "city:singapore",
+    "city:tokyo",
     "country:germany",
+    "country:netherlands",
+    "country:united-kingdom",
     "country:united-states",
     "country:singapore",
+    "country:japan",
   ],
   relatedDatasetSlugs: ["internet-exchange-hubs", "global-cloud-regions"],
   relatedIndicatorSlugs: ["ixp-density", "carrier-neutrality"],

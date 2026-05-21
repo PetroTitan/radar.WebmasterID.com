@@ -8,7 +8,7 @@ export const DATACENTER_HUBS_GUIDE: Guide = {
   dek:
     "What makes a metro a global datacenter hub — and why the same handful of metros (Ashburn, Frankfurt, Singapore, London, Amsterdam) keep appearing on every infrastructure map.",
   publishedAt: "2026-05-20",
-  lastUpdated: "2026-05-22",
+  lastUpdated: "2026-05-23",
   definition:
     "A datacenter hub is a metro with a high concentration of carrier-neutral colocation facilities, dense interconnection options, and access to fibre routes and power infrastructure that make it economically attractive to host computing infrastructure. PeeringDB tracks the facility-by-facility composition of every hub.",
   keyTakeaways: [
@@ -88,9 +88,24 @@ export const DATACENTER_HUBS_GUIDE: Guide = {
         "Frankfurt is the eastern anchor of the FLAP European cluster — high carrier-neutral facility density, the DE-CIX Frankfurt fabric, and primary EU regions for all three hyperscalers.",
     },
     {
+      entityRef: "city:amsterdam",
+      prose:
+        "Amsterdam is the northern FLAP anchor — long-running carrier-neutral cluster with AMS-IX as the metro's interconnection backbone.",
+    },
+    {
+      entityRef: "city:london",
+      prose:
+        "London is the western FLAP anchor and the principal European termination point for transatlantic cables, with dense colocation across central London, the Docklands, and the Slough corridor.",
+    },
+    {
       entityRef: "city:singapore",
       prose:
         "Singapore is the principal Southeast Asian hub: dense carrier-neutral colocation, submarine cable landings within the metro, and hyperscaler regions all in walking distance from each other.",
+    },
+    {
+      entityRef: "city:tokyo",
+      prose:
+        "Tokyo is the principal Northeast Asian hub — the Otemachi / Shinagawa cluster and the wider Kanto-area facilities anchor JPNAP, JPIX, BBIX, and the three hyperscalers' Japan regions.",
     },
   ],
   caveats: [
@@ -104,11 +119,17 @@ export const DATACENTER_HUBS_GUIDE: Guide = {
   ],
   relatedEntityRefs: [
     "city:frankfurt",
+    "city:amsterdam",
+    "city:london",
     "city:ashburn",
     "city:singapore",
+    "city:tokyo",
     "country:germany",
+    "country:netherlands",
+    "country:united-kingdom",
     "country:united-states",
     "country:singapore",
+    "country:japan",
   ],
   relatedDatasetSlugs: ["internet-exchange-hubs", "global-cloud-regions"],
   relatedIndicatorSlugs: ["datacenter-concentration", "carrier-neutrality"],

@@ -8,7 +8,7 @@ export const CLOUD_REGIONS_GUIDE: Guide = {
   dek:
     "What a cloud region actually is, how to read each provider's directory, and why regions cluster in a small number of interconnection metros.",
   publishedAt: "2026-05-20",
-  lastUpdated: "2026-05-22",
+  lastUpdated: "2026-05-23",
   definition:
     "A cloud region is a collection of one or more datacenters in a single metro placed under a single administrative and naming scope by a cloud provider — for example AWS eu-central-1 (Frankfurt), Google Cloud asia-southeast1 (Singapore), or Microsoft Azure East US (Virginia). The provider's own published directory is the authoritative public record.",
   keyTakeaways: [
@@ -92,6 +92,11 @@ export const CLOUD_REGIONS_GUIDE: Guide = {
         "Frankfurt hosts AWS eu-central-1, Google Cloud europe-west3, and Microsoft Azure Germany West Central — the same metro chosen by all three hyperscalers for their primary EU region.",
     },
     {
+      entityRef: "city:london",
+      prose:
+        "London hosts AWS eu-west-2, Google Cloud europe-west2, and Microsoft Azure UK South — the three hyperscalers' UK anchor regions, all co-located with LINX inside London's carrier-neutral facilities.",
+    },
+    {
       entityRef: "city:ashburn",
       prose:
         "Ashburn hosts AWS us-east-1, Google Cloud us-east4, and Microsoft Azure East US, the canonical US east-coast clustering and the largest concentration of hyperscaler region capacity in the world.",
@@ -100,6 +105,11 @@ export const CLOUD_REGIONS_GUIDE: Guide = {
       entityRef: "city:singapore",
       prose:
         "Singapore hosts AWS ap-southeast-1, Google Cloud asia-southeast1, and Microsoft Azure Southeast Asia, with the regions co-located alongside major submarine cable landings.",
+    },
+    {
+      entityRef: "city:tokyo",
+      prose:
+        "Tokyo hosts AWS ap-northeast-1, Google Cloud asia-northeast1, and Microsoft Azure Japan East — the Northeast Asian counterpart to the Frankfurt / Ashburn / Singapore three-hyperscaler clustering.",
     },
   ],
   caveats: [
@@ -113,11 +123,15 @@ export const CLOUD_REGIONS_GUIDE: Guide = {
   ],
   relatedEntityRefs: [
     "city:frankfurt",
+    "city:london",
     "city:ashburn",
     "city:singapore",
+    "city:tokyo",
     "country:germany",
+    "country:united-kingdom",
     "country:united-states",
     "country:singapore",
+    "country:japan",
   ],
   relatedDatasetSlugs: ["global-cloud-regions", "ai-infrastructure-regions"],
   relatedIndicatorSlugs: ["cloud-region-concentration"],

@@ -13,6 +13,7 @@ import type { Country } from "@/entities";
  */
 
 const CHECKED_AT = "2026-05-20";
+const CHECKED_AT_2 = "2026-05-22";
 
 export const COUNTRIES: ReadonlyArray<Country> = [
   {
@@ -248,6 +249,226 @@ export const COUNTRIES: ReadonlyArray<Country> = [
         },
       ],
       note: "Specific cloud-region pinning and US IXP records await ingestion.",
+    },
+  },
+  {
+    slug: "netherlands",
+    code: "NL",
+    name: "Netherlands",
+    region: "Western Europe",
+    continent: "Europe",
+    summary:
+      "The Netherlands is a Western European country. It hosts Amsterdam, a principal European interconnection metro, and AMS-IX, an Internet Exchange Point operated by Amsterdam Internet Exchange B.V.",
+    hubCitySlugs: ["amsterdam"],
+    ixpSlugs: [],
+    coordinates: { lat: 52.13, lon: 5.29 },
+    editorial: {
+      significance: [
+        "The Netherlands is the northern anchor of Western European interconnection. Amsterdam, its principal metro, is one of the four FLAP cluster metros (Frankfurt, London, Amsterdam, Paris) through which the bulk of intra-European internet traffic moves.",
+        "The country's stable jurisdiction, dense fibre topology, and long history of permissive carrier-neutral colocation policy have made it the European headquarters for many transit and content networks.",
+      ],
+      connectivityRole: [
+        "The Netherlands functions as the connective layer between the UK / North Sea corridor and the rest of continental Europe. Submarine cables landing on the Dutch coast feed continental long-haul terrestrial routes through Amsterdam.",
+        "Per TeleGeography reporting, Amsterdam interconnects northward to the Nordics and southward to Frankfurt and Paris, with onward routes to the rest of the continent.",
+      ],
+      cloudRelevance: [
+        "Hyperscaler cloud regions in the Netherlands are not yet listed as reviewed rows in the Radar registry. AWS, Google Cloud, and Microsoft Azure all publish Netherlands-located capacity per their respective public directories, but specific region pinning awaits editorial review.",
+      ],
+      interconnectionContext: [
+        "AMS-IX is operated by Amsterdam Internet Exchange B.V. and is among the largest IXPs globally by connected-network count, with a fabric spanning multiple Amsterdam-metro carrier-neutral facilities.",
+        "The country's carrier-neutral colocation operators — Equinix, Digital Realty (Interxion), NorthC, and a long tail of regional operators — concentrate in Amsterdam, with secondary footprints in Rotterdam and Eindhoven.",
+      ],
+      strategicImportance: [
+        "For European deployments that need anchored North European connectivity — UK, Nordics, Northern Germany — the Netherlands is the default routing anchor. For pan-European peering, an Amsterdam presence is generally considered table stakes alongside Frankfurt.",
+      ],
+    },
+    provenance: {
+      lastUpdated: CHECKED_AT_2,
+      confidence: "high",
+      sources: [
+        {
+          sourceId: "world-bank-open-data",
+          url: "https://data.worldbank.org/country/NL",
+          checkedAt: CHECKED_AT_2,
+          note: "Geographic classification (ISO 3166-1, UN M.49).",
+        },
+        {
+          sourceId: "peeringdb",
+          url: "https://www.peeringdb.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "AMS-IX identity and Amsterdam-metro facility presence.",
+        },
+        {
+          sourceId: "ams-ix",
+          url: "https://www.ams-ix.net/ams",
+          checkedAt: CHECKED_AT_2,
+          note: "AMS-IX Amsterdam operator pages — identity, location, policy.",
+        },
+        {
+          sourceId: "telegeography",
+          url: "https://www.telegeography.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "FLAP cluster framing and Amsterdam's role in European interconnection.",
+        },
+      ],
+      note: "AMS-IX is added as a country-level IXP via Amsterdam city links rather than as a country.ixpSlugs entry until an ixp:ams-ix entity record is seeded.",
+    },
+  },
+  {
+    slug: "united-kingdom",
+    code: "GB",
+    name: "United Kingdom",
+    region: "Northern Europe",
+    continent: "Europe",
+    summary:
+      "The United Kingdom is a Northern European country. It hosts London, a principal European interconnection metro and one of the four FLAP cluster metros, and LINX, the London Internet Exchange operated by London Internet Exchange Ltd.",
+    hubCitySlugs: ["london"],
+    ixpSlugs: [],
+    coordinates: { lat: 54.0, lon: -2.0 },
+    editorial: {
+      significance: [
+        "The United Kingdom anchors transatlantic infrastructure into Europe. London — its principal metro — is one of the four FLAP cluster metros and the western anchor of the European peering geography.",
+        "Hyperscaler region directories list multiple UK regions: AWS eu-west-2 (London), Google Cloud europe-west2 (London), and Microsoft Azure UK South (London) all appear in their respective directories.",
+      ],
+      connectivityRole: [
+        "The UK is the principal European termination point for transatlantic submarine cables; TeleGeography records dense landings on the Cornish coast (Bude / Whitesand Bay) and at Bournemouth.",
+        "London routes onward to mainland Europe through cross-Channel terrestrial fibre into Amsterdam, Paris and Frankfurt.",
+      ],
+      cloudRelevance: [
+        "All three major hyperscalers operate UK regions according to their published directories: AWS eu-west-2 in London, Google Cloud europe-west2 in London, and Microsoft Azure UK South in London. Each is corroborated by the provider's own published location page.",
+      ],
+      interconnectionContext: [
+        "LINX (London Internet Exchange) is operated by London Internet Exchange Ltd. with a primary fabric (LON1) plus a secondary fabric (LON2), spanning multiple London-metro carrier-neutral facilities.",
+        "Carrier-neutral colocation in London is anchored on Equinix's LD-series, Digital Realty / Telehouse, and NTT facilities, with a deep secondary cluster in Slough.",
+      ],
+      strategicImportance: [
+        "For UK-facing services and for transatlantic-routed European deployments, a London presence is the default. The UK's post-Brexit data-protection regime is an editorial consideration for cross-jurisdictional architectures — outside Radar's identity scope but on the practical map.",
+      ],
+    },
+    provenance: {
+      lastUpdated: CHECKED_AT_2,
+      confidence: "high",
+      sources: [
+        {
+          sourceId: "world-bank-open-data",
+          url: "https://data.worldbank.org/country/GB",
+          checkedAt: CHECKED_AT_2,
+          note: "Geographic classification (ISO 3166-1, UN M.49).",
+        },
+        {
+          sourceId: "peeringdb",
+          url: "https://www.peeringdb.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "LINX identity and London-metro facility presence.",
+        },
+        {
+          sourceId: "linx",
+          url: "https://www.linx.net/about/our-exchanges/lon1/",
+          checkedAt: CHECKED_AT_2,
+          note: "LINX London operator pages — exchange identity and policy.",
+        },
+        {
+          sourceId: "aws-regions",
+          url: "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/",
+          checkedAt: CHECKED_AT_2,
+          note: "AWS eu-west-2 (London) region listing.",
+        },
+        {
+          sourceId: "gcp-regions",
+          url: "https://cloud.google.com/about/locations",
+          checkedAt: CHECKED_AT_2,
+          note: "Google Cloud europe-west2 (London) region listing.",
+        },
+        {
+          sourceId: "azure-regions",
+          url: "https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/",
+          checkedAt: CHECKED_AT_2,
+          note: "Microsoft Azure UK South (London) region listing.",
+        },
+        {
+          sourceId: "telegeography",
+          url: "https://www.telegeography.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "Transatlantic cable landings and London's FLAP role.",
+        },
+      ],
+      note: "LINX is referenced via the London city page; the ixp:linx entity record is pending editorial seeding.",
+    },
+  },
+  {
+    slug: "japan",
+    code: "JP",
+    name: "Japan",
+    region: "Eastern Asia",
+    continent: "Asia",
+    summary:
+      "Japan is an East Asian country. It hosts Tokyo, the principal interconnection metro for Japan and a major regional anchor in East Asia, where AWS, Google Cloud, and Microsoft Azure all operate Tokyo-based cloud regions per their published directories.",
+    hubCitySlugs: ["tokyo"],
+    ixpSlugs: [],
+    coordinates: { lat: 36.2, lon: 138.25 },
+    editorial: {
+      significance: [
+        "Japan is one of the principal interconnection jurisdictions in East Asia. Tokyo — its principal metro — concentrates the country's hyperscaler regions, IXP fabrics, and submarine cable landings.",
+        "Hyperscaler region directories list at least three Tokyo-anchored regions: AWS ap-northeast-1, Google Cloud asia-northeast1, and Microsoft Azure Japan East.",
+      ],
+      connectivityRole: [
+        "Japan is the principal eastern landing point for transpacific submarine cables; TeleGeography records dense landings on the Boso and Shima peninsulas, with onward terrestrial routes into Tokyo's interconnection metro.",
+        "Routing onward from Japan reaches the rest of East Asia (Hong Kong, Singapore), the US west coast, and Russia / Northeast Asia.",
+      ],
+      cloudRelevance: [
+        "AWS ap-northeast-1 (Tokyo), Google Cloud asia-northeast1 (Tokyo), and Microsoft Azure Japan East (Tokyo) all appear in their respective provider directories. AWS additionally operates ap-northeast-3 (Osaka), and Azure operates Japan West (Osaka), per their published location pages.",
+        "Tokyo regions tend to be the implicit \"primary Japan\" region for cloud deployments; Osaka variants exist primarily for in-country disaster-recovery use cases.",
+      ],
+      interconnectionContext: [
+        "JPNAP, JPIX, and BBIX operate Tokyo-anchored exchange fabrics; their PeeringDB entries record dense Japanese-operator presence. None of these IXPs has yet been promoted to a Radar IXP entity record.",
+        "Tokyo's carrier-neutral colocation cluster is anchored on Equinix TY-series facilities and the NTT Communications Otemachi / Shinagawa campus group.",
+      ],
+      strategicImportance: [
+        "Japan is the default Northeast Asian region anchor for hyperscaler deployments. A Tokyo presence is generally considered table stakes for any operator with material Japanese end-user traffic, both for latency and for in-jurisdiction data-handling reasons.",
+      ],
+    },
+    provenance: {
+      lastUpdated: CHECKED_AT_2,
+      confidence: "high",
+      sources: [
+        {
+          sourceId: "world-bank-open-data",
+          url: "https://data.worldbank.org/country/JP",
+          checkedAt: CHECKED_AT_2,
+          note: "Geographic classification (ISO 3166-1, UN M.49).",
+        },
+        {
+          sourceId: "peeringdb",
+          url: "https://www.peeringdb.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "Tokyo-metro facility records and Japanese IXP presence.",
+        },
+        {
+          sourceId: "aws-regions",
+          url: "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/",
+          checkedAt: CHECKED_AT_2,
+          note: "AWS ap-northeast-1 (Tokyo) and ap-northeast-3 (Osaka) listings.",
+        },
+        {
+          sourceId: "gcp-regions",
+          url: "https://cloud.google.com/about/locations",
+          checkedAt: CHECKED_AT_2,
+          note: "Google Cloud asia-northeast1 (Tokyo) and asia-northeast2 (Osaka) listings.",
+        },
+        {
+          sourceId: "azure-regions",
+          url: "https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/",
+          checkedAt: CHECKED_AT_2,
+          note: "Microsoft Azure Japan East (Tokyo) and Japan West (Osaka) listings.",
+        },
+        {
+          sourceId: "telegeography",
+          url: "https://www.telegeography.com/",
+          checkedAt: CHECKED_AT_2,
+          note: "Transpacific cable landings on the Boso and Shima peninsulas.",
+        },
+      ],
+      note: "Japanese IXP entity records (JPNAP, JPIX, BBIX) are pending editorial review against PeeringDB.",
     },
   },
 ];

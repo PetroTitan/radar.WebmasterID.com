@@ -72,19 +72,19 @@ export const REVIEWED_PEERINGDB_IXPS: ReadonlyArray<PeeringDBInternetExchangeRec
     websiteUrl: "https://www.equinix.com/interconnection-services/equinix-fabric/internet-exchange",
     relatedEntityRefs: ["city:ashburn", "country:united-states"],
   }),
-  // AMS-IX and LINX appear in PeeringDB's IX catalogue but Radar
-  // does not yet have city or country entities for Amsterdam or
-  // London, so `relatedEntityRefs` is intentionally omitted. The
-  // rows are reviewed against PeeringDB and the operator's own
-  // location page; they will pick up entity refs once those metros
-  // and countries are seeded.
+  // AMS-IX and LINX now resolve fully against the entity graph:
+  // Radar has city (amsterdam, london) and country (netherlands,
+  // united-kingdom) entities for both metros. The operator's own
+  // location page is cited alongside PeeringDB.
   buildRow({
     id: "peeringdb-ix-ams-ix",
     sourceUrl: "https://www.peeringdb.com/ix",
     name: "AMS-IX",
     operator: "Amsterdam Internet Exchange B.V.",
     countryCode: "NL",
+    metroSlug: "amsterdam",
     websiteUrl: "https://www.ams-ix.net/ams",
+    relatedEntityRefs: ["city:amsterdam", "country:netherlands"],
   }),
   buildRow({
     id: "peeringdb-ix-linx-london",
@@ -92,6 +92,8 @@ export const REVIEWED_PEERINGDB_IXPS: ReadonlyArray<PeeringDBInternetExchangeRec
     name: "LINX LON1",
     operator: "London Internet Exchange Ltd.",
     countryCode: "GB",
+    metroSlug: "london",
     websiteUrl: "https://www.linx.net/about/our-exchanges/lon1/",
+    relatedEntityRefs: ["city:london", "country:united-kingdom"],
   }),
 ];
