@@ -8,7 +8,7 @@ export const INTERCONNECTION_GUIDE: Guide = {
   dek:
     "What \"interconnection\" actually means in infrastructure terms — peering, transit, private network interconnects, and the bilateral economics that decide which networks meet where.",
   publishedAt: "2026-05-22",
-  lastUpdated: "2026-05-23",
+  lastUpdated: "2026-05-24",
   definition:
     "Interconnection is the set of arrangements through which independent networks exchange traffic with each other — public peering at an Internet Exchange Point, private network interconnects between two networks inside a colocation facility, and paid transit from an upstream provider. The choice between these arrangements is governed by network economics, not by any single technical standard.",
   keyTakeaways: [
@@ -131,6 +131,9 @@ export const INTERCONNECTION_GUIDE: Guide = {
   ],
   relatedEntityRefs: [
     "ixp:de-cix-frankfurt",
+    "ixp:ams-ix",
+    "ixp:linx-lon1",
+    "ixp:equinix-internet-exchange-ashburn",
     "city:frankfurt",
     "city:amsterdam",
     "city:london",

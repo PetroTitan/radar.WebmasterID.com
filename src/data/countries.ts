@@ -184,7 +184,7 @@ export const COUNTRIES: ReadonlyArray<Country> = [
     summary:
       "The United States is a Northern American country. It hosts Ashburn, Virginia — a metro with a dense concentration of datacenter facilities listed on PeeringDB and the origin metro for several cloud-provider US east-coast regions.",
     hubCitySlugs: ["ashburn"],
-    ixpSlugs: [],
+    ixpSlugs: ["equinix-internet-exchange-ashburn"],
     coordinates: { lat: 39.83, lon: -98.58 },
     editorial: {
       significance: [
@@ -248,7 +248,7 @@ export const COUNTRIES: ReadonlyArray<Country> = [
           note: "Microsoft Azure US geography region listings.",
         },
       ],
-      note: "Specific cloud-region pinning and US IXP records await ingestion.",
+      note: "Equinix Internet Exchange Ashburn is now an IXP entity (ixp:equinix-internet-exchange-ashburn) wired through both country.ixpSlugs and Ashburn's city.ixpSlugs. Further US IXPs (across other east- and west-coast metros) await editorial review.",
     },
   },
   {
@@ -260,7 +260,7 @@ export const COUNTRIES: ReadonlyArray<Country> = [
     summary:
       "The Netherlands is a Western European country. It hosts Amsterdam, a principal European interconnection metro, and AMS-IX, an Internet Exchange Point operated by Amsterdam Internet Exchange B.V.",
     hubCitySlugs: ["amsterdam"],
-    ixpSlugs: [],
+    ixpSlugs: ["ams-ix"],
     coordinates: { lat: 52.13, lon: 5.29 },
     editorial: {
       significance: [
@@ -311,7 +311,7 @@ export const COUNTRIES: ReadonlyArray<Country> = [
           note: "FLAP cluster framing and Amsterdam's role in European interconnection.",
         },
       ],
-      note: "AMS-IX is added as a country-level IXP via Amsterdam city links rather than as a country.ixpSlugs entry until an ixp:ams-ix entity record is seeded.",
+      note: "AMS-IX is now an IXP entity (ixp:ams-ix) wired through both country.ixpSlugs and city.ixpSlugs. Reviewed PeeringDB rows cross-link back to it.",
     },
   },
   {
@@ -323,7 +323,7 @@ export const COUNTRIES: ReadonlyArray<Country> = [
     summary:
       "The United Kingdom is a Northern European country. It hosts London, a principal European interconnection metro and one of the four FLAP cluster metros, and LINX, the London Internet Exchange operated by London Internet Exchange Ltd.",
     hubCitySlugs: ["london"],
-    ixpSlugs: [],
+    ixpSlugs: ["linx-lon1"],
     coordinates: { lat: 54.0, lon: -2.0 },
     editorial: {
       significance: [
@@ -392,7 +392,7 @@ export const COUNTRIES: ReadonlyArray<Country> = [
           note: "Transatlantic cable landings and London's FLAP role.",
         },
       ],
-      note: "LINX is referenced via the London city page; the ixp:linx entity record is pending editorial seeding.",
+      note: "LINX LON1 is now an IXP entity (ixp:linx-lon1) wired through both country.ixpSlugs and city.ixpSlugs. LON2 and other LINX-operated fabrics are not yet seeded.",
     },
   },
   {

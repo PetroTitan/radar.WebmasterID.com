@@ -113,7 +113,7 @@ export const CITIES: ReadonlyArray<City> = [
     aliases: ["Northern Virginia", "NoVA"],
     summary:
       "Ashburn is a Loudoun County, Virginia metro that hosts a dense concentration of datacenter facilities listed on PeeringDB and serves as the origin metro for several cloud-provider US east-coast regions.",
-    ixpSlugs: [],
+    ixpSlugs: ["equinix-internet-exchange-ashburn"],
     cloudRegionRefs: [
       "aws:us-east-1",
       "gcp:us-east4",
@@ -278,7 +278,7 @@ export const CITIES: ReadonlyArray<City> = [
     aliases: ["AMS"],
     summary:
       "Amsterdam is one of the four FLAP cluster metros and the home of AMS-IX, the Amsterdam Internet Exchange operated by Amsterdam Internet Exchange B.V., per the operator's published location page and PeeringDB.",
-    ixpSlugs: [],
+    ixpSlugs: ["ams-ix"],
     cloudRegionRefs: [],
     cableSlugs: [],
     peerMetroSlugs: ["frankfurt", "london"],
@@ -344,7 +344,7 @@ export const CITIES: ReadonlyArray<City> = [
     aliases: ["LON", "Greater London"],
     summary:
       "London is one of the four FLAP cluster metros and the home of LINX (LON1, LON2), operated by London Internet Exchange Ltd. AWS, Google Cloud, and Microsoft Azure each operate London-anchored cloud regions per their published directories.",
-    ixpSlugs: [],
+    ixpSlugs: ["linx-lon1"],
     cloudRegionRefs: [
       "aws:eu-west-2",
       "gcp:europe-west2",

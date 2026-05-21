@@ -13,6 +13,7 @@ import { StrategicImportance } from "@/components/ui/StrategicImportance";
 import { CaveatBlock } from "@/components/ui/CaveatBlock";
 import { GeographicImportance } from "@/components/ui/GeographicImportance";
 import { RelatedResearch } from "@/components/ui/RelatedResearch";
+import { InterconnectionGraphTable } from "@/components/ui/InterconnectionGraphTable";
 import { GUIDES, getGuide } from "@/content/guides";
 import { getCountry, getCity, getIxp } from "@/data";
 import { InterconnectionDiagram } from "@/components/diagrams/InterconnectionDiagram";
@@ -134,9 +135,17 @@ export default async function GuidePage({ params }: RouteParams) {
       </div>
 
       {guide.slug === "interconnection" ? (
-        <div className="mt-14 md:mt-20">
-          <InterconnectionDiagram />
-        </div>
+        <>
+          <div className="mt-14 md:mt-20">
+            <InterconnectionDiagram />
+          </div>
+          <EntitySection
+            title="Interconnection graph"
+            description="Every reviewed IXP entity in the registry, anchored to its metro and country, with a count of the reviewed dataset rows that point back at it."
+          >
+            <InterconnectionGraphTable />
+          </EntitySection>
+        </>
       ) : null}
       {guide.slug === "internet-exchanges" ? (
         <div className="mt-14 md:mt-20">

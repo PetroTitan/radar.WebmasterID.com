@@ -8,7 +8,7 @@ export const DATACENTER_HUBS_GUIDE: Guide = {
   dek:
     "What makes a metro a global datacenter hub — and why the same handful of metros (Ashburn, Frankfurt, Singapore, London, Amsterdam) keep appearing on every infrastructure map.",
   publishedAt: "2026-05-20",
-  lastUpdated: "2026-05-23",
+  lastUpdated: "2026-05-24",
   definition:
     "A datacenter hub is a metro with a high concentration of carrier-neutral colocation facilities, dense interconnection options, and access to fibre routes and power infrastructure that make it economically attractive to host computing infrastructure. PeeringDB tracks the facility-by-facility composition of every hub.",
   keyTakeaways: [
@@ -118,6 +118,10 @@ export const DATACENTER_HUBS_GUIDE: Guide = {
     "Underlying inputs (power, fibre topology, regulatory stability) are tracked as commentary, not as quantitative metrics. Radar refuses to publish a composite \"hub score\" because the denominator (every metro) is not well-defined.",
   ],
   relatedEntityRefs: [
+    "ixp:de-cix-frankfurt",
+    "ixp:ams-ix",
+    "ixp:linx-lon1",
+    "ixp:equinix-internet-exchange-ashburn",
     "city:frankfurt",
     "city:amsterdam",
     "city:london",

@@ -1,6 +1,6 @@
 import type { Dataset } from "@/entities";
 
-const CHECKED_AT = "2026-05-22";
+const CHECKED_AT = "2026-05-23";
 
 export const INTERNET_EXCHANGE_HUBS: Dataset = {
   slug: "internet-exchange-hubs",
@@ -9,7 +9,7 @@ export const INTERNET_EXCHANGE_HUBS: Dataset = {
     "Operator-published and PeeringDB-verified IXP identity records — name, operator, country, metro, primary facility coordinates.",
   category: "interconnection",
   publishedAt: "2026-05-21",
-  lastUpdated: "2026-05-22",
+  lastUpdated: "2026-05-23",
   status: "partial",
   confidence: "high",
   methodology:
@@ -22,6 +22,9 @@ export const INTERNET_EXCHANGE_HUBS: Dataset = {
   ],
   relatedEntityRefs: [
     "ixp:de-cix-frankfurt",
+    "ixp:ams-ix",
+    "ixp:linx-lon1",
+    "ixp:equinix-internet-exchange-ashburn",
     "city:frankfurt",
     "city:amsterdam",
     "city:london",

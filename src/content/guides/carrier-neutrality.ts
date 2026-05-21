@@ -8,7 +8,7 @@ export const CARRIER_NEUTRALITY_GUIDE: Guide = {
   dek:
     "What it means for a colocation facility to be carrier-neutral, why neutrality is the precondition for dense interconnection, and how to read PeeringDB's facility records.",
   publishedAt: "2026-05-22",
-  lastUpdated: "2026-05-23",
+  lastUpdated: "2026-05-24",
   definition:
     "A carrier-neutral facility is a colocation building whose operator does not itself sell connectivity. Tenants — transit providers, content networks, cloud on-ramps, eyeball ISPs — reach each other through cross connects inside the building, not through bandwidth purchased from the operator. Neutrality is the structural condition that lets a facility host many competing networks side-by-side.",
   keyTakeaways: [
@@ -124,6 +124,10 @@ export const CARRIER_NEUTRALITY_GUIDE: Guide = {
     "Carrier-neutral classification is asserted only when the operator's own facility page describes the building as carrier-neutral or open-access, or when PeeringDB's record corroborates dense multi-network presence.",
   ],
   relatedEntityRefs: [
+    "ixp:de-cix-frankfurt",
+    "ixp:ams-ix",
+    "ixp:linx-lon1",
+    "ixp:equinix-internet-exchange-ashburn",
     "city:frankfurt",
     "city:amsterdam",
     "city:london",

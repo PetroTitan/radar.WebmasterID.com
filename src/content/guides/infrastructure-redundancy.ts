@@ -8,7 +8,7 @@ export const INFRASTRUCTURE_REDUNDANCY_GUIDE: Guide = {
   dek:
     "The layered model behind \"highly available\" infrastructure: facility, metro, region, route, and operator redundancy — and what each layer actually protects against.",
   publishedAt: "2026-05-22",
-  lastUpdated: "2026-05-22",
+  lastUpdated: "2026-05-24",
   definition:
     "Infrastructure redundancy is the practice of designing systems so that the failure of a single component (a facility, a metro, a cloud region, a fibre route, an operator) does not produce a system-wide outage. Each redundancy layer addresses a different class of failure, and a system's overall resilience is determined by which layers it actually spans — not by aggregate uptime claims.",
   keyTakeaways: [
@@ -115,10 +115,18 @@ export const INFRASTRUCTURE_REDUNDANCY_GUIDE: Guide = {
     "When discussing resilience, Radar surfaces structural signals (metro count of carrier-neutral facilities, regional cable landing diversity) rather than computing composite resilience scores. Composite scores require denominators (every possible failure mode) that are themselves not verifiable.",
   ],
   relatedEntityRefs: [
+    "ixp:de-cix-frankfurt",
+    "ixp:ams-ix",
+    "ixp:linx-lon1",
+    "ixp:equinix-internet-exchange-ashburn",
     "city:frankfurt",
+    "city:amsterdam",
+    "city:london",
     "city:ashburn",
     "city:singapore",
     "country:germany",
+    "country:netherlands",
+    "country:united-kingdom",
     "country:united-states",
     "country:singapore",
   ],

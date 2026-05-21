@@ -8,7 +8,7 @@ export const INTERNET_EXCHANGES_GUIDE: Guide = {
   dek:
     "What an Internet Exchange Point is, how the economics work, and why a handful of IXPs anchor most of the world's network traffic.",
   publishedAt: "2026-05-20",
-  lastUpdated: "2026-05-23",
+  lastUpdated: "2026-05-24",
   definition:
     "An Internet Exchange Point (IXP) is a Layer-2 switching fabric, hosted in one or more colocation facilities, where independent networks meet to exchange traffic directly via BGP peering — bypassing transit providers. PeeringDB is the authoritative public registry of IXPs and their member networks.",
   keyTakeaways: [
@@ -88,24 +88,24 @@ export const INTERNET_EXCHANGES_GUIDE: Guide = {
         "DE-CIX Frankfurt is among the largest IXPs globally by connected-network count. Its scale results from a network-effects loop running for over two decades inside Frankfurt's carrier-neutral colocation cluster.",
     },
     {
+      entityRef: "ixp:ams-ix",
+      prose:
+        "AMS-IX is the northern FLAP anchor. The fabric spans multiple Amsterdam-metro carrier-neutral facilities and ranks among the long-running European exchanges.",
+    },
+    {
+      entityRef: "ixp:linx-lon1",
+      prose:
+        "LINX LON1 is the western FLAP anchor and the principal IXP for transatlantic-routed European traffic terminating in the UK.",
+    },
+    {
+      entityRef: "ixp:equinix-internet-exchange-ashburn",
+      prose:
+        "Equinix Internet Exchange Ashburn is the equivalent IXP anchor on the US east coast — the same network-effects pattern, in the largest US east-coast colocation cluster.",
+    },
+    {
       entityRef: "city:frankfurt",
       prose:
         "Frankfurt's role as the eastern anchor of the European FLAP cluster (Frankfurt, London, Amsterdam, Paris) is inseparable from the presence of DE-CIX inside its carrier-neutral facilities.",
-    },
-    {
-      entityRef: "city:amsterdam",
-      prose:
-        "Amsterdam is the home of AMS-IX, the northern anchor of FLAP. The fabric spans multiple Amsterdam-metro carrier-neutral facilities and ranks among the largest IXPs globally by connected-network count.",
-    },
-    {
-      entityRef: "city:london",
-      prose:
-        "London is the home of LINX (LON1 / LON2), the western anchor of FLAP and the principal IXP for transatlantic-routed European traffic terminating in the UK.",
-    },
-    {
-      entityRef: "city:ashburn",
-      prose:
-        "Ashburn / Northern Virginia is the equivalent IXP anchor on the US east coast, with the Equinix Internet Exchange Ashburn fabric and a comparable density of carrier-neutral facilities.",
     },
   ],
   caveats: [
@@ -119,12 +119,17 @@ export const INTERNET_EXCHANGES_GUIDE: Guide = {
   ],
   relatedEntityRefs: [
     "ixp:de-cix-frankfurt",
+    "ixp:ams-ix",
+    "ixp:linx-lon1",
+    "ixp:equinix-internet-exchange-ashburn",
     "city:frankfurt",
     "city:amsterdam",
     "city:london",
     "city:ashburn",
+    "country:germany",
     "country:netherlands",
     "country:united-kingdom",
+    "country:united-states",
   ],
   relatedDatasetSlugs: ["internet-exchange-hubs"],
   relatedIndicatorSlugs: ["ixp-density"],

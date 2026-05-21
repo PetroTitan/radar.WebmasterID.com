@@ -207,19 +207,43 @@ for (const city of CITIES) {
   validateEditorial("city", id, city.editorial);
 }
 
+const seenIxpSlugs = new Set<string>();
+const seenIxpPeeringDbIds = new Map<number, string>();
 for (const ixp of IXPS) {
   const id = ixp.slug;
+  if (seenIxpSlugs.has(ixp.slug)) {
+    fail("ixp", id, `duplicate slug "${ixp.slug}"`);
+  }
+  seenIxpSlugs.add(ixp.slug);
   assertNonEmptyString("ixp", id, "slug", ixp.slug);
   assertNonEmptyString("ixp", id, "name", ixp.name);
   assertNonEmptyString("ixp", id, "operator", ixp.operator);
   assertNonEmptyString("ixp", id, "countryCode", ixp.countryCode);
   assertNonEmptyString("ixp", id, "citySlug", ixp.citySlug);
   assertNonEmptyString("ixp", id, "summary", ixp.summary);
-  if (!getCity(ixp.citySlug)) {
+  const city = getCity(ixp.citySlug);
+  if (!city) {
     fail("ixp", id, `citySlug "${ixp.citySlug}" not in cities registry`);
+  } else if (city.countryCode !== ixp.countryCode) {
+    fail(
+      "ixp",
+      id,
+      `countryCode "${ixp.countryCode}" disagrees with citySlug "${ixp.citySlug}" (city sits in ${city.countryCode})`,
+    );
   }
   if (!getCountryByCode(ixp.countryCode)) {
     fail("ixp", id, `countryCode "${ixp.countryCode}" not in countries registry`);
+  }
+  if (ixp.peeringDbId !== undefined) {
+    if (!Number.isInteger(ixp.peeringDbId) || ixp.peeringDbId <= 0) {
+      fail("ixp", id, `peeringDbId "${ixp.peeringDbId}" must be a positive integer`);
+    }
+    const existing = seenIxpPeeringDbIds.get(ixp.peeringDbId);
+    if (existing) {
+      fail("ixp", id, `peeringDbId "${ixp.peeringDbId}" already claimed by "${existing}"`);
+    } else {
+      seenIxpPeeringDbIds.set(ixp.peeringDbId, ixp.slug);
+    }
   }
   validateProvenance("ixp", id, ixp.provenance);
   validateEditorial("ixp", id, ixp.editorial);
