@@ -12,6 +12,7 @@ import {
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
+import { InfrastructureEvidenceTable } from "@/components/ui/InfrastructureEvidenceTable";
 import { CITIES, getCity, getCountry, getIxp } from "@/data";
 import { listInsightsByEntityRef } from "@/content/insights";
 import { listGuidesByEntityRef } from "@/content/guides";
@@ -141,6 +142,13 @@ export default async function CityPage({ params }: RouteParams) {
           </p>
         </EntitySection>
       )}
+
+      <EntitySection
+        title="Reviewed evidence"
+        description="Source-cited dataset rows linked to this metro. Cloud regions, IXPs and carrier-neutral facilities citing this metro's slug are listed here."
+      >
+        <InfrastructureEvidenceTable entityRef={`city:${city.slug}`} />
+      </EntitySection>
 
       {relatedGuides.length + relatedInsights.length > 0 ? (
         <EntitySection

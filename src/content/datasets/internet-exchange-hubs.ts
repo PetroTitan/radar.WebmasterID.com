@@ -37,5 +37,5 @@ export const INTERNET_EXCHANGE_HUBS: Dataset = {
       note: "DE-CIX operator location pages.",
     },
   ],
-  recordCount: 1,
+  recordCount: 7,
 };

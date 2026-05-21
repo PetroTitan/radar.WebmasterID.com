@@ -12,6 +12,7 @@ import { ConfidenceBreakdown } from "@/components/ui/ConfidenceBreakdown";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { ReviewedRowsTable } from "@/components/ui/ReviewedRowsTable";
+import { VerificationProgress } from "@/components/ui/VerificationProgress";
 import { DATASETS, getDataset } from "@/content/datasets";
 import { listIndicatorsByDataset } from "@/content/indicators";
 import { getCountry, getCity, getIxp } from "@/data";
@@ -104,10 +105,36 @@ export default async function DatasetPage({ params }: RouteParams) {
     d.slug === "global-cloud-regions"
       ? REVIEWED_CLOUD_REGIONS
       : d.slug === "internet-exchange-hubs"
-        ? REVIEWED_PEERINGDB_IXPS
+        ? [...REVIEWED_PEERINGDB_IXPS, ...REVIEWED_PEERINGDB_FACILITIES]
         : d.slug === "facilities"
           ? REVIEWED_PEERINGDB_FACILITIES
           : [];
+
+  const pendingByDataset: Record<string, ReadonlyArray<string>> = {
+    "global-cloud-regions": [
+      "Sovereign-cloud regions (Azure Germany, AWS Sovereign Cloud) are not yet promoted to reviewed rows.",
+      "Announced-but-not-yet-generally-available regions are documented in the methodology but absent from the row corpus.",
+      "Provider-published availability-zone counts are deliberately omitted until each region's zone disclosure is rechecked.",
+    ],
+    "internet-exchange-hubs": [
+      "PeeringDB numeric IX and facility IDs are intentionally undefined; rows publish operator name and source URL only.",
+      "Member-network counts, peering peaks and switch capacity are not stored on identity records — those are volatile observations.",
+      "More IXPs and facilities outside the seeded metros (Frankfurt, Ashburn, Singapore, Amsterdam, London) await editorial promotion.",
+    ],
+    "subsea-cable-landings": [
+      "No cable systems have been promoted to reviewed rows yet; the dataset card is published as a methodology placeholder.",
+      "Cable landing facility classification awaits TeleGeography review.",
+    ],
+    "ai-infrastructure-regions": [
+      "AI-accelerator availability is not published on cloud-region rows; the indicator awaits comparable disclosure across providers.",
+      "Provider-disclosed accelerator generations (H100, MI300, TPUv5) appear inconsistently across region directories.",
+    ],
+    facilities: [
+      "PeeringDB numeric facility IDs are intentionally undefined; rows publish operator name and source URL only.",
+      "Carrier-neutral classification is asserted only for facilities Equinix publishes as carrier-neutral on its own location pages.",
+    ],
+  };
+  const pending = pendingByDataset[d.slug] ?? [];
 
   return (
     <Container as="article">
@@ -152,6 +179,13 @@ export default async function DatasetPage({ params }: RouteParams) {
           />
         </div>
       </div>
+
+      <EntitySection
+        title="Verification snapshot"
+        description="What this dataset publishes today versus what is deliberately left unverified. The platform refuses to compute a composite percentage — the denominator (every region/IXP/facility that could exist) is itself unverified."
+      >
+        <VerificationProgress reviewedRows={reviewedRows} pending={pending} />
+      </EntitySection>
 
       <EntitySection
         title="Reviewed records"

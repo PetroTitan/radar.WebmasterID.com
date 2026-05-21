@@ -12,6 +12,7 @@ import {
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
+import { InfrastructureEvidenceTable } from "@/components/ui/InfrastructureEvidenceTable";
 import { COUNTRIES, getCountry, getCity, getIxp } from "@/data";
 import { listInsightsByEntityRef } from "@/content/insights";
 import { listGuidesByEntityRef } from "@/content/guides";
@@ -126,6 +127,13 @@ export default async function CountryPage({ params }: RouteParams) {
           </p>
         </EntitySection>
       )}
+
+      <EntitySection
+        title="Reviewed evidence"
+        description="Source-cited dataset rows linked to this country. Each row resolves to a primary source URL and the editorial review date."
+      >
+        <InfrastructureEvidenceTable entityRef={`country:${country.slug}`} />
+      </EntitySection>
 
       {relatedGuides.length + relatedInsights.length > 0 ? (
         <EntitySection

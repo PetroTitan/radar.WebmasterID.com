@@ -12,6 +12,7 @@ import {
 import { MetricTable } from "@/components/ui/MetricTable";
 import { RelatedEntities } from "@/components/ui/RelatedEntities";
 import { SourceFootnote } from "@/components/ui/SourceFootnote";
+import { InfrastructureEvidenceTable } from "@/components/ui/InfrastructureEvidenceTable";
 import { IXPS, getIxp, getCity, getCountryByCode } from "@/data";
 import { listInsightsByEntityRef } from "@/content/insights";
 import { listGuidesByEntityRef } from "@/content/guides";
@@ -136,6 +137,13 @@ export default async function IxpPage({ params }: RouteParams) {
           </p>
         </EntitySection>
       )}
+
+      <EntitySection
+        title="Reviewed evidence"
+        description="Source-cited PeeringDB rows linked to this exchange. Each row resolves to its PeeringDB catalogue entry and the editorial review date."
+      >
+        <InfrastructureEvidenceTable entityRef={`ixp:${ixp.slug}`} />
+      </EntitySection>
 
       {relatedGuides.length + relatedInsights.length > 0 ? (
         <EntitySection

@@ -414,20 +414,24 @@ for (const guide of GUIDES) {
   validateCitations("guide", id, guide.sources);
 }
 
+const ENTITY_REF_PATTERN = /^(country|city|ixp):[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 function validateEntityRef(scope: string, id: string, ref: string, field: string) {
-  const [kind, slug] = ref.split(":");
-  if (!kind || !slug) {
-    fail(scope, id, `${field} "${ref}" is malformed`);
+  if (!ENTITY_REF_PATTERN.test(ref)) {
+    fail(
+      scope,
+      id,
+      `${field} "${ref}" must match \`(country|city|ixp):<kebab-slug>\``,
+    );
     return;
   }
+  const [kind, slug] = ref.split(":");
   if (kind === "country") {
-    if (!getCountry(slug)) fail(scope, id, `${field} "${ref}" points at unknown country`);
+    if (!getCountry(slug!)) fail(scope, id, `${field} "${ref}" points at unknown country`);
   } else if (kind === "city") {
-    if (!getCity(slug)) fail(scope, id, `${field} "${ref}" points at unknown city`);
+    if (!getCity(slug!)) fail(scope, id, `${field} "${ref}" points at unknown city`);
   } else if (kind === "ixp") {
-    if (!getIxp(slug)) fail(scope, id, `${field} "${ref}" points at unknown IXP`);
-  } else {
-    fail(scope, id, `${field} "${ref}" uses unknown kind "${kind}"`);
+    if (!getIxp(slug!)) fail(scope, id, `${field} "${ref}" points at unknown IXP`);
   }
 }
 
@@ -608,6 +612,62 @@ function validateRow(scope: string, row: IngestedRecord) {
   }
 }
 
+/**
+ * Cross-consistency check: a row that declares both a country code
+ * and a metro slug must agree about which country the metro is in,
+ * and any `city:` / `country:` refs in `relatedEntityRefs` must
+ * match those identity fields.
+ */
+function validateRowLocationConsistency(
+  scope: string,
+  row: IngestedRecord & {
+    readonly countryCode: string;
+    readonly metroSlug?: string;
+  },
+) {
+  const id = row.id;
+  if (row.metroSlug) {
+    const city = getCity(row.metroSlug);
+    if (city && city.countryCode !== row.countryCode) {
+      fail(
+        scope,
+        id,
+        `metroSlug "${row.metroSlug}" is in ${city.countryCode}, but row declares countryCode ${row.countryCode}`,
+      );
+    }
+  }
+  for (const ref of row.relatedEntityRefs ?? []) {
+    const [kind, slug] = ref.split(":");
+    if (kind === "city" && slug) {
+      const city = getCity(slug);
+      if (city && city.countryCode !== row.countryCode) {
+        fail(
+          scope,
+          id,
+          `relatedEntityRefs "${ref}" sits in ${city.countryCode}, but row declares countryCode ${row.countryCode}`,
+        );
+      }
+      if (row.metroSlug && slug !== row.metroSlug) {
+        fail(
+          scope,
+          id,
+          `relatedEntityRefs "${ref}" disagrees with metroSlug "${row.metroSlug}"`,
+        );
+      }
+    }
+    if (kind === "country" && slug) {
+      const c = getCountry(slug);
+      if (c && c.code !== row.countryCode) {
+        fail(
+          scope,
+          id,
+          `relatedEntityRefs "${ref}" resolves to ${c.code}, but row declares countryCode ${row.countryCode}`,
+        );
+      }
+    }
+  }
+}
+
 function rejectUnknownLiteral(scope: string, id: string, field: string, value: unknown) {
   if (typeof value === "string" && value.trim().toLowerCase() === "unknown") {
     fail(
@@ -648,6 +708,7 @@ for (const row of REVIEWED_CLOUD_REGIONS) {
   if (row.availabilityZoneCount !== undefined && row.availabilityZoneCount < 1) {
     fail(scope, row.id, `availabilityZoneCount must be >= 1 when present`);
   }
+  validateRowLocationConsistency(scope, row);
 }
 
 for (const row of REVIEWED_PEERINGDB_IXPS) {
@@ -663,6 +724,7 @@ for (const row of REVIEWED_PEERINGDB_IXPS) {
   if (row.metroSlug && !getCity(row.metroSlug)) {
     fail(scope, row.id, `metroSlug "${row.metroSlug}" not in cities registry`);
   }
+  validateRowLocationConsistency(scope, row);
 }
 
 for (const row of REVIEWED_PEERINGDB_FACILITIES) {
@@ -671,6 +733,14 @@ for (const row of REVIEWED_PEERINGDB_FACILITIES) {
   validateRow(scope, row);
   rejectUnknownLiteral(scope, row.id, "name", row.name);
   rejectUnknownLiteral(scope, row.id, "operator", row.operator);
+  rejectUnknownLiteral(scope, row.id, "countryCode", row.countryCode);
+  if (row.countryCode.length !== 2) {
+    fail(scope, row.id, `countryCode "${row.countryCode}" must be ISO 3166-1 alpha-2`);
+  }
+  if (row.metroSlug && !getCity(row.metroSlug)) {
+    fail(scope, row.id, `metroSlug "${row.metroSlug}" not in cities registry`);
+  }
+  validateRowLocationConsistency(scope, row);
 }
 
 const counts = {

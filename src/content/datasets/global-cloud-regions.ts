@@ -50,6 +50,6 @@ export const GLOBAL_CLOUD_REGIONS: Dataset = {
       note: "Microsoft Azure geographies and regions directory.",
     },
   ],
-  recordCount: 9,
+  recordCount: 14,
   // Reviewed rows live in src/data/research/cloud-regions.reviewed.ts.
 };
